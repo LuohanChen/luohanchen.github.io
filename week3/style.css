@@ -1,3 +1,31 @@
+* {
+  color: hotpink;
+}
+
 h1 {
-    color: limegreen;
+  color: lime;
+}
+
+p {
+  color: blueviolet;
+}
+
+li {
+  color: black;
+}
+
+.my-color {
+  color: crimson;
+}
+
+#instructor {
+  color: purple;
+}
+
+#lastcolor {
+  color: yellowgreen;
+}
+
+[data-email="email"] {
+  color: blue;
 }
