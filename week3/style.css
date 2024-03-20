@@ -2,15 +2,22 @@
   color: hotpink;
 }
 
+/* my brand color is lime so i made h1 lime */
+
 h1 {
   color: lime;
 }
 
-p {
+p,
+h1 {
   color: blueviolet;
 }
 
 li {
+  color: black;
+}
+
+li strong {
   color: black;
 }
 
