@@ -9,10 +9,12 @@ h1 {
   font-style: normal;
 }
 
-h2 {
+h2,
+a {
   font-size: 1.4rem;
   padding-bottom: 10px;
   padding-top: 10px;
+  color: darkcyan;
 }
 
 p {
@@ -21,4 +23,12 @@ p {
   font-family: "Butterfly Kids", cursive;
   font-weight: 400;
   font-style: normal;
+}
+
+a:hover {
+  color: red;
+}
+
+a:visited {
+  color: green;
 }
