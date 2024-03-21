@@ -4,6 +4,10 @@
 
 /* my brand color is lime so i made h1 lime */
 
+body {
+  text-align: center;
+  border: 4px solid chocolate;
+}
 h1 {
   color: lime;
 }
