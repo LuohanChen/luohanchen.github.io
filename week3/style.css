@@ -1,42 +1,17 @@
-* {
-  color: hotpink;
-}
-
-/* my brand color is lime so i made h1 lime */
-
-body {
-  text-align: center;
-  border: 4px solid chocolate;
-}
 h1 {
-  color: lime;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  padding-bottom: 10px;
 }
 
-p,
-h1 {
-  color: blueviolet;
+h2 {
+  font-size: 1.4rem;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
-li {
-  color: black;
-}
-
-li strong {
-  color: black;
-}
-
-.my-color {
-  color: crimson;
-}
-
-#instructor {
-  color: purple;
-}
-
-#lastcolor {
-  color: yellowgreen;
-}
-
-[data-email="email"] {
-  color: blue;
+p {
+  line-height: 1.4;
+  padding: 10px;
 }
