@@ -1,0 +1,17 @@
+body {
+}
+
+nav {
+  overflow: hidden;
+  background: #162a36;
+  background: linear-gradient(90deg, #162a36 0%, #284251 35%, #317089 100%);
+  filter: drop-shadow(0 0 0.2rem black);
+}
+
+nav h1 {
+  display: block;
+  color: White;
+  text-align: center;
+  padding: 20px;
+  text-decoration: none;
+}
