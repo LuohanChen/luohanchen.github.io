@@ -1,11 +1,12 @@
 body {
+  background: #0b1215;
 }
 
 nav {
   overflow: hidden;
-  background: #162a36;
-  background: linear-gradient(90deg, #162a36 0%, #284251 35%, #317089 100%);
-  filter: drop-shadow(0 0 0.2rem black);
+  border-bottom-style: solid;
+  border-color: white;
+  border-width: 1px;
 }
 
 nav h1 {
@@ -26,8 +27,7 @@ h2 {
   margin-left: 5%;
   margin-right: 5%;
   padding: 0, 10px, 0, 10px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #162a36 0%, #284251 35%, #317089 100%);
+  border-bottom-style: solid;
 }
 
 h3 {
