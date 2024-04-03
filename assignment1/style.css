@@ -30,10 +30,6 @@ nav h1 {
   flex-wrap: wrap;
 }
 
-.question {
-  width: 100%;
-}
-
 .content {
   padding-top: 100px;
   border-bottom: solid 1px;
@@ -42,7 +38,6 @@ nav h1 {
 }
 
 h2 {
-  color: #fffce1;
   font-size: 40px;
   font-family: "Rubik", sans-serif;
   font-weight: 600;
@@ -54,4 +49,24 @@ p {
   color: #fffce1;
   font-size: 20px;
   font-family: "Rubik", sans-serif;
+}
+
+.coral {
+  color: rgb(255, 134, 90);
+}
+
+.purple {
+  color: rgb(247, 183, 247);
+}
+
+.yellow {
+  color: rgb(255, 180, 40);
+}
+
+.green {
+  color: rgb(113, 255, 189);
+}
+
+.blue {
+  color: rgb(119, 143, 250);
 }
