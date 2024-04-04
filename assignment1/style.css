@@ -82,7 +82,8 @@ p {
   color: rgb(255, 134, 90);
 }
 
-/*Applies colours to the color classes that were defined in html for the title*/
+/*Applies colours to the color classes that were defined in html for the title. Colours used are bright, chic yet not overly saturated
+in order to give contrast to the dark background yet maintain a professional look.*/
 .purple {
   color: rgb(247, 183, 247);
 }
