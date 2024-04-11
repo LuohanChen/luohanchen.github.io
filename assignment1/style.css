@@ -65,14 +65,14 @@ nav a {
 }
 
 .title {
-  
   position: absolute;
-  font-size: 300px;
+  z-index: -1;
+  bottom: 18%;
+  left: 10%;
+  font-size: 500px;
   font-family: "Imbue", serif;
   font-weight: 600;
-  color:rgba(255, 255, 255, 0.13);;
-  z-index: -1;
-
+  color: rgba(255, 255, 255, 0.1);
 }
 
 h2 {
@@ -89,12 +89,12 @@ p {
   font-family: "Rubik", sans-serif;
 }
 
+/*Applies colours to the color classes that were defined in html for the title. Colours used are bright, chic yet not overly saturated
+in order to give contrast to the dark background yet maintain a professional look.*/
 .coral {
   color: rgb(255, 134, 90);
 }
 
-/*Applies colours to the color classes that were defined in html for the title. Colours used are bright, chic yet not overly saturated
-in order to give contrast to the dark background yet maintain a professional look.*/
 .purple {
   color: rgb(247, 183, 247);
 }
