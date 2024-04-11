@@ -58,7 +58,10 @@ nav a {
 }
 
 .content {
-  height: auto;
+  position: relative;
+  z-index: -1;
+  overflow: hidden;
+  height: 450px;
   padding-top: 100px; /*Adding some space to the element*/
   border-bottom: solid 1px;
   border-color: rgb(61, 61, 61);
@@ -66,10 +69,9 @@ nav a {
 }
 
 .title {
-  left: 10;
-
-  position: absolute;
-  font-size: 25rem;
+  position: absolute; /* So that the letter does not move */
+  transform: translate(0, -22rem); /* Aligning the letter to the page */
+  font-size: 50rem;
   font-family: "Imbue", serif;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.1);

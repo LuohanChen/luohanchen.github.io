@@ -34,9 +34,12 @@ ul {
   min-height: 150px;
   list-style: none;
   display: flex;
-  gap: 1rem;
-  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  /* gap: 1rem;
+  flex-direction: row;
+  justify-content: center; */
   /* align-items: center; */
   /* flex-wrap: wrap; */
 }
@@ -46,6 +49,10 @@ li {
   background-color: #3c2a21;
   /* flex-grow: 1; */
   padding: 0 10px;
+}
+
+li a.hover {
+  color: crimson;
 }
 
 /* li:nth-child(1) {
