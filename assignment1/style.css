@@ -58,9 +58,9 @@ nav a {
 }
 
 .content {
-  position: relative;
-  z-index: -1;
-  overflow: hidden;
+  position: relative; /*to parent absolute position of question number (see below)*/
+  z-index: -1; /*Ensure that the elements in the container stays under the navbar*/
+  overflow: hidden; /*For question numbers, making sure it does not exceed container*/
   height: 450px;
   padding-top: 100px; /*Adding some space to the element*/
   border-bottom: solid 1px;
