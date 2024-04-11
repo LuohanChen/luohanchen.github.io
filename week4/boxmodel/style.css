@@ -23,6 +23,12 @@ h1 {
   border: 2px dashed #e5e5cb;
   width: 400px;
   min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  /* flex-direction: column; */
+  /* line-height: 120px; */
 }
 
 p {
@@ -30,9 +36,14 @@ p {
 }
 
 .inner {
-  width: 100px;
-  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
   background-color: coral;
-  margin: 10px;
   border: 5px solid lightblue;
+  flex-shrink: 1;
+  flex: 1;
+}
+
+.noshrink {
+  flex-shrink: 0;
 }

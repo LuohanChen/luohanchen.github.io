@@ -58,6 +58,8 @@ nav a {
 }
 
 .content {
+  position: relative;
+  z-index: -1;
   padding-top: 100px; /*Adding some space to the element*/
   border-bottom: solid 1px;
   border-color: rgb(61, 61, 61);
@@ -66,10 +68,9 @@ nav a {
 
 .title {
   position: absolute;
-  z-index: -1;
-  bottom: 18%;
-  left: 10%;
-  font-size: 500px;
+  height: auto;
+  bottom: 1%;
+  font-size: 30rem;
   font-family: "Imbue", serif;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.1);
