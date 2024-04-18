@@ -1,6 +1,7 @@
 body {
   background-color: #1a120b;
   display: flex;
+  flex-direction: column;
   text-align: center;
   margin: auto;
   max-width: 1000px;
@@ -17,6 +18,7 @@ body {
 
 h1 {
   font-size: 2rem;
+  padding-bottom: 10px;
 }
 
 .outer {
@@ -46,4 +48,14 @@ p {
 
 .noshrink {
   flex-shrink: 0;
+}
+
+.outer {
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+button {
+  padding: 10px;
 }
