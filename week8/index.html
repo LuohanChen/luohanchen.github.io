@@ -4,6 +4,80 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Space+Grotesk&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <div class="outer">
+      <section class="video-container">
+        <video src="stardust.mp4" controls id="my-video"></video>
+      </section>
+
+      <section class="video-controls">
+        <button id="play-pause-button">
+          <img
+            id="play-pause-img"
+            src="https://img.icons8.com/ios-glyphs/30/play--v1.png"
+            alt="Play Button"
+            width="24"
+            height="24"
+          />
+        </button>
+        <button id="mute-unmute-button">
+          <img
+            id="mute-unmute-img"
+            src="https://img.icons8.com/ios-glyphs/30/high-volume--v2.png"
+            alt="mute Button"
+            width="24"
+            height="24"
+          />
+        </button>
+        <div class="progress-bar">
+          <span id="progress-bar-fill"></span>
+        </div>
+        <button id="fullscreen-button">
+          <img
+            id="fullscreen-img"
+            src="https://img.icons8.com/ios-glyphs/30/full-screen--v1.png"
+            alt="Fullscreen Button"
+            width="24"
+            height="24"
+          />
+        </button>
+        <button id="decrease-volume-button">
+          <img
+            id="decrease-volume-img"
+            src="https://img.icons8.com/ios-glyphs/30/low-volume.png"
+            alt="Decrease Volume Button"
+            width="24"
+            height="24"
+          />
+        </button>
+        <button id="increase-volume-button">
+          <img
+            id="increase-vol-img"
+            src="https://img.icons8.com/ios-glyphs/30/high-volume--v1.png"
+            alt="Increase Volume Button"
+            width="24"
+            height="24"
+          />
+        </button>
+      </section>
+
+      <section class="timeline">
+        <button id="step-1-button">step 1</button>
+        <button id="step-2-button">step 2</button>
+      </section>
+    </div>
+    <footer>
+      <h1>Icons from Icons8</h1>
+    </footer>
+  </body>
 </html>
