@@ -87,7 +87,7 @@ header {
 .title {
   display: flex;
   justify-content: flex-start;
-  margin-top: 3%;
+  margin-top: 5%;
   margin-bottom: 10px;
   font-family: "Inter", sans-serif;
   font-weight: 900;

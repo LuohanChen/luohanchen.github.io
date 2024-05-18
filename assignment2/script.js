@@ -1,7 +1,8 @@
 const myVideo = document.querySelector("#my-video");
 console.log(myVideo);
 
-// The following code block allows me to play and pause the video on a click of a button
+// Upon clicking the "Play" button, this code calls upon the video element and plays the video. If the function detects that the video is currently playing, it will pause the video and switch the "play" icon with the "Pause" icon.
+// This gives user control over when to play or stop playing the video.
 const playPauseButton = document.querySelector("#play-pause-button");
 console.log(playPauseButton);
 
@@ -20,6 +21,9 @@ function playPauseVideo() {
   }
 }
 
+// This code block allows the user to mute or unmute the audio track in the video. The function detects whether the audio is currently muted or unmuted and executes the function to mute/unmute accordingly.
+// It also switches the icons from unmuted to muted when it mutes the audio, and vice versa when it unmutes the audio. The colours of the background of the icons are also changed based upon the current state of mute/unmute
+// A mute/unmute button is crucial for users for quick access to remove the sounds in the case that they might be in a place or situation where sound is undesirable.
 const muteUnmuteButton = document.querySelector("#mute-unmute-button");
 console.log(muteUnmuteButton);
 
@@ -41,6 +45,8 @@ function toggleSound() {
   }
 }
 
+// This code calls upon the progress-bar-fill id in the html, changing the state of the progress bar as it runs a check on the current time elapsed in the video, converting that time into an integer, this integer is then used to update the progress bar fill in css styling.
+// A progress bar provides a visual aid for the user to understand the progress of the video, one quick glance and the user is able to identify how much of the video has passed, or where in the video they are at.
 myVideo.addEventListener("timeupdate", updateProgressBar);
 
 const progressBarFill = document.querySelector("#progress-bar-fill");
