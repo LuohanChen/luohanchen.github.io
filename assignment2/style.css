@@ -60,3 +60,95 @@ header {
   width: 60%;
   margin: 0 auto;
 }
+
+.description,
+.heading {
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: solid 1px rgb(168, 168, 168);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.column2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex: 1;
+}
+
+.heading h2 {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  margin-top: 2%;
+  padding-bottom: 2%;
+}
+
+.description h1 {
+  font-family: "Inter", sans-serif;
+  font-weight: 800;
+  font-size: 30px;
+}
+
+.description p {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  padding-bottom: 2%;
+}
+
+.description ul {
+  list-style: none;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.description button {
+  width: 50%;
+  height: 100%;
+  background-color: rgb(255, 126, 51);
+  border: none;
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.description button {
+  width: 50%;
+  height: 100%;
+  background-color: rgb(255, 126, 51);
+  border: none;
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+}
