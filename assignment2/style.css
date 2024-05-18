@@ -242,4 +242,5 @@ footer ul {
   font-family: "Inter", sans-serif;
   font-size: 12px;
   padding-left: 10%;
+  list-style: none;
 }
