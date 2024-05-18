@@ -28,7 +28,7 @@
 
     <div class="video-container">
       <div class="title">
-        <h1>DIY: How to make handheld windmills:</h1>
+        <h1>Watch: How to make DIY handheld windmills:</h1>
       </div>
       <video
         src="https://thelongesthumstore.sgp1.cdn.digitaloceanspaces.com/IM-2250/berry-bunch_handheld-windmill-fan.mp4"
@@ -37,24 +37,60 @@
       ></video>
 
       <div class="video-controls">
-        <button id="play-pause-button">
-          <img
-            id="play-pause-img"
-            src="https://img.icons8.com/ios-glyphs/30/play--v1.png"
-            alt="Play Button"
-            width="24"
-            height="24"
-          />
-        </button>
-        <button id="mute-unmute-button">
-          <img
-            id="mute-unmute-img"
-            src="https://img.icons8.com/ios-glyphs/30/high-volume--v2.png"
-            alt="mute Button"
-            width="24"
-            height="24"
-          />
-        </button>
+        <div class="buttonwrapper">
+          <div class="left">
+            <button id="play-pause-button">
+              <img
+                id="play-pause-img"
+                src="https://img.icons8.com/ios-glyphs/30/play--v1.png"
+                alt="Play Button"
+                width="16"
+                height="16"
+              />
+            </button>
+
+            <button id="mute-unmute-button">
+              <img
+                id="mute-unmute-img"
+                src="https://img.icons8.com/ios-glyphs/30/high-volume--v2.png"
+                alt="mute Button"
+                width="16"
+                height="16"
+              />
+            </button>
+          </div>
+
+          <div class="right">
+            <button id="decrease-volume-button">
+              <img
+                id="decrease-volume-img"
+                src="https://img.icons8.com/ios-glyphs/30/low-volume.png"
+                alt="Decrease Volume Button"
+                width="16"
+                height="16"
+              />
+            </button>
+
+            <button id="increase-volume-button">
+              <img
+                id="increase-vol-img"
+                src="https://img.icons8.com/ios-glyphs/30/high-volume--v1.png"
+                alt="Increase Volume Button"
+                width="16"
+                height="16"
+              />
+            </button>
+            <button id="fullscreen-button">
+              <img
+                id="fullscreen-img"
+                src="https://img.icons8.com/ios-glyphs/30/full-screen--v1.png"
+                alt="Fullscreen Button"
+                width="16"
+                height="16"
+              />
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -64,6 +100,9 @@
         create a handheld windmill using ready available materials! This will be
         a project that is both fun for children and adults alike!
       </h2>
+      <div class="progress-bar">
+        <span id="progress-bar-fill"></span>
+      </div>
     </div>
 
     <div class="description">
@@ -80,7 +119,7 @@
           </ul>
         </div>
         <div class="column2">
-          <button>Skip to timestamp</button>
+          <button id="time-1-button">Skip to timestamp</button>
         </div>
       </div>
     </div>
@@ -95,7 +134,7 @@
           </p>
         </div>
         <div class="column2">
-          <button>Skip to timestamp</button>
+          <button id="time-2-button">Skip to timestamp</button>
         </div>
       </div>
     </div>
@@ -111,7 +150,7 @@
           </p>
         </div>
         <div class="column2">
-          <button>Skip to timestamp</button>
+          <button id="time-3-button">Skip to timestamp</button>
         </div>
       </div>
     </div>
@@ -126,7 +165,24 @@
           </p>
         </div>
         <div class="column2">
-          <button>Skip to timestamp</button>
+          <button id="time-4-button">Skip to timestamp</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="description">
+      <div class="row">
+        <div class="column">
+          <h1>Step 4</h1>
+          <p>
+            Using the leftover pieces of foam sheets that was cut out, use a
+            circular object (We used a cover of a glue stick) and stamp an
+            impression, creating a circular cutout. Poke a hole through the
+            center of the circular cutout.
+          </p>
+        </div>
+        <div class="column2">
+          <button id="time-5-button">Skip to timestamp</button>
         </div>
       </div>
     </div>
@@ -136,23 +192,6 @@
         <div class="column">
           <h1>Step 5</h1>
           <p>
-            Using the leftover pieces of foam sheets that was cut out, use a
-            circular object (We used a cover of a glue stick) and stamp an
-            impression, creating a circular cutout. Poke a hole through the
-            center of the circular cutout.
-          </p>
-        </div>
-        <div class="column2">
-          <button>Skip to timestamp</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="description">
-      <div class="row">
-        <div class="column">
-          <h1>Step 6</h1>
-          <p>
             Wrap the pipe cleaner around the straw, leaving a small bit hanging
             out. Slide a foam ring onto the pipe cleaner, push the windmill
             through the pipe cleaner and cover the other end with a foam ring.
@@ -160,7 +199,7 @@
           </p>
         </div>
         <div class="column2">
-          <button>Skip to timestamp</button>
+          <button id="time-6-button">Skip to timestamp</button>
         </div>
       </div>
     </div>
@@ -175,7 +214,19 @@
     </div>
 
     <footer>
-      <p>A Chen Luohan Site, Made with 10% sanity, 90% love.</p>
+      <div class="row">
+        <div class="column">
+          <p>A Chen Luohan Site, Made with 10% sanity, 90% love.</p>
+        </div>
+        <div class="column">
+          <ul>
+            <li>Icon Credit</li>
+            <li>Icon Credit</li>
+            <li>Icon Credit</li>
+            <li>Icon Credit</li>
+          </ul>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
