@@ -13,10 +13,10 @@ playPauseButton.addEventListener("click", playPauseVideo);
 
 function playPauseVideo() {
   if (myVideo.paused || myVideo.ended) {
-    playPauseImg.src = "https://img.icons8.com/ios-glyphs/30/play--v2.png";
+    playPauseImg.src = "https://img.icons8.com/ios-glyphs/30/pause--v2.png";
     myVideo.play();
   } else {
-    playPauseImg.src = "https://img.icons8.com/ios-glyphs/30/pause--v2.png";
+    playPauseImg.src = "https://img.icons8.com/ios-glyphs/30/play--v2.png";
     myVideo.pause();
   }
 }
@@ -57,6 +57,10 @@ function updateProgressBar() {
   progressBarFill.style.width = progress + "%";
 }
 
+// This code allows the user to enable fullscreen on the video using either the button or double clicking.
+// If the video is not in fullscreen, the video will go into fullscreen when the fullscreen button is pressed or a double click is registered
+// However, if the video is in fullscreen, the video will exit fullscreen when double clicked.
+// fullscreen functionality is important to a site that has a video as the main focus of the page as it gives the user an option to focus solely on the main content of the site: The video.
 myVideo.addEventListener("dbclick", goFullscreen);
 
 const fullscreenButton = document.querySelector("#fullscreen-button");
@@ -72,6 +76,11 @@ function goFullscreen() {
   }
 }
 
+
+// This code allows the volume to be increased or decreased when the button is clicked. The volume will increase/decrease on a 10% interval (0.1) from the value of 1 (maximum volume) to 0 (no volume)
+// When the button is clicked, The function in the code collects the value of the current volume and if the value returned is within the parameters set to raise/lower the volume, it executes the code.
+// This action can be repeated by repeatedly pressing the button until the value of volume hits the upper/lower limit as stated in the function
+// A volume control is essential to users as it gives the user more control over how they want to view the video.
 const increaseVolumeButton = document.querySelector("#increase-volume-button");
 console.log(increaseVolumeButton);
 increaseVolumeButton.addEventListener("click", increaseVolume);
@@ -98,6 +107,10 @@ function updateVolume() {
   console.log("current volume is", myVideo.volume);
 }
 
+// This code allows the video to play at a certain timestamp when the button is pressed. The usage of multiple ids allows the creation of multiple timestamps.
+// When the button is clicked, the code will scroll the user towards the video and play the video (if it's paused) at the timestamp stipulated.
+// Timestamps is the most important part of a DIY/crafts website as it allows the user to repeat/skip to parts that they are specifically looking for, instead of having to sit through the video until
+// it ends and rewinds before being able to look at the parts that they wanted to find.
 const step1Button = document.querySelector("#time-1-button");
 console.log(step1Button);
 step1Button.addEventListener("click", gotoStep1);
