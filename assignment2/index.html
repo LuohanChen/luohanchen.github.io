@@ -2,8 +2,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Site title -->
     <title>InteractiveCrafts!</title>
-    <!-- add the font family of your choice -->
     <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
@@ -15,7 +15,7 @@
     />
   </head>
   <body>
-    <!-- Navigation Section -->
+    <!-- Navbar, tailored to match the content and theme of the site -->
     <nav>
       <a href="#">Home</a>
       <a href="#">Blog</a>
@@ -26,6 +26,7 @@
       <a href="#">Contact</a>
     </nav>
 
+    <!-- Sitemap as most cooking/arts&crafts sites include it for quicker navigation -->
     <div class="sitemap">
       <a href="#">Crafts</a>
       <p>></p>
@@ -34,6 +35,7 @@
       <a href="#">Handheld Windmill</a>
     </div>
 
+    <!-- Main video and associated controllers of the site is contained within this section -->
     <div class="video-container">
       <div class="title">
         <h1>Watch: How to make DIY handheld windmills:</h1>
@@ -45,7 +47,9 @@
 
       <div class="video-controls">
         <div class="buttonwrapper">
+          <!-- I divided the button layout into two columns, this class marks the left column of buttons -->
           <div class="left">
+            <!-- play/pause button -->
             <button id="play-pause-button">
               <img
                 id="play-pause-img"
@@ -55,7 +59,7 @@
                 height="16"
               />
             </button>
-
+            <!-- Mute/unmute button -->
             <button id="mute-unmute-button">
               <img
                 id="mute-unmute-img"
@@ -65,7 +69,7 @@
                 height="16"
               />
             </button>
-
+            <!-- Skip backwards 10 seconds button -->
             <button id="return-backward-button">
               <img
                 id="return-backward-img"
@@ -75,7 +79,7 @@
                 height="24"
               />
             </button>
-
+            <!-- Fast forward 10 seconds button -->
             <button id="fast-forward-button">
               <img
                 id="fast-forward-img"
@@ -86,8 +90,9 @@
               />
             </button>
           </div>
-
+          <!-- This class marks the right column of buttons -->
           <div class="right">
+            <!-- Decrease volume button -->
             <button id="decrease-volume-button">
               <img
                 id="decrease-volume-img"
@@ -97,7 +102,7 @@
                 height="20"
               />
             </button>
-
+            <!-- Increase volume button -->
             <button id="increase-volume-button">
               <img
                 id="increase-vol-img"
@@ -107,6 +112,7 @@
                 height="16"
               />
             </button>
+            <!-- Fullscreen button -->
             <button id="fullscreen-button">
               <img
                 id="fullscreen-img"
@@ -120,21 +126,25 @@
         </div>
       </div>
     </div>
-
+    <!-- Main text content of the site is located here -->
     <div class="heading">
+      <!-- I created a heading to describe the description that is shown in the video so the viewers have context -->
       <h2>
         Welcome to Interactivecrafts.com, our talented artist shows us how to
         create a handheld windmill using ready available materials! This will be
         a project that is both fun for children and adults alike!
       </h2>
+      <!-- Progress bar is located in a location where the viewers reading the main content could see so they have a visual representation of how far along the video they are -->
       <div class="progress-bar">
         <span id="progress-bar-fill"></span>
       </div>
     </div>
-
+    <!-- The main steps and processes for the craft recipe is listed out in the description so that viewers can follow along as the video plays -->
     <div class="description">
+      <!-- The description is also broken into two columns, using class row and class column to denote which content is on the left column, and which is on the right -->
       <div class="row">
         <div class="column">
+          <!-- I've elected to list down all the materials, steps, and progress of the project with a large title and small text descriptions -->
           <h1>Materials Needed</h1>
           <ul>
             <li>Sheet of foam</li>
@@ -146,6 +156,8 @@
           </ul>
         </div>
         <div class="column2">
+          <!-- On the right of the description is the second part of the column, which contains the timestamp button, allowing the user to skip to that timestamp in the video while they are reading it. -->
+          <!-- This is repeated throughout the page until the end of the page -->
           <button id="time-1-button">Skip to timestamp</button>
         </div>
       </div>
@@ -239,7 +251,7 @@
         turn smoothly. Try making a few in different colours!
       </p>
     </div>
-
+    <!-- Footer contains personal and copyright details -->
     <footer>
       <div class="row">
         <div class="column">
@@ -250,6 +262,8 @@
           <ul>
             <li>play icon from icons8</li>
             <li>high-volume icon from icons8</li>
+            <li>skip-forward icon from icons8</li>
+            <li>skip-backward icon from icons8</li>
             <li>low-volume icon from icons8</li>
             <li>fullscreen icon from icons8</li>
           </ul>
