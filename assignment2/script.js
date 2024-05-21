@@ -45,6 +45,28 @@ function toggleSound() {
   }
 }
 
+// This code block allows for the user to fast forward or to return 10 seconds into the video. The function calls upon the current time of the video and adds or subtracts 10 seconds from it. For a check that the function is fired, the console will log a confirmation message
+// This function and button is essential to a DIY arts and crafts site as users are able to return back to details that they might have missed or want to have a look at again without the need to re-loop the video from the beginning.
+const backwardButton = document.querySelector("#return-backward-button");
+console.log(backwardButton);
+backwardButton.addEventListener("click", return10s);
+
+function return10s() {
+  myVideo.currentTime -= 10.0;
+  myVideo.play();
+  console.log("Skipped to: ", myVideo.currentTime);
+}
+
+const forwardButton = document.querySelector("#fast-forward-button");
+console.log(forwardButton);
+forwardButton.addEventListener("click", skip10s);
+
+function skip10s() {
+  myVideo.currentTime += 10.0;
+  myVideo.play();
+  console.log("Skipped to: ", myVideo.currentTime);
+}
+
 // This code calls upon the progress-bar-fill id in the html, changing the state of the progress bar as it runs a check on the current time elapsed in the video, converting that time into an integer, this integer is then used to update the progress bar fill in css styling.
 // A progress bar provides a visual aid for the user to understand the progress of the video, one quick glance and the user is able to identify how much of the video has passed, or where in the video they are at.
 myVideo.addEventListener("timeupdate", updateProgressBar);
@@ -75,7 +97,6 @@ function goFullscreen() {
     document.exitFullscreen();
   }
 }
-
 
 // This code allows the volume to be increased or decreased when the button is clicked. The volume will increase/decrease on a 10% interval (0.1) from the value of 1 (maximum volume) to 0 (no volume)
 // When the button is clicked, The function in the code collects the value of the current volume and if the value returned is within the parameters set to raise/lower the volume, it executes the code.
