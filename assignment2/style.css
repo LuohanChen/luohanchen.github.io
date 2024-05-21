@@ -36,6 +36,21 @@ nav a:hover {
   background-color: rgb(255, 227, 175);
 }
 
+.sitemap {
+  display: flex;
+  width: 100%;
+  margin-left: 20%;
+  margin-top: 1%;
+  font-family: inter;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.sitemap a {
+  color: rgb(30, 30, 30);
+  text-decoration: none;
+}
+
 .video-controls button {
   width: 36px;
   height: 36px;
@@ -87,7 +102,7 @@ header {
 .title {
   display: flex;
   justify-content: flex-start;
-  margin-top: 5%;
+  margin-top: 3%;
   margin-bottom: 10px;
   font-family: "Inter", sans-serif;
   font-weight: 900;
@@ -103,12 +118,19 @@ header {
   margin: 0 auto;
 }
 
-.description,
 .heading {
   width: 60%;
   margin: 0 auto;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-bottom: solid 1px rgb(168, 168, 168);
+}
+
+.description {
+  width: 60%;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 3%;
   border-bottom: solid 1px rgb(168, 168, 168);
 }
 
@@ -163,7 +185,7 @@ header {
   font-family: "Inter", sans-serif;
   font-weight: 800;
   font-size: 30px;
-  color: rgb(30, 30, 30);;
+  color: rgb(30, 30, 30);
 }
 
 .description p {
@@ -171,7 +193,7 @@ header {
   font-weight: 400;
   font-size: 18px;
   padding-bottom: 2%;
-  color: rgb(30, 30, 30);;
+  color: rgb(30, 30, 30);
 }
 
 .description ul {
@@ -181,7 +203,7 @@ header {
   font-size: 18px;
   padding-top: 3px;
   padding-bottom: 3px;
-  color: rgb(30, 30, 30);;
+  color: rgb(30, 30, 30);
 }
 
 .description button {
@@ -243,7 +265,7 @@ footer .column {
 
 footer p,
 footer ul {
-  color: rgb(30, 30, 30);;
+  color: rgb(30, 30, 30);
   font-family: "Inter", sans-serif;
   font-size: 12px;
   padding-left: 10%;
