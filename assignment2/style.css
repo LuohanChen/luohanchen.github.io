@@ -1,9 +1,11 @@
+/* Design Decision: I chose a light yellow/orange theme for the colours as these kind of bright/desturated color combination is commonly associated with arts and craft sites (they tend to be pretty colourful) */
 html,
 body {
   background-color: rgb(255, 252, 237);
   overflow-x: hidden;
 }
 
+/* I have once again elected to include white space on both sides of the page as it aids the viewer in efficiently viewing the content on the screen without the need to move their heads or to strain their eyes reading from one corner to the other */
 .container {
   margin-left: 10%;
   margin-right: 10%;
@@ -12,7 +14,7 @@ body {
 video {
   display: block;
 }
-
+/* This time I contained all the elements of the Navbar in the center of the page, with each navigation button laid out on the left and right of the site's logo, which is on the center, I also used flexbox for all my ordering operations instead of float :) */
 nav {
   display: flex;
   justify-content: center;
@@ -20,7 +22,7 @@ nav {
   width: 100%;
   background-color: rgb(255, 244, 210);
 }
-
+/* The font i have chosen for this site is Inter, a neat, clean sans serif font for a modern look and good visibility.*/
 nav a {
   list-style-type: none;
   text-decoration: none;
@@ -31,7 +33,7 @@ nav a {
   font-size: 20px;
   padding: 20px;
 }
-
+/* Changing the colour when mouse over the element to indicate interactivity. */
 nav a:hover {
   background-color: rgb(255, 227, 175);
 }
@@ -50,7 +52,7 @@ nav a:hover {
   color: rgb(30, 30, 30);
   text-decoration: none;
 }
-
+/* I've chosen to make the video buttons rounded using border-radius. A rounded button contributes to the overall theme of the site and the artistic nature of an arts and craft website. */
 .video-controls button {
   width: 36px;
   height: 36px;
@@ -77,6 +79,7 @@ nav a:hover {
   width: 100%;
 }
 
+/* Flexbox columns to arrange elements left and right. */
 .left {
   display: flex;
   justify-content: flex-start;
