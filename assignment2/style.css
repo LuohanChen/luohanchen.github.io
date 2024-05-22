@@ -94,7 +94,7 @@ nav a:hover {
   margin-right: 0;
   flex: 1;
 }
-
+/* I've elected to use the font "Pacifico" to create a typography logo for the website. adding some blank space on each side of it in order to isolate it from the other navigational elements. */
 header {
   font-family: "Pacifico", cursive;
   color: rgb(255, 126, 51);
@@ -137,6 +137,7 @@ header {
   border-bottom: solid 1px rgb(168, 168, 168);
 }
 
+/* I made the progress bar rounded in order to fit with the other rounded elements of the site. */
 .progress-bar {
   width: 100%;
   height: 15px;
@@ -150,11 +151,11 @@ header {
 .progress-bar span {
   display: block;
   height: 100%;
-  background-color: coral;
+  background-color: rgb(255, 126, 51);
   width: 0;
   transition: width 0.3s ease;
 }
-
+/* Rows and columns in order to separate the content from left to right. */
 .row {
   display: flex;
   flex-direction: row;
@@ -167,7 +168,7 @@ header {
   flex-direction: column;
   flex: 1;
 }
-
+/* I wanted the content on the right to stick to the right edge, so i used flex-end */
 .column2 {
   display: flex;
   flex-direction: column;
@@ -224,7 +225,7 @@ header {
   font-size: 16px;
   border-radius: 4px;
 }
-
+/* The timestamp buttons are styled to have rounded edges to fit with the theme of the site. */
 .description button {
   width: 50%;
   height: 100%;
@@ -240,11 +241,11 @@ header {
   font-size: 16px;
   border-radius: 4px;
 }
-
+/* A change of colour on hover of the button to indicate interactivity. */
 .description button:hover {
   background-color: rgb(221, 100, 30);
 }
-
+/* Footer styling, once again separating the content into two columns. */
 footer {
   display: flex;
   background-color: rgb(255, 244, 210);
