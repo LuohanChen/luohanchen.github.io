@@ -23,6 +23,7 @@ nav {
   background-color: rgb(255, 244, 210);
 }
 /* The font i have chosen for this site is Inter, a neat, clean sans serif font for a modern look and good visibility.*/
+/* I added a css transition to give the to hover change of background colour a smoother interaction experience. */
 nav a {
   list-style-type: none;
   text-decoration: none;
@@ -32,6 +33,7 @@ nav a {
   font-family: "Inter", sans-serif;
   font-size: 20px;
   padding: 20px;
+  transition: background-color 0.1s ease;
 }
 /* Changing the colour when mouse over the element to indicate interactivity. */
 nav a:hover {
@@ -209,22 +211,6 @@ header {
   padding-bottom: 3px;
   color: rgb(30, 30, 30);
 }
-
-.description button {
-  width: 50%;
-  height: 100%;
-  background-color: rgb(255, 126, 51);
-  border: none;
-  color: white;
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
-  font-size: 18px;
-  padding: 10px 10px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 16px;
-  border-radius: 4px;
-}
 /* The timestamp buttons are styled to have rounded edges to fit with the theme of the site. */
 .description button {
   width: 50%;
@@ -240,6 +226,7 @@ header {
   text-decoration: none;
   font-size: 16px;
   border-radius: 4px;
+  transition: background-color 0.1s ease;
 }
 /* A change of colour on hover of the button to indicate interactivity. */
 .description button:hover {
