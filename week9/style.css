@@ -47,3 +47,156 @@ button:hover {
   /* rotate: 20deg; */
   translate: -10px;
 }
+
+input {
+  padding: 10px;
+  border: 4px solid lime;
+  border-radius: 10px;
+  transition: border-color 0.2s linear;
+}
+
+input:hover {
+  border-color: crimson;
+}
+
+input.focus {
+  border-color: yellow;
+}
+
+.fill-icon {
+  transition: fill 0.5s ease;
+}
+
+.fill-icon:hover {
+  fill: blue;
+}
+
+.duck-icon {
+  /* transition: scale 0.5s ease; */
+  animation: bounce 1s ease-out infinite;
+}
+
+.duck-icon:hover {
+  scale: 1.2;
+}
+
+.box {
+  background-color: purple;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* animation-name: color-switch; */
+  animation-name: border-switch;
+  border-width: 6px;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes color-switch {
+  0% {
+    background-color: purple;
+  }
+  20% {
+    background-color: rgb(178, 178, 18);
+  }
+  40% {
+    background-color: rgb(7, 196, 45);
+  }
+  60% {
+    background-color: rgb(195, 14, 17);
+  }
+  80% {
+    background-color: rgb(0, 194, 200);
+  }
+  100% {
+    background-color: purple;
+  }
+}
+
+@keyframes border-switch {
+  0% {
+    border-color: purple;
+  }
+  20% {
+    border-color: rgb(178, 178, 18);
+  }
+  40% {
+    border-color: rgb(7, 196, 45);
+  }
+  60% {
+    border-color: rgb(195, 14, 17);
+  }
+  80% {
+    border-color: rgb(0, 194, 200);
+  }
+  100% {
+    border-color: purple;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    translate: 0px 0px;
+  }
+  25% {
+    translate: 0px -60px;
+  }
+  50% {
+    translate: 0px 0px;
+  }
+  75% {
+    translate: 0px -20px;
+  }
+  100% {
+    translate: 0px 0px;
+  }
+}
+
+.spinner {
+  width: 120px;
+  height: 120px;
+  /* background-color: cornsilk; */
+  border: 6px solid cornsilk;
+  border-top-color: crimson;
+  border-radius: 50%;
+  animation-name: loading;
+  animation-duration: 3s;
+  animation-timing-function: linear;
+  animation-iteration-count: Infinite;
+}
+
+@keyframes loading {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+.heart-icon {
+  animation: heartbeat 4s infinite;
+}
+
+@keyframes heartbeat {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 0.7;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+#side-drawer {
+  position: fixed;
+  width: 200px;
+  background-color: cadetblue;
+  height: 100vh;
+  top: 0;
+  left: -200px;
+  transition: translate 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
