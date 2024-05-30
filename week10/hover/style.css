@@ -45,6 +45,7 @@ button:hover {
   padding: 10px;
   position: absolute;
   bottom: 0;
+  /* top: 0; */
   width: 100%;
   display: none;
   z-index: 1;
