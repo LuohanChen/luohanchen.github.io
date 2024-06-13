@@ -6,8 +6,32 @@ body {
   overflow: hidden;
 }
 
-#canvas {
-  height: 100vh;
+nav {
+  display: flex;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  border: 1px solid black;
+}
+
+nav #random {
+  display: flex;
+  justify-content: flex-end;
+}
+
+img {
+  pointer-events: none;
+}
+
+.canvas {
+  display: flex;
+  justify-content: center;
+  zoom: 1;
+  position: absolute;
+  width: 100%;
+  cursor: move;
+  user-select: none;
+  zoom: 1.5;
 }
 
 .row {
