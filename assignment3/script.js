@@ -1,42 +1,51 @@
 // Needed functionalities (JS):
 // random selection button, fortune cookie onclick change image, fortune cookie randomiser button, canvas scroll in/out, canvas draggable
-const container = document.querySelector(".canvas");
 
-let currentZoom = 1;
-let minZoom = 1;
-let maxZoom = 5;
-let stepSize = 0.05;
+// const track = document.getElementById("card-container");
 
-container.addEventListener("wheel", function (event) {
-  let direction = event.deltaY > 0 ? -1 : 1;
-  zoomImage(direction);
+// window.onmousedown = (e) => {
+//   track.dataset.mouseDownAt = e.clientX;
+// };
+
+// window.onmousemove = (e) => {
+//   if (track.dataset.mouseDownAt === "0") return;
+
+//   const mouseDelta = parseFloat(track.dataset.mouseDownAt) - e.clientX,
+//     maxDelta = window.innerWidth / 2;
+
+//   const percentage = (mouseDelta / maxDelta) * -100,
+//     nextPercentage = parseFloat(track.dataset.prevPercentage) + percentage;
+
+//   track.dataset.percentage = nextPercentage;
+
+//   track.style.transform = `translate(${nextPercentage}%, -50%)`;
+// };
+
+// window.onmouseup = () => {
+//   track.dataset.mouseDownAt = "0";
+//   track.dataset.prevPercentage = track.dataset.percentage;
+// };
+
+document.addEventListener("DOMContentLoaded", function () {});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var stream = document.querySelector(".gallery__stream");
+  var items = document.querySelectorAll(".gallery__item");
+  var prev = document.querySelector(".gallery__prev");
+  var next = document.querySelector(".gallery__next");
 });
 
-function zoomImage(direction) {
-  let newZoom = currentZoom + direction * stepSize;
-
-  // Limit the zoom level to the minimum and maximum values
-  if (newZoom < minZoom || newZoom > maxZoom) {
-    return;
-  }
-
-  currentZoom = newZoom;
-
-  // Update the CSS transform of the image to scale it
-  let image = document.querySelector(".canvas");
-  image.style.transform = "scale(" + currentZoom + ")";
-}
-
-function onMouseDrag({ movementX, movementY }) {
-  let getContainerStyle = window.getComputedStyle(container);
-  let leftValue = parseInt(getContainerStyle.left);
-  let topValue = parseInt(getContainerStyle.top);
-  container.style.left = `${leftValue + movementX}px`;
-  container.style.top = `${topValue + movementY}px`;
-}
-container.addEventListener("mousedown", () => {
-  container.addEventListener("mousemove", onMouseDrag);
-});
-document.addEventListener("mouseup", () => {
-  container.removeEventListener("mousemove", onMouseDrag);
+document.addEventListener("DOMContentLoaded", function () {
+  var stream = document.querySelector(".gallery__stream");
+  var items = document.querySelectorAll(".gallery__item");
+  var prev = document.querySelector(".gallery__prev");
+  var next = document.querySelector(".gallery__next");
+  prev.addEventListener("click", function () {
+    stream.insertBefore(items[items.length - 1], items[0]);
+    items = document.querySelectorAll(".gallery__item");
+  });
+  next.addEventListener("click", function () {
+    stream.appendChild(items[0]);
+    items = document.querySelectorAll(".gallery__item");
+  });
 });
