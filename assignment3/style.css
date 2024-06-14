@@ -22,22 +22,22 @@ body {
 
 .card:nth-child(1) {
   position: absolute;
-  transform: translatex(-10%) rotate(-6deg);
+  transform: translatex(-2%) rotate(-3deg);
 }
 
 .card:nth-child(2) {
   position: absolute;
-  transform: translatex(10%) rotate(6deg);
+  transform: translatex(5%) rotate(6deg);
 }
 
 .card:nth-child(3) {
   position: absolute;
-  transform: translatex(-5%) rotate(-3deg);
+  transform: translatex(-2%) rotate(-10deg);
 }
 
 .card:nth-child(4) {
   position: absolute;
-  transform: translatex(5%) rotate(3deg);
+  transform: translatex(6%) rotate(3deg);
 }
 
 .card-container:hover > .card {
@@ -46,27 +46,31 @@ body {
 }
 
 .card-container:hover > .card:nth-child(1) {
-  transform: translate(-80%, 15%) rotate(-21deg);
+  transform: translate(-100%);
 }
 
 .card-container:hover > .card:nth-child(2) {
-  transform: translate(80%, 15%) rotate(21deg);
+  transform: translate(100%);
 }
 
 .card-container:hover > .card:nth-child(3) {
-  transform: translate(-35%, 5%) rotate(-15deg);
+  transform: translate(-200%);
 }
 
 .card-container:hover > .card:nth-child(4) {
-  transform: translate(35%, 5%) rotate(15deg);
+  transform: translate(200%);
 }
 
 .card-container > .card:hover {
-  scale: 110%;
-  transition: scale 0.6s cubic-bezier(0, 0.55, 0.45, 1);
+  transform: scale(110%);
 }
 
-.card.is-flipped {
+.card-container > .card:hover:nth-child(1) {
+  transform: scale(110%);
+}
+
+.card-container:hover > .card.is-flipped {
+  scale: 110%;
   transition: transform 0.6s ease;
   transform: rotateY(180deg);
   z-index: 1;
