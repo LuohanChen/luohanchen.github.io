@@ -36,11 +36,11 @@ body {
 
 .column:hover {
   scale: 110%;
-  animation-duration: 2s;
+  /* animation-duration: 2s;
   animation-iteration-count: infinite;
   transform-origin: bottom;
   animation-name: bounce;
-  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); */
 }
 
 .row:hover > .column.is-flipped {
