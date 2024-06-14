@@ -25,8 +25,14 @@ body {
   backface-visibility: hidden;
 }
 
+.card-front:hover {
+  animation: bounce 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+}
+
 .card-back {
-  transform: rotateY(180deg);
+  transform: scale(1.1, 1.1) rotateY(180deg);
 }
 
 .row:hover > .column {
@@ -34,29 +40,23 @@ body {
   transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
-.column:hover {
-  scale: 110%;
-  /* animation-duration: 2s;
-  animation-iteration-count: infinite;
-  transform-origin: bottom;
-  animation-name: bounce;
-  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1); */
-}
-
 .row:hover > .column.is-flipped {
   transition: transform 0.6s ease;
   transform: rotateY(180deg);
-  z-index: 1;
+}
+
+.column:hover {
+  transform: scale(1.1, 1.1);
 }
 
 @keyframes bounce {
   0% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(-2deg);
   }
   50% {
-    transform: translateY(-50px);
+    transform: translateY(-50px) rotate(2deg);
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(0) rotate(-2deg);
   }
 }
