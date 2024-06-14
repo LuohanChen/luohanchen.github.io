@@ -1,16 +1,36 @@
 body {
+  height: 100vh;
+  overflow: hidden;
   background-color: black;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-.card-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .card {
+  position: relative;
+  width: 360px;
+  height: 550px;
+  transform-style: preserve-3d;
+  transition: transform 1s ease;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  backface-visibility: hidden;
+}
+
+.card-container:hover > .card {
+  cursor: pointer;
+  transform: rotateY(180deg);
+}
+
+.card-back {
+  transform: rotateY(180deg);
+}
+
+/* .card {
   position: absolute;
   transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
 }
@@ -50,4 +70,4 @@ body {
 .card:hover {
   scale: 107%;
   transition: scale 0.6s cubic-bezier(0, 0.55, 0.45, 1);
-}
+} */
