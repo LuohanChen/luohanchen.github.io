@@ -1,40 +1,58 @@
 // Add CSS to card to make it LARGER, then return back to original state after time.
-var clickStyle = document.getElementById("cardContainer");
+var clickStyle = document.querySelectorAll(".column");
 
 function toggleStyle() {
   clickStyle.classList.toggle("is-clicked");
-
-  setTimeout(function () {
-    clickStyle.classList.remove("is-clicked");
-  }, 1000);
 }
 
-// Modal controls
-var modal = document.getElementById("modal");
-var open = document.getElementById("btn");
-var span = document.getElementsByClassName("close")[0];
+clickStyle.forEach((column, index) => {
+  // Use index to associate each column with its modal
+  column.addEventListener("click", function () {
+    this.classList.toggle("is-clicked");
 
-open.onclick = function () {
-  modal.style.visibility = "visible";
-  modal.style.opacity = "1";
-};
+    setTimeout(function () {
+      clickStyle.forEach((col) => col.classList.remove("is-clicked"));
+    }, 3000);
 
-span.onclick = function () {
-  modal.style.visibility = "hidden";
-  modal.style.opacity = "0";
-};
+    // Open the associated modal
+    var modal = document.getElementById(`modal${index + 1}`); // Adjust the modal ID based on the column index
+    modal.style.visibility = "visible";
+    modal.style.opacity = "1";
+  });
+});
 
-window.onclick = function (event) {
-  if (event.target == modal) {
+// Close modal logic remains unchanged
+var closes = document.querySelectorAll(".close");
+
+closes.forEach((close) => {
+  close.addEventListener("click", function () {
+    var modal = this.closest(".modalbox");
     modal.style.visibility = "hidden";
     modal.style.opacity = "0";
-  }
-};
+  });
+});
 
-// Card tilt while cursor is hovering over the page (elaborate)
-document.addEventListener("DOMContentLoaded", function (event) {
-  const card = document.getElementById("modalcard");
-  const rect = card.getBoundingClientRect();
+window.addEventListener("click", function (event) {
+  var modals = document.querySelectorAll(".modalbox");
+  modals.forEach((modal) => {
+    if (
+      event.target === modal ||
+      event.target === modal.querySelector(".modalcard")
+    ) {
+      modal.style.visibility = "hidden";
+      modal.style.opacity = "0";
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Card tilt while cursor is hovering over the page (elaborate)
+  const cards = document.querySelectorAll(".modalcard");
+  let rect;
+
+  cards.forEach((card) => {
+    rect = card.getBoundingClientRect();
+  });
 
   document.addEventListener("mousemove", function (e) {
     const x = e.clientX - rect.left;
@@ -47,7 +65,10 @@ document.addEventListener("DOMContentLoaded", function (event) {
     tiltX = Math.min(Math.max(tiltX, -30), 30);
     tiltY = Math.min(Math.max(tiltY, -30), 30);
 
-    card.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
-    card.style.boxShadow = `${tiltX}px ${tiltY}px 30px rgb(249, 210, 122, 0.3)`;
+    // Apply transformation to each card individually
+    cards.forEach((card) => {
+      card.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
+      card.style.boxShadow = `${tiltX}px ${tiltY}px 30px rgb(249, 210, 122, 0.3)`;
+    });
   });
 });
