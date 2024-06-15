@@ -7,6 +7,16 @@ body {
   justify-content: center;
 }
 
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
 .row {
   display: flex;
   gap: 4vw;
@@ -19,8 +29,7 @@ body {
   transform-style: preserve-3d;
 }
 
-.card-front,
-.card-back {
+.card-front {
   position: absolute;
   backface-visibility: hidden;
 }
@@ -31,18 +40,24 @@ body {
   animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
 }
 
-.card-back {
-  transform: scale(1.1, 1.1) rotateY(180deg);
-}
-
 .row:hover > .column {
   cursor: pointer;
   transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
-.row:hover > .column.is-flipped {
-  transition: transform 0.6s ease;
-  transform: rotateY(180deg);
+.row:hover > .column.is-clicked {
+  transform: scale(2, 2);
+  transition: transform 1s ease;
+  animation: fadeout 1s;
+  animation-fill-mode: forwards;
+  z-index: 1;
+}
+
+.row:hover > .column.is-letgo {
+  transform: scale(1, 1);
+  transition: transform 1s ease;
+  animation: fadein 1s;
+  animation-fill-mode: forwards;
 }
 
 .column:hover {
@@ -59,4 +74,73 @@ body {
   100% {
     transform: translateY(0) rotate(-2deg);
   }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.modalbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modalbox img {
+  scale: 1.1;
+  transform: rotate(5deg);
+  z-index: 2;
+}
+
+.modal-content {
+  margin-left: 5%;
+  padding: 20px;
+  border-radius: 2em;
+  height: 200px;
+}
+
+h1 {
+  color: white;
+}
+
+h2 {
+  color: grey;
+}
+
+li {
+  color: gold;
+}
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }

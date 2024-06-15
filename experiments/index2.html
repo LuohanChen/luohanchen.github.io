@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Toggle CSS Style Example</title>
+    <style>
+      .mystyle {
+        color: blue;
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myDIV">Hello World!</div>
+    <button onclick="toggleStyle()">Toggle Style</button>
+
+    <script>
+      function toggleStyle() {
+        var element = document.getElementById("myDIV");
+        element.classList.toggle("mystyle");
+
+        // Reset the style after 5 seconds
+        setTimeout(function () {
+          element.classList.remove("mystyle");
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>

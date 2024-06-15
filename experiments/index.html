@@ -11,44 +11,45 @@
 
   <body>
     <div class="row">
+      <div class="column" id="cardContainer" onclick="toggleStyle()">
+        <button class="card-front" id="btn">
+          <img src="cardback.png" />
+        </button>
+      </div>
+
+      <div id="modal" class="modalbox">
+        <img src="card_banana.png" />
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h1>The Banana</h1>
+          <h2>Have you had some fruit today?</h2>
+          <ul>
+            <li>Time to drop what you're doing and grab a piece of fruit!</li>
+            <li>DESCRIPTION 2</li>
+            <li>DESCRIPTION 3</li>
+          </ul>
+          <h1>RETURN</h1>
+        </div>
+      </div>
+
       <div class="column">
         <div class="card-front">
           <img src="cardback.png" />
-        </div>
-        <div class="card-back">
-          <img src="card_banana.png" />
         </div>
       </div>
       <div class="column">
         <div class="card-front">
           <img src="cardback.png" />
         </div>
-        <div class="card-back">
-          <img src="card_burger.png" />
-        </div>
       </div>
       <div class="column">
         <div class="card-front">
           <img src="cardback.png" />
         </div>
-        <div class="card-back">
-          <img src="card_candy.png" />
-        </div>
       </div>
       <div class="column">
         <div class="card-front">
           <img src="cardback.png" />
-        </div>
-        <div class="card-back">
-          <img src="card_egg.png" />
-        </div>
-      </div>
-      <div class="column">
-        <div class="card-front">
-          <img src="cardback.png" />
-        </div>
-        <div class="card-back">
-          <img src="card_mushroom.png" />
         </div>
       </div>
     </div>
