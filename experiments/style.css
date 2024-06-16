@@ -38,7 +38,7 @@ body {
     rgb(var(--secondary-stripe-rgb)) 75%,
     rgb(var(--secondary-stripe-rgb)) 100%
   );
-  animation: pan 360s linear infinite;
+  animation: pan 100s linear infinite;
 }
 
 @keyframes pan {
