@@ -42,18 +42,18 @@ button {
   border-radius: 2em;
 }
 
-.row:hover > .column {
+.random:hover > .column {
   cursor: pointer;
   transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
-.row:hover > .column.is-clicked {
+.random:hover > .column.is-clicked {
   transform: translateY(-500%);
   transition: transform 0.6s cubic-bezier(0.55, 0, 1, 0.45);
   z-index: 0;
 }
 
-.row:hover > .column.is-letgo {
+.random:hover > .column.is-letgo {
   transform: scale(1, 1);
   transition: transform 1s ease;
   animation: fadein 1s;
