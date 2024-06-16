@@ -47,26 +47,22 @@ window.addEventListener("click", function (event) {
 
 // Card tilt while cursor is hovering over the page (elaborate)
 const cards = document.querySelectorAll(".modalcard");
-let rect;
 
-cards.forEach((card) => {
-  rect = card.getBoundingClientRect();
-});
+function updateTiltAndShadow(event) {
+  const x = event.clientX - window.innerWidth / 2;
+  const y = event.clientY - window.innerHeight / 2;
 
-document.addEventListener("mousemove", function (e) {
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  let tiltX = ((x - centerX) / centerX) * -5;
-  let tiltY = ((y - centerY) / centerY) * -10;
+  const tiltAmount = 50;
+  const tiltX = (x / window.innerWidth) * tiltAmount;
+  const tiltY = (-y / window.innerHeight) * tiltAmount;
 
-  tiltX = Math.min(Math.max(tiltX, -30), 30);
-  tiltY = Math.min(Math.max(tiltY, -30), 30);
+  const boxShadowOffsetX = (-tiltX / 100) * 20;
+  const boxShadowOffsetY = (tiltY / 100) * 20;
 
-  // Apply transformation to each card individually
   cards.forEach((card) => {
-    card.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
-    card.style.boxShadow = `${tiltX}px ${tiltY}px 30px rgb(249, 210, 122, 0.3)`;
+    card.style.transform = `perspective(900px) rotateX(${tiltY}deg) rotateY(${tiltX}deg)`;
+    card.style.boxShadow = `${boxShadowOffsetX}px ${boxShadowOffsetY}px 50px rgb(249, 210, 122, 0.3)`;
   });
-});
+}
+
+window.addEventListener("mousemove", updateTiltAndShadow);
