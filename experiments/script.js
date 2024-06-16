@@ -66,3 +66,14 @@ function updateTiltAndShadow(event) {
 }
 
 window.addEventListener("mousemove", updateTiltAndShadow);
+
+document.addEventListener("DOMContentLoaded", function () {
+  const randomElements = Array.from(document.querySelectorAll(".random"));
+
+  randomElements.forEach((element) => {
+    const randomIndex = Math.floor(Math.random() * randomElements.length);
+    const temp = randomElements[randomIndex];
+    randomElements[randomIndex] = element;
+    element.parentNode.insertBefore(temp, element);
+  });
+});
