@@ -67,7 +67,8 @@ function updateTiltAndShadow(event) {
 
 window.addEventListener("mousemove", updateTiltAndShadow);
 
-document.addEventListener("DOMContentLoaded", function () {
+// Randomization (elaborate)
+function randomizeOrder() {
   const randomElements = Array.from(document.querySelectorAll(".random"));
 
   randomElements.forEach((element) => {
@@ -76,4 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
     randomElements[randomIndex] = element;
     element.parentNode.insertBefore(temp, element);
   });
-});
+
+  const textAnimation = document.getElementById("textAnimation");
+  textAnimation.style.display = "block";
+  setTimeout(() => {
+    // Hide the text animation after the reshuffling is done
+    textAnimation.style.display = "none";
+  }, 2000); // Match the duration of the animation
+}

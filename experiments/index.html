@@ -9,11 +9,19 @@
     <script src="script.js" defer></script>
   </head>
   <body>
+    <div id="stripe-container">
+      <div id="stripe-pattern"></div>
+    </div>
+
+    <div class="sitetitle">
+      <h1>Pick a card, and let Destiny do the rest:</h1>
+    </div>
+
     <div class="row">
       <div class="random">
         <div class="column">
           <button class="card-front">
-            <img src="cardback.png" />
+            <img src="cardback.png" draggable="false" />
           </button>
         </div>
 
@@ -38,7 +46,7 @@
       <div class="random">
         <div class="column">
           <button class="card-front">
-            <img src="cardback.png" />
+            <img src="cardback.png" draggable="false" />
           </button>
         </div>
 
@@ -63,7 +71,7 @@
       <div class="random">
         <div class="column">
           <button class="card-front">
-            <img src="cardback.png" />
+            <img src="cardback.png" draggable="false" />
           </button>
         </div>
 
@@ -88,7 +96,7 @@
       <div class="random">
         <div class="column">
           <button class="card-front">
-            <img src="cardback.png" />
+            <img src="cardback.png" draggable="false" />
           </button>
         </div>
 
@@ -113,7 +121,7 @@
       <div class="random">
         <div class="column">
           <button class="card-front">
-            <img src="cardback.png" />
+            <img src="cardback.png" draggable="false" />
           </button>
         </div>
 
@@ -135,6 +143,8 @@
         </div>
       </div>
     </div>
+    <button id="shuffle" onclick="randomizeOrder()">Reshuffle cards</button>
+    <span id="textAnimation" style="display: none">Shuffled!</span>
   </body>
 </html>
 

@@ -1,20 +1,62 @@
+:root {
+  --primary-stripe-rgb: 20 20 20;
+  --secondary-stripe-rgb: 30 30 30;
+}
+
 body {
   height: 100vh;
   overflow: hidden;
   background-color: black;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
-button {
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
+#stripe-container {
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  translate: -50% 0%;
+  height: 100%;
+  width: 100%;
+  min-width: 2000px;
+  background-color: rgb(var(--stripe-primary-rgb));
+}
+
+#stripe-pattern {
+  height: 100%;
+  width: 100%;
+  background-size: 18px 18px;
+  background-image: linear-gradient(
+    -45deg,
+    rgb(var(--primary-stripe-rgb)) 25%,
+    rgb(var(--secondary-stripe-rgb)) 25%,
+    rgb(var(--secondary-stripe-rgb)) 50%,
+    rgb(var(--primary-stripe-rgb)) 50%,
+    rgb(var(--primary-stripe-rgb)) 75%,
+    rgb(var(--secondary-stripe-rgb)) 75%,
+    rgb(var(--secondary-stripe-rgb)) 100%
+  );
+  animation: pan 360s linear infinite;
+}
+
+@keyframes pan {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.sitetitle {
+  z-index: 1;
+}
+
+h1 {
+  color: white;
+  font-size: 60px;
 }
 
 .row {
@@ -32,6 +74,13 @@ button {
 .card-front {
   position: absolute;
   backface-visibility: hidden;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .card-front:hover {
@@ -124,15 +173,16 @@ button {
   height: 200px;
 }
 
-h1 {
+.modal-content h1 {
   color: white;
+  font-size: 20px;
 }
 
-h2 {
+.modal-content h2 {
   color: grey;
 }
 
-li {
+.modal-content li {
   color: gold;
 }
 .close {
@@ -147,4 +197,32 @@ li {
   color: #000;
   text-decoration: none;
   cursor: pointer;
+}
+
+#shuffle {
+  z-index: 1;
+}
+
+#textAnimation {
+  position: fixed;
+  color: white;
+  font-size: 150px;
+  display: none;
+  animation: fadingText 2s infinite cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+@keyframes fadingText {
+  0% {
+    transform: translate(0, 50px);
+    opacity: ;
+  }
+  50% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
 }
