@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- This site is also very fun, both to make and to use! -->
     <title>Very Lucky!</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Girassol&family=Oswald:wght@200..700&display=swap"
@@ -25,15 +26,19 @@
 
     <!-- Using row and column divs to arrange the cards horizontally with css flexboxes. -->
     <div class="row">
+      <!-- the Div class random is used to connect to javascript in order to randomise the order of the cards. -->
       <div class="random">
         <div class="column">
+          <!-- Using a button and a class, I'm able to create the selectable (clickable) card and control it independantly from the other elements in the page. Draggable=false to minimise breaking any elements in the page incase the user holds their mouse down a little too long. -->
           <button class="card-front">
             <img src="cardback.png" draggable="false" />
           </button>
         </div>
-
+        <!-- The entire modal element is contained within the div modalbox with an id to link to javascript. The main card element in the modal is contained within the modalcard div and an image of the card is assigned to it.
+         The textual content of the modal is contained within the modal-content div. ensuring a separation of the two modal classes to display horizontally and adjustments in css and javascript independantly. -->
         <div class="modalbox" id="modal1">
           <div class="modalcard">
+            <!-- I made each of the cards in Adobe Illustrator, so i can ensure the consistency of the size and dimensions of each card. -->
             <img src="card_banana.png" draggable="false" />
           </div>
           <div class="modal-content">
@@ -50,6 +55,7 @@
               </li>
               <li>Remember to return your shopping carts after usage.</li>
             </ul>
+            <!-- The span class close (linked to css and javascript) allows for the modal element to be closed and returned back to the main card selection screen. -->
             <span class="close">Return</span>
           </div>
         </div>
@@ -68,7 +74,7 @@
           </div>
           <div class="modal-content">
             <h1>The Burger</h1>
-            <h2>You deserve a treat.</h2>
+            <h2>You deserve a treat!</h2>
             <ul>
               <li>You've worked hard, so reward yourself accordingly!</li>
               <li>Rest and relaxation is equally important to work.</li>
@@ -92,7 +98,7 @@
           </div>
           <div class="modal-content">
             <h1>The Mushroom</h1>
-            <h2>Never a better time to get some sun.</h2>
+            <h2>Never a better time to get some sun!</h2>
             <ul>
               <li>
                 How long have you been at home? Head out and get some sunlight!
@@ -149,7 +155,7 @@
           </div>
           <div class="modal-content">
             <h1>The Egg</h1>
-            <h2>Why does we exist?</h2>
+            <h2>It's time to realise your potential!</h2>
             <ul>
               <li>The human spirit is stronger than you think, keep going!</li>
               <li>There will always be another opportunity to try again.</li>
@@ -163,6 +169,7 @@
         </div>
       </div>
     </div>
+    <!-- the button "shuffle" allows for the cards to be reshuffled onclick and have the text display "shuffled" after the button is pressed. The shuffle button calls upon the "randomizeOrder()" function in Javascript to function -->
     <button id="shuffle" onclick="randomizeOrder()">Reshuffle cards</button>
     <span id="textAnimation" style="display: none">Shuffled!</span>
   </body>

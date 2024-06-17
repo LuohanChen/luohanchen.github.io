@@ -1,18 +1,24 @@
+/* Most of the magic of my interaction: Hovering, happens here. Which i will explain in more details */
+
+/* Using root, i managed to define the colours i'm using for the background so i don't have to type the value every single time. */
 :root {
   --primary-stripe-rgb: 20 20 20;
   --secondary-stripe-rgb: 30 30 30;
 }
 
+/* Display: flex is used to turn the entire body into a flexbox in order to lay out the elements better. I used justify-content: space-evenly in order to stack the elements on top and below each other with even spacing without having to manually input the spaces*/
+/* This allows the elements to be responsive and adhere to CSS Flexbox rules for ease in styling the other elements*/
 body {
   height: 100vh;
   overflow: hidden;
-  background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
 }
 
+/* The background of the webpage. I used CSS's shape creator features to create a set of stripes and a pan animation to enable it to move from left to right and repeat. This adds to the site's aesthestics */
+/* The colours calls back to the color values that were originally indicated in the root element */
 #stripe-container {
   position: absolute;
   left: 50%;
@@ -50,6 +56,7 @@ body {
   }
 }
 
+/* This code allows for the text in the site's header/title to be fully uppercased (I could just type it in HTML but its more fun this way), Adding a text-shadow, i'm able to create a glow effect by playing with the rgb and opacity.*/
 .sitetitle {
   text-transform: uppercase;
   z-index: 1;
@@ -57,6 +64,7 @@ body {
     0 0 82px rgb(245, 167, 0);
 }
 
+/* One of the fonts I chose for this site is "Girassol" from Google fonts. Girassol is a serif font that is clean, but still retains an element of tradition and retains a mystical air around it. making it perfect for a "fortune telling" website*/
 h1 {
   font-family: "Girassol", serif;
   color: white;
@@ -68,17 +76,17 @@ h1 {
   gap: 4vw;
 }
 
+/* This is where back of the cards are styled.  */
+/* The column class defines the dimensions of the card, as well as contain a transition that allows the cards to scale back down smoothly after the mouse leaves the hover area of the card. I am a strong believer in brushing up details like these as I want the user's experience to be enhanced with absolute smooth animations and transitions.*/
 .column {
   position: relative;
   width: 360px;
   height: 550px;
-  transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* The main point of this part of css is to ensure that each card has a consistent styling, and that the cursor changes to a pointer when hovered over the cards in order to indicate to the user that this element can be clicked.*/
 .card-front {
-  position: absolute;
-  backface-visibility: hidden;
   background: none;
   color: inherit;
   border: none;
@@ -88,34 +96,38 @@ h1 {
   outline: inherit;
 }
 
+/* This section of codecode adds visual feedback for the user while hovering over the element by allowing for the scale of the card to be expanded and an animation to be played while the mouse is hovering over the .card-front element, 
+the animation allows for the card to be move with the "bounce" animation keyframes defined below, it will run as long as the user puts their mouse cursor on it. For smoothness, I used a cubic bezier that I picked from easings.net*/
+/* A box shadow is also added to enhance the hovering interaction by giving the user an additional visual feedback for the hovering. */
 .card-front:hover {
   animation: bounce 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
   box-shadow: 0px 0px 30px rgb(249, 210, 122, 1);
   border-radius: 2em;
 }
 
+.column:hover {
+  transform: scale(1.1, 1.1);
+}
+
 .random:hover > .column {
-  cursor: pointer;
   transition: transform 0.6s cubic-bezier(0, 0.55, 0.45, 1);
 }
 
+/* When the mouse clicks onto the card, the position of the mouse changes to give a visual feedback that the card has been selected, and has been brought out of the deck. Once again, I used transitions to make the animation smooth to enhance the user's experience. */
+/* This section of CSS is used to link to javascript to listen for the mouseclick and mouse letting go, so it does not run until those conditions in javascript are met. */
 .random:hover > .column.is-clicked {
   transform: translateY(-500%);
   transition: transform 0.6s cubic-bezier(0.55, 0, 1, 0.45);
   z-index: 0;
 }
 
+/* When the mouse has finished clicking the card and the click is let go, this animation and transition plays. I chose to scale up the cards to give it an illusion that the card is coming up away from the deck.*/
 .random:hover > .column.is-letgo {
   transform: scale(1, 1);
   transition: transform 1s ease;
-  animation: fadein 1s;
-  animation-fill-mode: forwards;
 }
 
-.column:hover {
-  transform: scale(1.1, 1.1);
-}
-
+/* keyframes for the "bounce" animation that plays when the user is hovering. I want the card to slightly rotate and move in order to give it a "floating" feeling as the user hovers over the cards. */
 @keyframes bounce {
   0% {
     transform: translateY(0) rotate(-2deg);
@@ -128,23 +140,8 @@ h1 {
   }
 }
 
-@keyframes fadeout {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fadein {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+/* Main code for the modal box, The only important part here is the visibility, opacity and transitions, The visibility and opacity connects to Javascript and listens for the click function to play in order to change its value from hidden to visible and 0 to 1. */
+/* The transition on the opacity is to ensure smooth transition for the modal box opening. */
 .modalbox {
   display: flex;
   visibility: hidden;
@@ -162,6 +159,8 @@ h1 {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+/* I made the card in the modal to be larger than the cards in the backgroun in order to distinguise it from the background cards and give users more opportunity to look at the details of the card. */
+/* There is also an effect that can be made with th cards being larger: The card displayed looks closer to the user, giving them the illusion of depth between the card on display and the cards at the background.*/
 .modalcard {
   scale: 1.2;
   z-index: 2;
@@ -181,6 +180,7 @@ h1 {
   font-size: 40px;
 }
 
+/* The other font I used for this site is the sans-serif font "Oswald". Oswald is a clean font with variable font weight to allow for the separation of subheader and description elements using font weight and good readability. */
 .modal-content h2 {
   font-family: "Oswald", sans-serif;
   color: grey;
@@ -197,6 +197,8 @@ h1 {
   font-size: 24px;
   padding-bottom: 5%;
 }
+
+/* For the close button, I made the buttons semi transparent and moved it to the bottom right of the text description in order for it to be naturally the last thing that the user will interact with after moving around and reading the page. */
 .close {
   float: right;
   margin-top: 5%;
@@ -220,6 +222,8 @@ h1 {
   transform: scale(1.05);
 }
 
+/* The shuffle button has the same styling as the close button. It's semi transparent and has a background-filter element to make the background behind the button blurry, giving it a nice slick glassmorphism effect. The hover interactions that
+I added are that the button will expand smoothly upon hovering, and the background colour will become darker. The button will also revert back to it's original scale smoothly if the mouse leaves it's hover range. Once again, I like to incorporate these details into enhancing the user's hover experience.*/
 #shuffle {
   background: rgba(212, 212, 212, 0.3);
   padding: 1%;
@@ -239,6 +243,8 @@ h1 {
   transform: scale(1.05);
 }
 
+/* Upon clicking the shuffle button, a text will appear indicating that the cards have been shuffled. This text provides a visual confirmation that the button has been pressed, and the associated randomizer javascript has been ran. prompting the user to select the cards again.
+The text moves smoothly using translate and opacity keyframes.*/
 #textAnimation {
   position: fixed;
   color: white;
@@ -249,6 +255,7 @@ h1 {
   font-family: "Girassol", serif;
 }
 
+/*The keyframes for the fadingText animation. */
 @keyframes fadingText {
   0% {
     transform: translate(0, 50px);
