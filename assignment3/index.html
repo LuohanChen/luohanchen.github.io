@@ -3,58 +3,164 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Fortune Cards</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Girassol&family=Oswald:wght@200..700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="reset.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
-
   <body>
-    <div class="card-container">
-      <div class="card">
-        <div class="card-front">
-          <img src="cardback.png" draggable="false" />
+    <div id="stripe-container">
+      <div id="stripe-pattern"></div>
+    </div>
+
+    <div class="sitetitle">
+      <h1>Pick a card, and let Destiny do the rest:</h1>
+    </div>
+
+    <div class="row">
+      <div class="random">
+        <div class="column">
+          <button class="card-front">
+            <img src="cardback.png" draggable="false" />
+          </button>
         </div>
-        <div class="card-back">
-          <img src="card_banana.png" draggable="false" />
+
+        <div class="modalbox" id="modal1">
+          <div class="modalcard">
+            <img src="card_banana.png" draggable="false" />
+          </div>
+          <div class="modal-content">
+            <h1>The Banana</h1>
+            <h2>How healthy have you been eating?</h2>
+            <ul>
+              <li>
+                Maybe it's time to drop what you're doing and grab a piece of
+                fruit.
+              </li>
+              <li>
+                Live healthier, drink more water, Sleep earlier. Take care of
+                yourself.
+              </li>
+              <li>Remember to return your shopping carts after usage.</li>
+            </ul>
+            <span class="close">Return</span>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-front">
-          <img src="cardback.png" draggable="false" />
+      <div class="random">
+        <div class="column">
+          <button class="card-front">
+            <img src="cardback.png" draggable="false" />
+          </button>
         </div>
-        <div class="card-back">
-          <img src="card_burger.png" draggable="false" />
+
+        <div class="modalbox" id="modal2">
+          <div class="modalcard">
+            <img src="card_burger.png" draggable="false" />
+          </div>
+          <div class="modal-content">
+            <h1>The Burger</h1>
+            <h2>You deserve a treat.</h2>
+            <ul>
+              <li>You've worked hard, so reward yourself accordingly!</li>
+              <li>Rest and relaxation is equally important to work.</li>
+              <li>Be careful around seafood though.</li>
+            </ul>
+            <span class="close">Return</span>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-front">
-          <img src="cardback.png" draggable="false" />
+      <div class="random">
+        <div class="column">
+          <button class="card-front">
+            <img src="cardback.png" draggable="false" />
+          </button>
         </div>
-        <div class="card-back">
-          <img src="card_candy.png" draggable="false" />
+
+        <div class="modalbox" id="modal3">
+          <div class="modalcard">
+            <img src="card_mushroom.png" draggable="false" />
+          </div>
+          <div class="modal-content">
+            <h1>The Mushroom</h1>
+            <h2>Never a better time to get some sun.</h2>
+            <ul>
+              <li>
+                How long have you been at home? Head out and get some sunlight!
+              </li>
+              <li>
+                some time in nature might just be the inspiration you need to
+                get out of your rut.
+              </li>
+              <li>Pick up your trash.</li>
+            </ul>
+            <span class="close">Return</span>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-front">
-          <img src="cardback.png" draggable="false" />
+      <div class="random">
+        <div class="column">
+          <button class="card-front">
+            <img src="cardback.png" draggable="false" />
+          </button>
         </div>
-        <div class="card-back">
-          <img src="card_egg.png" draggable="false" />
+
+        <div class="modalbox" id="modal4">
+          <div class="modalcard">
+            <img src="card_candy.png" draggable="false" />
+          </div>
+          <div class="modal-content">
+            <h1>The Candy</h1>
+            <h2>Good things are coming!</h2>
+            <ul>
+              <li>
+                In the sea of bitterness, a tinge of sweetness approaches...
+              </li>
+              <li>
+                The things you seek might just be hidden behind a wrapper.
+              </li>
+              <li>Be kind to others, be kind to yourselves.</li>
+            </ul>
+            <span class="close">Return</span>
+          </div>
         </div>
       </div>
 
-      <div class="card">
-        <div class="card-front">
-          <img src="cardback.png" draggable="false" />
+      <div class="random">
+        <div class="column">
+          <button class="card-front">
+            <img src="cardback.png" draggable="false" />
+          </button>
         </div>
-        <div class="card-back">
-          <img src="card_mushroom.png" draggable="false" />
+
+        <div class="modalbox" id="modal5">
+          <div class="modalcard">
+            <img src="card_egg.png" draggable="false" />
+          </div>
+          <div class="modal-content">
+            <h1>The Egg</h1>
+            <h2>Why does we exist?</h2>
+            <ul>
+              <li>The human spirit is stronger than you think, keep going!</li>
+              <li>There will always be another opportunity to try again.</li>
+              <li>
+                If it looks too good to be true, it is. Do not be tempted or
+                fooled.
+              </li>
+            </ul>
+            <span class="close">Return</span>
+          </div>
         </div>
       </div>
     </div>
+    <button id="shuffle" onclick="randomizeOrder()">Reshuffle cards</button>
+    <span id="textAnimation" style="display: none">Cards Shuffled!</span>
   </body>
 </html>

@@ -38,7 +38,7 @@ body {
     rgb(var(--secondary-stripe-rgb)) 75%,
     rgb(var(--secondary-stripe-rgb)) 100%
   );
-  animation: pan 100s linear infinite;
+  animation: pan 200s linear infinite;
 }
 
 @keyframes pan {
@@ -51,10 +51,14 @@ body {
 }
 
 .sitetitle {
+  text-transform: uppercase;
   z-index: 1;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 42px rgb(182, 184, 74),
+    0 0 82px rgb(245, 167, 0);
 }
 
 h1 {
+  font-family: "Girassol", serif;
   color: white;
   font-size: 60px;
 }
@@ -69,6 +73,7 @@ h1 {
   width: 360px;
   height: 550px;
   transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 .card-front {
@@ -84,9 +89,7 @@ h1 {
 }
 
 .card-front:hover {
-  animation: bounce 2s;
-  animation-iteration-count: infinite;
-  animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  animation: bounce 2s infinite cubic-bezier(0.45, 0, 0.55, 1);
   box-shadow: 0px 0px 30px rgb(249, 210, 122, 1);
   border-radius: 2em;
 }
@@ -175,32 +178,65 @@ h1 {
 
 .modal-content h1 {
   color: white;
-  font-size: 20px;
+  font-size: 40px;
 }
 
 .modal-content h2 {
+  font-family: "Oswald", sans-serif;
   color: grey;
+  font-size: 26px;
+  font-weight: 400;
+  padding-bottom: 10px;
 }
 
 .modal-content li {
-  color: gold;
+  list-style-type: none;
+  color: rgb(249, 210, 122, 1);
+  font-family: "Oswald", sans-serif;
+  font-weight: 200;
+  font-size: 24px;
+  padding-bottom: 5%;
 }
 .close {
-  color: #aaaaaa;
   float: right;
-  font-size: 28px;
-  font-weight: bold;
+  margin-top: 5%;
+  padding: 2%;
+  background: rgba(212, 212, 212, 0.3);
+  border: 1px solid rgb(249, 210, 122, 0.4);
+  backdrop-filter: blur(0.1em);
+  color: white;
+  border-radius: 2em;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  font-size: 20px;
+  font-family: "Girassol", serif;
 }
 
 .close:hover,
 .close:focus {
-  color: #000;
+  color: #adadad;
   text-decoration: none;
   cursor: pointer;
+  background: rgba(212, 212, 212, 0.2);
+  transform: scale(1.05);
 }
 
 #shuffle {
+  background: rgba(212, 212, 212, 0.3);
+  padding: 1%;
+  border: 1px solid rgb(249, 210, 122, 0.4);
+  border-radius: 2em;
+  backdrop-filter: blur(0.1em);
   z-index: 1;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  font-family: "Girassol", serif;
+}
+
+#shuffle:hover {
+  background: rgba(212, 212, 212, 0.2);
+  transform: scale(1.05);
 }
 
 #textAnimation {
@@ -210,6 +246,7 @@ h1 {
   display: none;
   animation: fadingText 2s infinite cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 1;
+  font-family: "Girassol", serif;
 }
 
 @keyframes fadingText {

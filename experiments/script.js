@@ -12,7 +12,7 @@ clickStyle.forEach((column, index) => {
 
     setTimeout(function () {
       clickStyle.forEach((col) => col.classList.remove("is-clicked"));
-    }, 3000);
+    }, 1000);
 
     // Open the associated modal
     var modal = document.getElementById(`modal${index + 1}`); // Adjust the modal ID based on the column index
