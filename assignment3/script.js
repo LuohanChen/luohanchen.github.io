@@ -68,6 +68,9 @@ function updateTiltAndShadow(event) {
 window.addEventListener("mousemove", updateTiltAndShadow);
 
 // Randomization (elaborate)
+
+window.onload = randomizeOrder;
+
 function randomizeOrder() {
   const randomElements = Array.from(document.querySelectorAll(".random"));
 
