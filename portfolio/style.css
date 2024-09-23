@@ -1,5 +1,21 @@
 body {
     width: 100%;
+    background-color: #161616;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.column1 {
+    background-color: white;
+    margin-left: 5%;
+    margin-right: 2%;
+}
+
+.column2 {
+    background-color: gray;
+    margin-right: 5%;
 }
 
 nav {
@@ -9,7 +25,3 @@ nav {
     border: 1px solid red;
 }
 
-nav a {
-    margin-left: 1%;
-    padding-left: 1%;
-}
