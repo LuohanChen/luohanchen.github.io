@@ -1,25 +1,23 @@
 body {
   width: 100%;
+  background-color: #0B1215;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-}
-.column1 {
-  background-color: white;
-  margin-left: 5%;
-  margin-right: 2%;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.column2 {
-  background-color: gray;
-  margin-right: 5%;
+.logo {
+  color: white;
+  font-size: 30px;
+  font-family: "Instrument Serif", serif;
+  font-weight: 300;
 }
 
-nav {
-  padding-top: 1%;
-
-  display: flex;
-  border: 1px solid red;
+.footer {
+  color: white;
+  font-size: 24px;
+  font-family: "Instrument Serif", serif;
+  font-weight: 300;
 }
