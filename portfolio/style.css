@@ -1,6 +1,6 @@
 body {
   width: 100%;
-  background-color: #0B1215;
+  background-color: #191919;
 }
 
 a {
@@ -8,16 +8,21 @@ a {
   color: inherit;
 }
 
-.logo {
+nav {
+  display: flex;
   color: white;
-  font-size: 30px;
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-top: 1%;
+}
+
+.logo {
+  font-size: 34px;
   font-family: "Instrument Serif", serif;
-  font-weight: 300;
 }
 
 .footer {
   color: white;
   font-size: 24px;
   font-family: "Instrument Serif", serif;
-  font-weight: 300;
 }
