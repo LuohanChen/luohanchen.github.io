@@ -1,6 +1,8 @@
 body {
+  margin-left: 5%;
+  margin-right: 5%;
   width: 100%;
-  background-color: #191919;
+  background-color: #e4ded1;
 }
 
 a {
@@ -10,19 +12,30 @@ a {
 
 nav {
   display: flex;
-  color: white;
-  margin-left: 3%;
-  margin-right: 3%;
-  margin-top: 1%;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 10%;
+  margin-top: 1rem;
+  color: rgb(0, 0, 0);
+  align-items: center;
+  font-family: "Atkinson Hyperlegible Next", serif;
+  font-weight: 30;
+  font-size: 18px;
+  border-bottom: 1px solid black;
 }
 
 .logo {
-  font-size: 34px;
-  font-family: "Instrument Serif", serif;
+  font-size: 24px;
+  font-family: "IBM Plex Serif", serif;
+  font-weight: 700;
+}
+
+.selection a{
+  margin-left: 1rem;
 }
 
 .footer {
   color: white;
   font-size: 24px;
-  font-family: "Instrument Serif", serif;
+  font-family: "Atkinson Hyperlegible Next", serif;
 }
