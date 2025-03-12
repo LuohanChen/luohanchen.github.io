@@ -12,3 +12,7 @@
     --col-04: #598e8f;
     --border: single 1rem var(--col-02);
 }
+
+body {
+    font-family: "Montserrat", sans-serif;
+}
