@@ -36,3 +36,16 @@ function pickingColour(e){
 // console.log(e.target.value);
 setSquareColour(e.target.value)
 }
+
+let colors_r = document.getElementById('red');
+let colors_g = document.getElementById('green');
+let colors_b = document.getElementById('blue');
+
+colors_r.addEventListener('input', rangeColor);
+colors_g.addEventListener('input', rangeColor);
+colors_b.addEventListener('input', rangeColor);
+
+function rangeColor(i){
+    // console.log ('rgb(' + colors_r.value + "," + colors_g.value + "," + colors_b.value + ')');
+    setSquareColour('rgb(' + colors_r.value + "," + colors_g.value + "," + colors_b.value + ')');
+}

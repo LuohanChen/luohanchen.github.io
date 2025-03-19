@@ -29,3 +29,8 @@ body{
   background-color: var(--col03);
   border: var(--border);
 }
+
+.rangepicker {
+  display: flex;
+  flex-direction: column;
+}
