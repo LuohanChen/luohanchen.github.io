@@ -63,15 +63,28 @@ nav {
 }
 
 .content {
-    flex-direction: flex-end;
+    flex-direction: column;
 }
 
 .qns {
+    position: relative;
     padding-right: 10%;
     padding-left: 1%;
     margin-top: 1%;
     padding-bottom: 3%;
     border-bottom: 2px solid black;
+
+}
+
+.anchor {
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    z-index: -1;
+    top: -10.7vh;
+    left: 0;
+    visibility: hidden;
 }
 
 h3 {
