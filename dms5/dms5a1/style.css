@@ -3,26 +3,29 @@
 * {
     box-sizing: border-box;
     margin: 0;
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: "Montserrat", sans-serif;
     background-color: #fdf4df;
-    display: flex;
-    flex-direction: column;
+    overscroll-behavior-y: none;
 }
 
 .title {
     position: sticky;
+    top: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     width: 100%;
     padding-left: 1%;
     border-bottom: 2px solid black;
-    overflow: hidden;
+    background-color: #fdf4df;
     height: 10vh;
+    z-index: 1;
 }
+
 wrapper {
     width: 100%;
     display: flex;
@@ -31,6 +34,9 @@ wrapper {
 
 nav {
     position: sticky;
+    top: 10vh;
+    left: 0;
+    background-color: #fdf4df;
     height: 90vh;
     display: flex;
     flex-direction: column;
@@ -61,8 +67,18 @@ nav {
 }
 
 .qns {
+    padding-right: 10%;
     padding-left: 1%;
     margin-top: 1%;
     padding-bottom: 3%;
     border-bottom: 2px solid black;
+}
+
+h3 {
+    font-size: 25px;
+}
+
+p {
+    padding-top: 1%;
+    font-size: 18px;
 }
