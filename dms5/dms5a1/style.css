@@ -55,6 +55,17 @@ nav {
     color: black;
 }
 
+.buttonv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2.5vh;
+    border-right: 2px solid black;
+    height: 100%;
+    text-decoration: none;
+    color: black;
+}
+
 .button:hover {
     background-color: #f8deb8;
     -webkit-transition: background-color 500ms linear;
@@ -74,9 +85,15 @@ nav {
     margin-top: 1%;
     padding-bottom: 3%;
     border-bottom: 1px solid black;
-
 }
 
+.qnsv {
+    position: relative;
+    padding-right: 10%;
+    padding-left: 1%;
+    margin-top: 1%;
+    padding-bottom: 3%;
+}
 .anchor {
     display: block;
     position: absolute;
