@@ -37,7 +37,7 @@ nav {
     top: 10vh;
     left: 0;
     background-color: #fdf4df;
-    height: 90vh;
+    height: 85vh;
     display: flex;
     flex-direction: column;
     
@@ -47,7 +47,7 @@ nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2vh;
+    padding: 3vh;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
     height: 100%;
@@ -64,6 +64,7 @@ nav {
 
 .content {
     flex-direction: column;
+    background-color: #fffcf28a;
 }
 
 .qns {
@@ -72,7 +73,7 @@ nav {
     padding-left: 1%;
     margin-top: 1%;
     padding-bottom: 3%;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
 
 }
 
@@ -82,7 +83,7 @@ nav {
     width: 0;
     height: 0;
     z-index: -1;
-    top: -10.7vh;
+    top: -11vh;
     left: 0;
     visibility: hidden;
 }
@@ -94,4 +95,19 @@ h3 {
 p {
     padding-top: 1%;
     font-size: 18px;
+}
+
+
+footer {
+    font-size: 12px;
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-top: 2px solid black;
+    background-color: #fdf4df;
+    height: 5vh;
+    z-index: 1;
 }
