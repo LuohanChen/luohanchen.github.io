@@ -30,3 +30,7 @@ h1{
   color: var(--col04);
   margin-bottom: 1rem;
 }
+
+#konvaStage {
+  background-color: white;
+}
