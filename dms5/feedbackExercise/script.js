@@ -9,5 +9,13 @@ let currentVolume = null;
 setInterval(() => {
   /* meter defined in toneSetup */
   currentVolume = meter.getValue();
-  meterText.innerHTML = currentVolume;
+  // let newValue = clamp(currentVolume, -48, 0);
+  // let newValueInt = parseInt(newValue);
+  // let newRemappedValue = remapRange(newValueInt, -48, -6, 0, 1);
+  // let newRemappedValueInt = parseFloat(newRemappedValue.toPrecision(2));
+  // meterText.innerHTML = newRemappedValueInt + "%";
+
+  remappedValue =  parseInt(remapRange(clamp(currentVolume, -48, 0), -48, -6, 0, 100));
+  meterText.innerHTML = `${remappedValue} %`;
 }, meterCheckInterval);
+
