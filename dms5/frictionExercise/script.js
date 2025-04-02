@@ -1,4 +1,6 @@
-
+let waterAmount = 0.5;
+let dryAmount = 0.003;
+let currentColour = "rgb(255, 255, 255)";
 
 document.getElementById("palette01").addEventListener("click", addColour);
 document.getElementById("palette02").addEventListener("click", addColour);
@@ -8,6 +10,17 @@ document.getElementById("palette04").addEventListener("click", addColour);
 
 function addColour(e){
   let buttonClicked = e.target;
+  let backgroundColour = getComputedStyle(buttonClicked).backgroundColor;
+  let newAlphaColour = rgbaFromRGBString(backgroundColour, waterAmount);
+  currentColour = backgroundColour;
+  console.log(newAlphaColour);
+  setBrushColour(newAlphaColour);
+}
+
+function dryingBrush() {
+  waterAmount = waterAmount - dryAmount;
+  let newColour = rgbaFromRGBString(currentColour, waterAmount);
+  setBrushColour(newColour);
 }
 
 document.getElementById("waterCupMouth").addEventListener("click", () => {

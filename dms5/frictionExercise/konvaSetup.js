@@ -71,7 +71,7 @@ function draw(){
     ctx.stroke();
 
     lastPointerPos = pos;
-
+    dryingBrush();
     layer.batchDraw();
 }
 
