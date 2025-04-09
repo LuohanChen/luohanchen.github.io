@@ -1,6 +1,6 @@
-let waterAmount = 0.5
+let waterAmount = 0.5;
 let dryAmount = 0.005;
-let currentcolor = "rgb (255, 255, 255)";
+let currentColour = "rgb (255, 255, 255)";
 
 document.getElementById("palette01").addEventListener("click", addcolor);
 document.getElementById("palette02").addEventListener("click", addcolor);
@@ -11,15 +11,16 @@ document.getElementById("palette04").addEventListener("click", addcolor);
 function addcolor(e){
   let buttonClicked = e.target;
   let backgroundColour = getComputedStyle(buttonClicked).backgroundColor;
-  let newAlphacolor = rgbaFromRGBString(backgroundColour, waterAmount);
-  currentcolor = backgroundColour;
-  console.log(newAlphacolor);
-  setBrushcolor(backgroundColour);
+  let newAlphaColour = rgbaFromRGBString(backgroundColour, waterAmount);
+  currentColour = backgroundColour;
+  console.log(newAlphaColour);
+  setBrushcolor(newAlphaColour);
 }
 
 function dryingBrush(){
-  waterAmount = waterAmount - dryAmount
-  rgbaFromRGBString(backgroundColour, waterAmount);
+  waterAmount = waterAmount - dryAmount;
+ let newColour = rgbaFromRGBString(currentColour, waterAmount);
+ setBrushcolor(newColour);
 }
 
 
