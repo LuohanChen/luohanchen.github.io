@@ -90,4 +90,6 @@ document.addEventListener("mouseup", () => {
     isPainting = false;
     /* remove draw listener on mouseup */
     stage.off('mousemove', draw);
+    undoStates.push(canvas.toDataURL());
+    prevState = canvas.toDataURL();
 });
