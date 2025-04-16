@@ -29,16 +29,38 @@ let isPaint = false;
 let lastPointerPosition;
 let mode = 'brush';
 
-image.on('mousedown touchstart', function () {
+// image.on('mousedown touchstart', function () {
+//     isPaint = true;
+//     lastPointerPosition = stage.getPointerPosition();
+//     console.log(lastPointerPosition);
+//   });
+
+image.addEventListener('mousedown', (e)=>{
     isPaint = true;
     lastPointerPosition = stage.getPointerPosition();
     console.log(lastPointerPosition);
-  });
-  
-  stage.on('mouseup touchend', function () {
+});
+
+image.addEventListener('mousemove', (e)=>{
+    if (isPaint) {
+        console.log(lastPointerPosition);
+    }
+})
+
+stage.addEventListener('mouseup', (e)=>{
     isPaint = false;
     console.log(lastPointerPosition);
-  });
+
+})
+
+stage.addEventListener('mouseout', (e)=>{
+    isPaint = false;
+})
+
+//   stage.on('mouseup touchend', function () {
+//     isPaint = false;
+//     console.log(lastPointerPosition);
+//   });
 
   stage.on('mousemove touchmove', function () {
     if (!isPaint) {
