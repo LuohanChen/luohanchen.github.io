@@ -1,0 +1,12 @@
+
+
+body{
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+#stageContainer {
+    background-color: white;
+}
