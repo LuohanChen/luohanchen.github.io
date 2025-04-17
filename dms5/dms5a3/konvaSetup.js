@@ -169,8 +169,24 @@ stage.on('click', function () {
     x: pos.x,
     y: pos.y,
     fill: 'red',
-    radius: 20,
+    width: 30,
+    height: 30,
+    draggable: true
   });
 
   group.add(shape2);
+});
+
+stage.on('click', function () {
+  var pos = group.getRelativePointerPosition();
+  var shape3 = new Konva.RegularPolygon({
+    x: pos.x,
+    y: pos.y,
+    fill: 'red',
+    sides: 3,
+    radius: 20,
+    draggable: true
+  });
+
+  group.add(shape3);
 });
