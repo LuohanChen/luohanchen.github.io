@@ -190,3 +190,4 @@ stage.on('click', function () {
 
   group.add(shape3);
 });
+
