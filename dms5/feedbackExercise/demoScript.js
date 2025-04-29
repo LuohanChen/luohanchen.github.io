@@ -178,6 +178,7 @@ backgroundRectThree.on("mousemove", (e) => {
   } else {
     crossCursor.position(pos);
   }
+  console.log(crossCursor.position())
 });
 
 groupThree.add(backgroundRectThree);
