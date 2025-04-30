@@ -72,15 +72,15 @@ function draw(){
 
   lastPointerPos = pos;
 
-  //console.log(pos);
+  // console.log(pos);
 
-  //let marker = document.getElementById("performanceMarker");
-  //marker.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+  let marker = document.getElementById("performanceMarker");
+  marker.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
 
-  //layer.cache();
-  //layer.filters([Konva.Filters.Pixelate, Konva.Filters.Blur, Konva.Filters.Solarize,]);  
-  //layer.pixelSize(4);
-  //layer.blurRadius(15);
+  layer.cache();
+  layer.filters([Konva.Filters.Pixelate, Konva.Filters.Blur, Konva.Filters.Solarize,]);  
+  layer.pixelSize(10);
+  layer.blurRadius(1);
 
   layer.batchDraw();
 }
