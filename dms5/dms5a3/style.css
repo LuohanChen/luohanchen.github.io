@@ -9,4 +9,7 @@ body{
 
 #stageContainer {
     background-color: white;
+    width: 800px;
+    height: 500px;
+    border: 1px solid #ccc;
 }

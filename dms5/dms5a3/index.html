@@ -9,8 +9,8 @@
     <script src="https://unpkg.com/konva@9/konva.min.js" defer></script>
     <script src="http://unpkg.com/tone" defer></script>
 
-    <script src="konvaSetup.js" defer></script>
     <script src="script.js" defer></script>
+    <script src="konvaSetup.js" defer></script>
 
     <title>DAW</title>
 </head>
@@ -21,6 +21,12 @@
     <button class="changeShape" id="shape2">Square</button>
     <button class="changeShape" id="shape3">Triangle</button>
     <input type="color" id="colourPicker" value="#ff0000"></input>
+    <button id="playButton">Play</button>
+    <label for="tempoSlider">Tempo: <span id="tempoDisplay">120</span> BPM</label>
+<input type="range" id="tempoSlider" min="60" max="200" value="120">
+
+<button id="startLoop">Loop Play</button>
+<button id="stopLoop">Loop Stop</button>
     
 </body>
 </html>
