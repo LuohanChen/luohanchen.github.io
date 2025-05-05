@@ -1,1 +1,2 @@
-t
+const synth = new Tone.Synth().toDestination();
+
