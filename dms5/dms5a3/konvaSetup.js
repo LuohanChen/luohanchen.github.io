@@ -33,7 +33,8 @@ for (let i = 0; i < pitchCount; i++) {
   const y = i * step;
 
   const line = new Konva.Line({
-    points: [0, y, canvasWidth, y],
+    points: [0, y, canvasWidth, y
+    ],
     stroke: 'black',
     strokeWidth: 0.1,
   });
