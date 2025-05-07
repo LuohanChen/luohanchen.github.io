@@ -3,7 +3,7 @@ window.scale = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4"
 window.addEventListener('DOMContentLoaded', () => {
     const synth = new Tone.Synth().toDestination();
     const circleSynth = new Tone.AMSynth().toDestination();
-    const squareSynth = new Tone.DuoSynth().toDestination();
+    const squareSynth = new Tone.PolySynth().toDestination();
     const triangleSynth = new Tone.FMSynth().toDestination();
   
     const shapeInstruments = {
