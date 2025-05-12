@@ -18,6 +18,16 @@ const canvas = document.createElement('canvas');
 canvas.width = stage.width();
 canvas.height = stage.height();
 
+// timeline line
+const playhead = new Konva.Line({
+  points: [0, 0, 0, stage.height()],
+  stroke: 'black',
+  strokeWidth: 1,
+  visible: false
+});
+layer.add(playhead);
+layer.draw();
+
 
 // Pitch guide
 const scale = window.scale;
