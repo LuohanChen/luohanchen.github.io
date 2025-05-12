@@ -1,6 +1,19 @@
+// define tone scales
 window.scale = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4"];
 
 window.addEventListener('DOMContentLoaded', () => {
+
+  const speakers = document.querySelectorAll('img[src="speaker.png"]');
+
+// define animation for speakers to be called up
+function animateSpeakers() {
+  speakers.forEach(speaker => {
+    speaker.classList.add('speaker-bounce');
+    setTimeout(() => speaker.classList.remove('speaker-bounce'), 200);
+  });
+}
+
+  // define tone instruments in relation to shapes
   const synth = new Tone.Synth().toDestination();
   const circleSynth = new Tone.AMSynth().toDestination();
   const squareSynth = new Tone.PolySynth().toDestination();
@@ -12,11 +25,12 @@ window.addEventListener('DOMContentLoaded', () => {
     triangle: triangleSynth
   };
 
-  let currentColour = 'red';
+  // on page load, default on circle, not looping.
   let currentShape = 'circle';
   let loopEvent = null;
   let loopRunning = false;
 
+  // randomise colours (don't like the colour picker)
   function getRandomColor() {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -38,12 +52,14 @@ window.addEventListener('DOMContentLoaded', () => {
     tempoDisplay.textContent = bpm;
   });
 
+  // Pitch
   function getPitchFromY(y) {
     const canvasHeight = 500;
     const noteIndex = Math.floor((1 - y / canvasHeight) * (scale.length - 1));
     return scale[Math.max(0, Math.min(scale.length - 1, noteIndex))];
   }
 
+  // create shapes
   function createShape(pos) {
     let shape;
     switch (currentShape) {
@@ -81,22 +97,39 @@ window.addEventListener('DOMContentLoaded', () => {
     group.add(shape);
     layer.draw();
 
+    // relate pitch to y position of shape, tone emit sound
     const pitch = getPitchFromY(pos.y);
     Tone.start();
     shapeInstruments[currentShape].triggerAttackRelease(pitch, "4n");
+    animateSpeakers();
   }
 
-  stage.on('click', function () {
+  stage.on('mousedown', function (e) {
+    const isRightClick = e.evt.button === 2;
     const pos = stage.getPointerPosition();
-    console.log("Clicked at:", pos);
-    createShape(pos);
+    const clickedShape = stage.getIntersection(pos);
+  
+    // right click to remove
+    if (isRightClick) {
+      if (clickedShape && clickedShape !== playhead) {
+        clickedShape.destroy();
+        layer.draw();
+      }
+      return;
+    }
+  
+    // shape check, if mouse hovering over a shape does not allow left click to create a shape.
+    if (!clickedShape || clickedShape === playhead) {
+      createShape(pos);
+    }
   });
 
   document.getElementById('shape1').addEventListener('click', () => currentShape = 'circle');
   document.getElementById('shape2').addEventListener('click', () => currentShape = 'square');
   document.getElementById('shape3').addEventListener('click', () => currentShape = 'triangle');
+  stage.getContent().addEventListener('contextmenu', e => e.preventDefault());
 
-  // SOUND PLAYBACK
+  // SOUND PLAYBACK (Code created by ChatGPT)
   document.getElementById('playButton').addEventListener('click', () => {
     const shapes = group.getChildren();
     if (shapes.length === 0) return;
@@ -140,6 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
           const instrument = shapeInstruments[type];
           instrument.triggerAttackRelease(pitch, '8n', now);
+          animateSpeakers();
           shape.hasPlayed = true;
 
           shape.stroke('yellow');
@@ -209,6 +243,7 @@ window.addEventListener('DOMContentLoaded', () => {
   
             const instrument = shapeInstruments[type];
             instrument.triggerAttackRelease(pitch, '8n', now);
+            animateSpeakers();
             shape.lastPlayed = now;
   
             shape.stroke('yellow');

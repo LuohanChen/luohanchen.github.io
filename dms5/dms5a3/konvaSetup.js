@@ -49,16 +49,7 @@ for (let i = 0; i < pitchCount; i++) {
     strokeWidth: 0.1,
   });
 
-  const label = new Konva.Text({
-    x: 5,
-    y: y - 10,
-    text: scale[scale.length - 1 - i],
-    fontSize: 12,
-    fill: 'gray'
-  });
-
   guideLayer.add(line);
-  guideLayer.add(label);
 }
 
 guideLayer.draw();
