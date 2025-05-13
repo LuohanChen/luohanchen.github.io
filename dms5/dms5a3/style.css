@@ -61,22 +61,33 @@ button:hover {
   width: 3ch;
   text-align: right;
 }
-
-
-#colourPicker {
-  width: 50px;
-  height: 50px;
-  margin-left: 10px;
-  cursor: pointer;
-}
 .shapeSelector {
   width: 100%;
   display: flex;
 }
 
+.changeShape:focus {
+background-color: #ffd4d4;
+}
+
 .playbackOptions {
   width: 100%;
   display: flex;
+}
+
+.secondRow {
+  display: flex;
+  margin-top: 1%;
+  justify-content: center;
+  align-items: center;
+}
+
+#saveImg {
+  width: 60px;
+}
+
+#resetImg {
+  width: 60px;
 }
 
 @keyframes bounce {

@@ -59,43 +59,54 @@ function animateSpeakers() {
     return scale[Math.max(0, Math.min(scale.length - 1, noteIndex))];
   }
 
-  // create shapes
-  function createShape(pos) {
-    let shape;
-    switch (currentShape) {
-      case 'circle':
-        shape = new Konva.Circle({
-          x: pos.x,
-          y: pos.y,
-          fill: getRandomColor(),
-          radius: 20,
-          draggable: true
-        });
-        break;
-      case 'square':
-        shape = new Konva.Rect({
-          x: pos.x,
-          y: pos.y,
-          fill: getRandomColor(),
-          width: 30,
-          height: 30,
-          draggable: true
-        });
-        break;
-      case 'triangle':
-        shape = new Konva.RegularPolygon({
-          x: pos.x,
-          y: pos.y,
-          fill: getRandomColor(),
-          sides: 3,
-          radius: 20,
-          draggable: true
-        });
-        break;
-    }
+  // random number generator :)
+  function getRandomSize(min = 10, max = 80) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-    group.add(shape);
-    layer.draw();
+  // create shapes
+function createShape(pos) {
+  const size = getRandomSize(); // <-- Random size between 5 and 30
+  let shape;
+
+  switch (currentShape) {
+    case 'circle':
+      shape = new Konva.Circle({
+        x: pos.x,
+        y: pos.y,
+        fill: getRandomColor(),
+        radius: size,
+        draggable: true
+      });
+      break;
+
+    case 'square':
+      shape = new Konva.Rect({
+        x: pos.x,
+        y: pos.y,
+        fill: getRandomColor(),
+        width: size,
+        height: size,
+        offsetX: size / 2,
+        offsetY: size / 2,
+        draggable: true
+      });
+      break;
+
+    case 'triangle':
+      shape = new Konva.RegularPolygon({
+        x: pos.x,
+        y: pos.y,
+        fill: getRandomColor(),
+        sides: 3,
+        radius: size,
+        draggable: true
+      });
+      break;
+  }
+
+  group.add(shape);
+  layer.draw();
 
     // relate pitch to y position of shape, tone emit sound
     const pitch = getPitchFromY(pos.y);
@@ -280,4 +291,26 @@ function animateSpeakers() {
     playhead.visible(false);
     layer.draw();
   });
+
+// Save JPG image
+document.getElementById('saveImg').addEventListener('click', () => {
+  const dataURL = stage.toDataURL({ mimeType: 'image/jpeg' });
+
+  const link = document.createElement('a');
+  link.download = 'canvas.jpg';
+  link.href = dataURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
+
+// Reset canvas
+document.getElementById('resetImg').addEventListener('click', () => {
+  Tone.Transport.stop();
+  loopRunning = false;
+  group.destroyChildren();
+  playhead.visible(false);
+  layer.draw();     
+});
+});
+

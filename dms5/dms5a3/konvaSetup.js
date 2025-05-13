@@ -8,6 +8,18 @@ const stage = new Konva.Stage({
 const layer = new Konva.Layer();
 stage.add(layer);
 
+const background = new Konva.Rect({
+  x: 0,
+  y: 0,
+  width: stage.width(),
+  height: stage.height(),
+  fill: 'white',
+  listening: false
+});
+
+layer.add(background);
+background.moveToBottom();
+
 const group = new Konva.Group({
 });
 layer.add(group);
