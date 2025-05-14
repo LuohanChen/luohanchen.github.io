@@ -85,8 +85,8 @@ function createShape(pos) {
         x: pos.x,
         y: pos.y,
         fill: getRandomColor(),
-        width: size,
-        height: size,
+        width: size*2,
+        height: size*2,
         offsetX: size / 2,
         offsetY: size / 2,
         draggable: true
@@ -104,6 +104,8 @@ function createShape(pos) {
       });
       break;
   }
+
+  console.log(size)
 
   group.add(shape);
   layer.draw();
@@ -316,9 +318,7 @@ document.getElementById('resetImg').addEventListener('click', () => {
 // Volume Control
 
 const volControl = document.getElementById("volSlider");
-const volValue = document.getElementById("volDisplay");
 volControl.value = 100;
-volValue.textContent = volControl.value;
 
 function remapRange(value, fromLow, fromHigh, toLow, toHigh) {
   return ((value - fromLow) * (toHigh - toLow)) / (fromHigh - fromLow) + toLow;
@@ -330,7 +330,6 @@ function clamp(value, min, max) {
 
 volControl.addEventListener("input", e => {
   const value = parseInt(e.target.value, 10);
-  volValue.textContent = value;
   const newVolume = remapRange(clamp(value, 0, 100), 0, 100, -48, 0);
   Object.values(shapeInstruments).forEach(instr => {
     instr.volume.value = newVolume;
