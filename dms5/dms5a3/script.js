@@ -312,5 +312,29 @@ document.getElementById('resetImg').addEventListener('click', () => {
   playhead.visible(false);
   layer.draw();     
 });
+
+// Volume Control
+
+const volControl = document.getElementById("volSlider");
+const volValue = document.getElementById("volDisplay");
+volControl.value = 100;
+volValue.textContent = volControl.value;
+
+function remapRange(value, fromLow, fromHigh, toLow, toHigh) {
+  return ((value - fromLow) * (toHigh - toLow)) / (fromHigh - fromLow) + toLow;
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+volControl.addEventListener("input", e => {
+  const value = parseInt(e.target.value, 10);
+  volValue.textContent = value;
+  const newVolume = remapRange(clamp(value, 0, 100), 0, 100, -48, 0);
+  Object.values(shapeInstruments).forEach(instr => {
+    instr.volume.value = newVolume;
+  });
+});
 });
 
