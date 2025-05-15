@@ -35,14 +35,14 @@ textarea {
   box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
-  background-color: #f8f8f8;
+  background-color: #dfdfdf;
   font-size: 16px;
   resize: none;
 }
 
 input[type=submit] {
     margin-top: 2%;
-  background-color:#f8f8f8;
+  background-color:#dfdfdf;
   color: black;
   padding: 12px 20px;
   border: none;
