@@ -1,7 +1,41 @@
+// Button colour
+const buttons = document.querySelectorAll('.changeShape');
+
+buttons.forEach(button => {
+  button.addEventListener('click', function () {
+    buttons.forEach(btn => btn.classList.remove('changeColour'));
+    this.classList.add('changeColour');
+  });
+});
+
 // define tone scales
 window.scale = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4"];
 
+// Functionalities under here
 window.addEventListener('DOMContentLoaded', () => {
+
+let currentColor = "random";
+
+document.querySelectorAll('.colourButton').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const color = btn.getAttribute('data-color');
+    currentColor = color;
+    document.querySelectorAll('.colourButton').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  });
+});
+
+function randomiseSwatches() {
+  document.querySelectorAll('.colourButton:not(.random-btn)').forEach(btn => {
+    const randomColor = getRandomColor();
+    btn.style.backgroundColor = randomColor;
+    btn.setAttribute('data-color', randomColor);
+  });
+}
+randomiseSwatches();
+document.getElementById('reloadSwatches').addEventListener('click', () => {
+  randomiseSwatches();
+});
 
   const speakers = document.querySelectorAll('img[src="Speaker.png"]');
 
@@ -66,7 +100,7 @@ function animateSpeakers() {
 
   // create shapes
 function createShape(pos) {
-  const size = getRandomSize(); // <-- Random size between 5 and 30
+  const size = getRandomSize();
   let shape;
 
   switch (currentShape) {
@@ -74,7 +108,7 @@ function createShape(pos) {
       shape = new Konva.Circle({
         x: pos.x,
         y: pos.y,
-        fill: getRandomColor(),
+        fill: currentColor === "random" ? getRandomColor() : currentColor,
         radius: size,
         draggable: true
       });
@@ -84,7 +118,7 @@ function createShape(pos) {
       shape = new Konva.Rect({
         x: pos.x,
         y: pos.y,
-        fill: getRandomColor(),
+        fill: currentColor === "random" ? getRandomColor() : currentColor,
         width: size*2,
         height: size*2,
         offsetX: size / 2,
@@ -97,7 +131,7 @@ function createShape(pos) {
       shape = new Konva.RegularPolygon({
         x: pos.x,
         y: pos.y,
-        fill: getRandomColor(),
+        fill: currentColor === "random" ? getRandomColor() : currentColor,
         sides: 3,
         radius: size,
         draggable: true
