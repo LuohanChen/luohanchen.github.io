@@ -14,12 +14,13 @@ window.scale = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4"
 // Functionalities under here
 window.addEventListener('DOMContentLoaded', () => {
 
-let currentColor = "random";
+  // Colour swatch selector
+let currentColour = "random";
 
 document.querySelectorAll('.colourButton').forEach(btn => {
   btn.addEventListener('click', () => {
     const color = btn.getAttribute('data-color');
-    currentColor = color;
+    currentColour = color;
     document.querySelectorAll('.colourButton').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
   });
@@ -27,9 +28,9 @@ document.querySelectorAll('.colourButton').forEach(btn => {
 
 function randomiseSwatches() {
   document.querySelectorAll('.colourButton:not(.random-btn)').forEach(btn => {
-    const randomColor = getRandomColor();
-    btn.style.backgroundColor = randomColor;
-    btn.setAttribute('data-color', randomColor);
+    const randomColour = getRandomColor();
+    btn.style.backgroundColor = randomColour;
+    btn.setAttribute('data-color', randomColour);
   });
 }
 randomiseSwatches();
@@ -108,7 +109,7 @@ function createShape(pos) {
       shape = new Konva.Circle({
         x: pos.x,
         y: pos.y,
-        fill: currentColor === "random" ? getRandomColor() : currentColor,
+        fill: currentColour === "random" ? getRandomColor() : currentColour,
         radius: size,
         draggable: true
       });
@@ -118,7 +119,7 @@ function createShape(pos) {
       shape = new Konva.Rect({
         x: pos.x,
         y: pos.y,
-        fill: currentColor === "random" ? getRandomColor() : currentColor,
+        fill: currentColour === "random" ? getRandomColor() : currentColour,
         width: size*2,
         height: size*2,
         offsetX: size / 2,
@@ -131,7 +132,7 @@ function createShape(pos) {
       shape = new Konva.RegularPolygon({
         x: pos.x,
         y: pos.y,
-        fill: currentColor === "random" ? getRandomColor() : currentColor,
+        fill: currentColour === "random" ? getRandomColor() : currentColour,
         sides: 3,
         radius: size,
         draggable: true
@@ -144,7 +145,7 @@ function createShape(pos) {
   group.add(shape);
   layer.draw();
 
-    // relate pitch to y position of shape, tone emit sound
+    // relate pitch to y position of shape, tone emit sound (Code assisted by ChatGPT)
     const pitch = getPitchFromY(pos.y);
     Tone.start();
     shapeInstruments[currentShape].triggerAttackRelease(pitch, "4n");
@@ -176,7 +177,7 @@ function createShape(pos) {
   document.getElementById('shape3').addEventListener('click', () => currentShape = 'triangle');
   stage.getContent().addEventListener('contextmenu', e => e.preventDefault());
 
-  // SOUND PLAYBACK (Code created by ChatGPT)
+  // SOUND PLAYBACK (Code assisted by ChatGPT)
   document.getElementById('playButton').addEventListener('click', () => {
     const shapes = group.getChildren();
     if (shapes.length === 0) return;
@@ -349,8 +350,7 @@ document.getElementById('resetImg').addEventListener('click', () => {
   layer.draw();     
 });
 
-// Volume Control
-
+// Volume Control (Code assisted by ChatGPT)
 const volControl = document.getElementById("volSlider");
 volControl.value = 100;
 
