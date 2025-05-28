@@ -2,3 +2,22 @@ body {
     background-color: #008080;
 }
 
+.judgement {
+    margin-left: 1%;
+    margin-top: 2%;
+}
+
+button {
+    font-family: sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff00;
+    border: 0;
+    width: 80px;
+    height: 80px;
+}
+
+button:hover {
+    cursor: pointer;
+}
