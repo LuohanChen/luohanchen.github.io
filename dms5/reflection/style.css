@@ -1,23 +1,118 @@
 body {
-    background-color: #008080;
+    margin: 0;
+  background-color: #008080;
+  font-family: sans-serif;
 }
 
 .judgement {
-    margin-left: 1%;
-    margin-top: 2%;
+  margin-left: 1%;
+  margin-top: 2%;
 }
 
 button {
-    font-family: sans-serif;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff00;
-    border: 0;
-    width: 80px;
-    height: 80px;
+  font-family: sans-serif;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border: 0;
+  width: 80px;
+  height: 80px;
 }
 
 button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
+
+.popup-panel {
+  top: 10%;
+  left: 10%;
+  position: fixed;
+  user-select: none;
+  width: 80vw;
+  height: auto;
+  max-height: 60vh;
+  border: 5px solid #bdbdbd;
+  box-shadow: 2px 2px black;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  overflow: hidden;
+}
+
+.info-panel {
+  display: none;
+  padding: 40px;
+  box-sizing: border-box;
+  color: white;
+}
+
+.panel-header {
+    display: flex;
+    align-items: center;
+background: #26266C;
+background: linear-gradient(90deg,rgba(38, 38, 108, 1) 0%, rgba(77, 136, 199, 1) 100%);
+padding: 20px;
+position: relative;
+color: white;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 35px;
+}
+
+.panel-body {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: white;
+  color: black;
+  padding: 20px;
+  max-height: calc(60vh - 60px);
+  box-sizing: border-box;
+}
+
+.close-btn {
+  font-size: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  background-color: #bdbdbd;
+  padding: 2px 6px;
+  margin-left: auto;
+  box-shadow: 2px 2px black;
+}
+
+.close-btn:hover {
+  background-color: #ccc;
+}
+
+footer {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #bdbdbd;
+    box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
+}
+
+footer h4 {
+    width: fit-content;
+    margin-right: 2%;
+    padding: 1%;
+    border: 1px solid #a7a7a7;
+      box-shadow: 1px 1px black;
+}
+
+footer p {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left:2%;
+}
+
