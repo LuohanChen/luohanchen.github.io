@@ -25,8 +25,7 @@
 <button class="popupBox" data-title="Judgement of Worth" data-content="A core value that this project expresses is creativity. Many times during the design process, I was given the option to limit the creativity of the user by restricting the way some things worked like reworking the freeform placement of shapes to grid based or changing the object choices to simply squares. Sure, these changes make for a simpler, cleaner and more polished project in terms of usability and debugging, however, my intention from the beginning has always been “Creative expression” above all else, thus, it is absolutely important that the project gives the user as much options as possible with shapes, colours and placement, with as little chance of two projects being the absolute same as possible.
 
 <br><br>Accessibility is also something that is valued throughout the conceptualisation of this project. This can be seen from the simplicity of the UI and application as a whole, with just enough buttons to enable a good amount of control over the final product, but not too much that it becomes overwhelming and complicated for the user. 
-<img src='images/daw_full.png' alt='DAW's full layout' style='max-width:80%; height: auto;'>
-<br>Accessibility leads into the educational value of the application. The setup functionalities of DAW provides users such as children or the less musically inclined to a fun way to learn about music notes and visualise how notes on a music sheet functions without the need to dive into full on music theory or learning musical notation. 
+<br><img src='images/daw_full.png' alt='DAW's full layout' style='max-width:600px; height: auto;'><br>Accessibility leads into the educational value of the application. The setup functionalities of DAW provides users such as children or the less musically inclined to a fun way to learn about music notes and visualise how notes on a music sheet functions without the need to dive into full on music theory or learning musical notation. 
 ">
   <img src="icons/directory_closed-4.png" alt="judgement of Worth">Worth
 </button>
@@ -37,7 +36,7 @@
 
 <br><br>These shapes were chosen as they were basic, familiar shapes, these shapes were also chosen as they each possessed a unique property: curved edges, straight edges and diagonal edges. These shapes should theoretically allow for the creation of any artwork. Additionally, the choice to limit the canvas to these shapes simplifies the experience and understanding of the application.
 
-<br><img src='images/daw_shapes.png' alt='Shapes allowed in the application' style='max-width:80%; height: auto;'><br>Speaking of “Simplifying the experience”, the entire project actually places huge emphasis on this phrase. Looking back at the target audience of children and the purpose of being an accessible, easy to use tool with potential educational values, it’s important that the application does not fall into the trap of “Feature creep” where new features just continually get introduced without any thought for the user experience. Thus, the control panel contains the most basic buttons and sliders to enable the users enough control over the creation of their artwork and music.
+<br><img src='images/daw_shapes.png' alt='Shapes allowed in the application' style='max-width:600px; height: auto;'><br>Speaking of “Simplifying the experience”, the entire project actually places huge emphasis on this phrase. Looking back at the target audience of children and the purpose of being an accessible, easy to use tool with potential educational values, it’s important that the application does not fall into the trap of “Feature creep” where new features just continually get introduced without any thought for the user experience. Thus, the control panel contains the most basic buttons and sliders to enable the users enough control over the creation of their artwork and music.
 ">
   <img src="icons/directory_closed-4.png" alt="judgement of Framing">Framing
 </button>
@@ -48,15 +47,15 @@
 With reference to the intention of simplicity, DAW is split between 3 main sections:
 <ul>
 <li>The Canvas</li>
-<img src='images/daw_canvas.png' alt='the Canvas' style='max-width:80%; height: auto;'>
+<img src='images/daw_canvas.png' alt='the Canvas' style='max-width:600px; height: auto;'>
 <li>The Speakers</li>
-<img src='images/daw_speaker.png' alt='the speakers' style='max-width:50%; height: auto;'>
+<img src='images/daw_speaker.png' alt='the speakers' style='max-width:600ox; height: auto;'>
 <li>The Buttons panel</li>
-<img src='images/daw_controls.png' alt='the buttons' style='max-width:80%; height: auto;'>
+<img src='images/daw_controls.png' alt='the buttons' style='max-width:600ox; height: auto;'>
 </ul>
 The main rationale of these 3 sections is to let the users have a clear sense of how to navigate the site. Using visual hierarchy, the user navigates to the main focus of the page, the canvas, conveniently placed in the center of the application. This hopefully prompts the user to start by clicking the canvas, placing their first shape and hearing their first sound.
 <br><br>After tinkering with the canvas, users are naturally led to the button panels, which allows the users more control over what and how they decide to create with the canvas.
-<br><img src='images/daw_userflow.png' alt='user flow of DAW' style='max-width:80%; height: auto;'><br>This simplified aesthetics makes DAW a straightforward education tool that anybody can pick up.
+<br><img src='images/daw_userflow.png' alt='user flow of DAW' style='max-width:600px; height: auto;'><br>This simplified aesthetics makes DAW a straightforward education tool that anybody can pick up.
 <br><br>The speakers on the sides of the canvas not only unifies the aesthetic choice of a early 2010’s web application, they also serve a practical purpose: enhancing feedback. With each sound that is played through the application, the speaker bounces, giving visual feedback to the user that this site is indeed playing sound, and incase users have their computers muted; to turn on their volume in order to experience the site fully.
 <br><br>Looking back, I have wanted DAW to be a much more “skeuomorphic” looking application, with knobs, sliders, 3d buttons and textures on each of the site’s elements and buttons. I believe that skeuomorphism represents the time period (early 2010s) the best, and naturally, DAW should follow that kind of aesthetics. However, due to time constraints and limited experience in more advanced css, I simplified it. Certainly elements of skeuomorphism can be derived from the control panel and how each interaction was represented, but I believe much more can be done in that regard.
 ">
@@ -71,7 +70,7 @@ The main rationale of these 3 sections is to let the users have a clear sense of
 <br><br>Finally, I landed on using a playhead and letting it scroll through the canvas, playing any sounds that it touches. This implementation worked surprisingly well and smooth considering that it did not take much tweaking to the previous code to implement. With a playhead, I was able to control when the sounds are played, giving more options in the placements of the shapes, This also opens up another controllable parameter for the user to play with: the tempo. I added a tempo slider to control the speed of the playhead, which increases or decreases the BPM of the sequence of sounds played. With this implementation, the sounds are beginning to sound more pleasant and controlled.
 
 <br><br>Another technical choice that haunted me for a little bit is the role played by colour in the application. Originally, one of the concepts of the application included using colours to represent pitch instead of location, or the both of it at once, providing a little more “novelty” to the application, differing it from similar projects done by others. However, during feedback and discussion in class, it was raised that if colour indicated pitch, what would location do? How can the user create a satisfactory art piece with a pleasant sequence of sounds if they are forced to use specific colours in the creation of their artwork? 
-<br><img src='images/daw_original.jpg' alt='original plan for colours' style='max-width:80%; height: auto;'><br>These questions were quite on point as it led me to reconsider the role of colour in the application. On one hand, I want the user to create artwork that they enjoy looking at, and a mishmash of random colours in order to achieve a decent listenable sound piece was definitely not the right move. Thus, I believe instead of holding colour hostage, I should give users free reign of colours in the canvas without affecting how the end product of sound will look like.
+<br><img src='images/daw_original.jpg' alt='original plan for colours' style='max-width:600px; height: auto;'><br>These questions were quite on point as it led me to reconsider the role of colour in the application. On one hand, I want the user to create artwork that they enjoy looking at, and a mishmash of random colours in order to achieve a decent listenable sound piece was definitely not the right move. Thus, I believe instead of holding colour hostage, I should give users free reign of colours in the canvas without affecting how the end product of sound will look like.
 ">
   <img src="icons/directory_closed-4.png" alt="Judgement of Quality">Quality
 </button>
@@ -91,7 +90,7 @@ The main rationale of these 3 sections is to let the users have a clear sense of
 <button class="popupBox" data-title="Judgement of Navigation" data-content="The priority in terms of navigation is during the conceptualisation and development is to create a UI that doesn’t need words to understand. 
 <br><br>During the development of this project, I have pondered over whether to make this into a full fledged “game” like application complete with a starting screen, play button, etc. However, I felt that DAW is best served as a program that can be accessible and immediately dived into as soon as opening the page without any loading screens, confirmations and extra steps.
 <br><br>Unfortunately, as much as I would have preferred the application to explain each and every function for itself visually, or through user experimentation, there were some decisions regarding the control scheme that eventually warranted some instructions: namely the right click to remove.
-<br><img src='images/daw_instructions.png' alt='How to use DAW' style='max-width:80%; height: auto;'><br>I honestly do not consider my application “perfect” by any means, however, I really do enjoy the process of planning, creating, working around technical and aesthetic setbacks, but most importantly, making something for the enjoyment of others.
+<br><img src='images/daw_instruction.png' alt='How to use DAW' style='max-width:600px; height: auto;'><br>I honestly do not consider my application “perfect” by any means, however, I really do enjoy the process of planning, creating, working around technical and aesthetic setbacks, but most importantly, making something for the enjoyment of others.
 ">
   <img src="icons/directory_closed-4.png" alt="Judgement of navigation">Navigation
 </button>
@@ -108,7 +107,7 @@ The main rationale of these 3 sections is to let the users have a clear sense of
 </div>
 
 <footer>
-        <p>Digital Media Studio 5, Assignment 4</p>
+        <p>Digital Media Studio 5, Assignment 4: Reflection</p>
     <h4>A Chen Luohan Site</h4>
 </footer>
 </body>
