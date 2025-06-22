@@ -1,53 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
-  <title>Chen Luohan’s Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luohan Chen Design Works</title>
 </head>
 <body>
-  <!-- Top Navbar -->
-  <nav class="navbar">
-    <div class="navbar-left"><a href="index.html">Chen Luohan</a></div>
-    <div class="navbar-right">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-    </div>
-  </nav>
 
-  <!-- Canvas for rendering -->
-  <canvas id="imageCanvas"></canvas>
+<div class="header">
+  <h3>Hello, I am</h3>
+  <h1>Luohan Chen</h1>
+  <h3>Digital Media Designer</h3>
+  <h4>and I make</h4>
+  <button id="selection1">Everything</button>
+  <button id="selection2">Interactive Design</button>
+  <button id="selection3">Visuals Design</button>
+  <button id="selection2">Sound Design</button>
 
-  <!-- Hidden image definitions -->
-  <div id="imagePool" style="display:none;">
-    <img id="web" src="images/ImaginariumFull.JPG" />
-    <img id="web" src="images/daw_full.png" />
-    <img id="photo" src="https://placehold.co/300x300/red/white" />
-    <img id="photo" src="https://placehold.co/300x300/green/black" />
-    <img id="sound" src="https://placehold.co/300x300/blue/white" />
-    <img id="sound" src="https://placehold.co/300x300/coral/white" />
-    <img id="graphic" src="https://placehold.co/300x300/lime/black" />
-    <img id="graphic" src="https://placehold.co/300x300/brown/white" />
-    <img id="graphic" src="https://placehold.co/300x300/pink/black" />
-    <img id="graphic" src="https://placehold.co/300x300/navy/white" />
-  </div>
+</div>
 
-  <!-- Fullscreen Overlay -->
-  <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:black; justify-content:center; align-items:center; z-index:100;">
-    <img id="overlayImg" style="max-width:90vw; max-height:90vh;" />
-  </div>
-
-  <!-- Bottom Filter Bar -->
-  <div class="filter-bar">
-    <button data-type="all" class="active">All</button>
-    <button data-type="web">Web Design</button>
-    <button data-type="photo">Photo and Video</button>
-    <button data-type="sound">Sound Design</button>
-    <button data-type="graphic">Graphic Design</button>
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
