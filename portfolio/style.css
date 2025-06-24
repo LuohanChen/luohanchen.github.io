@@ -1,0 +1,13 @@
+body {
+  background-color: #000;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  position: absolute;
+  width: 100%;
+  background-color: #b68bd3;
+}
+
