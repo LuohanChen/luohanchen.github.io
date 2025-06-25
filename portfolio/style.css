@@ -6,8 +6,87 @@ body {
 }
 
 .header {
+  display: flex;
   position: absolute;
   width: 100%;
   background-color: #b68bd3;
+  margin-bottom: 1%;
 }
 
+.wrap-l {
+  width: 80vw;
+  border-right: 2px solid black;
+}
+
+.wrap-r {
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+a {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  font-family: "Funnel Display", sans-serif;
+  font-size: 100px;
+  font-weight: 100;
+  text-decoration: none;
+  color: #000;
+  flex: 1;
+}
+
+.cont {
+    border-top: 2px solid black;
+}
+
+h1 {
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 800;
+  font-size: 200px;
+  margin: 0;
+  padding: 0;
+  line-height: 150px;
+}
+
+h3 {
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 400;
+  font-size: 60px;
+  margin: 0;
+  padding: 0;
+  margin-left: 10px;;
+}
+
+.buttonContainer {
+  display: flex;
+  border-top: 2px solid black;
+  flex: 1;
+  justify-content: space-between;
+}
+
+button {
+  border-left: none;
+  border-right: 2px solid black;
+  border-top: none;
+  border-bottom: none;
+  background-color: #00000000;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 50px;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+.sd {
+  border: none;
+}
+
+button:hover {
+    background-color: #936faa;
+    transition: 1s;
+}
