@@ -14,6 +14,45 @@ body {
   overflow-x: hidden;
 }
 
+.nav {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.name {
+  display: flex;
+  width: 100%;
+  color: white;
+  text-decoration: none;
+}
+
+.name a {
+  margin-top: 0;
+  margin-left: 1%;
+}
+
+.nav-links {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-right: 1%;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  font-family: "Funnel Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.nav a:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  transition: 0.5s;
+}
+
 .header {
   width: 100%;
   display: flex;
@@ -56,43 +95,6 @@ h3 {
   h3 {
     font-size: 24px;
   }
-}
-
-.nav {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.name {
-  display: flex;
-  width: 100%;
-  color: white;
-  text-decoration: none;
-  font-family: "Funnel Display", sans-serif;
-  font-size: 20px;
-  font-weight: 100;
-}
-
-.name a {
-  margin-top: 0;
-  margin-left: 1%;
-}
-
-.nav-links {
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-  gap: 20px;
-  margin-right: 1%;
-}
-
-.nav a {
-  color: white;
-  text-decoration: none;
-  font-family: "Funnel Sans", sans-serif;
-  font-size: 20px;
-  font-weight: 100;
 }
 
 .burger-menu {
@@ -226,6 +228,7 @@ margin-top: 2%;
   box-sizing: border-box;
   justify-items: center;
   overflow-x: hidden;
+  margin-bottom: 3vh;
 }
 
 .image-card {
@@ -297,6 +300,93 @@ margin-top: 2%;
   opacity: 0;
   animation: fadeUp 0.6s ease-out forwards;
 }
+
+.footer1 {
+  display: flex;
+  width: 100vw;
+  background-color: rgb(28, 26, 36);
+  color: white;
+  font-family: "Funnel Sans", sans-serif;
+  flex-direction: column;
+  padding-top: 5vh;
+}
+
+.footer2 {
+  display: flex;
+  width: 100vw;
+  background-color: rgb(28, 26, 36);
+  color: white;
+  font-family: "Funnel Sans", sans-serif;
+  padding-top: 5%;
+}
+
+.ft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2vh;
+}
+
+.ft p {
+  font-weight: 600;
+  font-size: 60px;
+  padding: 0;
+  margin: 2vh;
+}
+
+.ftl {
+  display: flex;
+  flex-direction: column;
+}
+
+.ft button {
+    background-color: #ffffff;
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 0.5vh 10vw;;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: "Funnel Sans", sans-serif;
+  font-weight: 00;
+  font-size: 16px;
+  border-radius: 0.2em;
+  margin: 0 10px 10px 0;
+  cursor: pointer;
+}
+
+.fl {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  height: auto;
+}
+
+.fl p {
+  font-family: "Funnel Display", sans-serif;
+  font-size: 100px;
+  font-weight: 800;
+  margin: 0;
+  align-items: flex-end;
+}
+
+.fr {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+  height: auto;
+}
+
+.fr p {
+  font-family: "Funnel Display", sans-serif;
+  font-size: 100px;
+  font-weight: 800;
+  margin: 0;
+  align-items: flex-end;
+}
+
+
 
 .image-card:nth-child(1) { animation-delay: 0.1s; }
 .image-card:nth-child(2) { animation-delay: 0.2s; }
