@@ -51,3 +51,25 @@ document.addEventListener("DOMContentLoaded", () => {
     filterCategory(activeButton.id);
   }
 });
+
+function animateFooterElements() {
+  const elements = document.querySelectorAll('.footer-animate');
+  let delay = 0;
+
+  elements.forEach((el, index) => {
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (inView) {
+      el.style.animationDelay = `${delay}s`;
+      el.classList.add('visible');
+      delay += 0.2; // stagger increment
+    } else {
+      el.classList.remove('visible');
+      el.style.animationDelay = '0s';
+    }
+  });
+}
+
+window.addEventListener('scroll', animateFooterElements);
+window.addEventListener('load', animateFooterElements);
