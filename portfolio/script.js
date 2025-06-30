@@ -1,19 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const burger = document.querySelector(".burger-menu");
-  const mobileMenu = document.querySelector(".mobile-menu");
-
-  burger.addEventListener("click", () => {
-    mobileMenu.classList.toggle("show");
-  });
-
-  document.querySelectorAll(".mobile-menu a").forEach(link => {
-    link.addEventListener("click", () => {
-      mobileMenu.classList.remove("show");
-    });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
   const buttons = document.querySelectorAll(".buttonContainer button");
   const cards = document.querySelectorAll(".image-card");
 
@@ -22,8 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     cards.forEach((card) => {
       const img = card.querySelector("img");
+      const wrapper = card.parentElement;
 
       if (category === "all" || img.id === category) {
+        wrapper.style.display = "block";
         card.style.display = "flex";
         card.style.animation = "none";
         void card.offsetWidth;
@@ -33,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         visibleIndex++;
       } else {
-        card.style.display = "none";
+        wrapper.style.display = "none";
       }
     });
   }
@@ -50,26 +37,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (activeButton) {
     filterCategory(activeButton.id);
   }
+
+
+  function animateFooterElements() {
+    const elements = document.querySelectorAll('.footer-animate');
+    let delay = 0;
+
+    elements.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+
+      if (inView) {
+        el.style.animationDelay = `${delay}s`;
+        el.classList.add('visible');
+        delay += 0.2;
+      } else {
+        el.classList.remove('visible');
+        el.style.animationDelay = '0s';
+      }
+    });
+  }
+
+  window.addEventListener('scroll', animateFooterElements);
+  window.addEventListener('load', animateFooterElements);
 });
-
-function animateFooterElements() {
-  const elements = document.querySelectorAll('.footer-animate');
-  let delay = 0;
-
-  elements.forEach((el, index) => {
-    const rect = el.getBoundingClientRect();
-    const inView = rect.top < window.innerHeight && rect.bottom > 0;
-
-    if (inView) {
-      el.style.animationDelay = `${delay}s`;
-      el.classList.add('visible');
-      delay += 0.2; // stagger increment
-    } else {
-      el.classList.remove('visible');
-      el.style.animationDelay = '0s';
-    }
-  });
-}
-
-window.addEventListener('scroll', animateFooterElements);
-window.addEventListener('load', animateFooterElements);

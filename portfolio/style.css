@@ -14,10 +14,30 @@ body {
   overflow-x: hidden;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .nav {
   display: flex;
   gap: 20px;
   margin-top: 20px;
+}
+
+.return {
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  margin-left: 2vw;
+  font-family: "Funnel Display", sans-serif;
+  font-weight: 800;
+  font-size: 40px;
+  color: white;
+}
+
+.return:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  transition: 0.2s;
 }
 
 .name {
@@ -62,14 +82,175 @@ body {
   margin-top: 10vh;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.container h1 {
+  margin-bottom: 3vh;
+}
+
+.container img {
+  max-width: 40vw;
+  height: auto;
+}
+
+.container h2 {
+  font-family: "Funnel Sans", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #464646;
+  margin: 0;
+}
+
+.container p {
+  color: white;
+  font-family: "Funnel Sans", sans-serif;
+  font-size: 30px;
+  font-weight: 200;
+}
+
+.container a {
+  display: flex;
+  justify-content: center;
+  background-color: white;
+  border-radius: 0.5em;
+  font-family: "Funnel Sans", sans-serif;
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 80%;
+    max-width: 300px;
+    cursor: pointer;
+    margin-bottom: 5vh;
+}
+
+.container a:hover {
+    background-color: rgb(204, 204, 204);
+    transition: 0.2s;
+}
+
+video {
+  max-width: 40vw;
+  height: auto;
+}
+
+.miniGallery {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 0.5%;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 5vh;
+}
+
+.miniGallery img {
+  max-width: 20vw;
+}
+
+@media (max-width: 1080px) {
+.container img {
+  max-width: 100vw;
+  height: auto;
+}
+
+.container p {
+  color: white;
+  font-family: "Funnel Sans", sans-serif;
+  font-size: 28px;
+  font-weight: 200;
+}
+
+video {
+  max-width: 100vw;
+  height: auto;
+}
+
+.miniGallery {
+  display: grid;
+  grid-template-columns: repeat(1,3fr);
+  gap: 0.5%;
+  margin-left: 10vw;
+  margin-right: 10vw;
+  margin-bottom: 5vh;
+}
+
+.miniGallery img {
+  max-width: 50vw;
+}
+}
+
 .main {
   display: flex;
   height: 100vh;
   color: white;
+  margin-top: 2vh;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-bottom: 10%;
+}
+
+.main img {
+  margin-top: 2vh;
+  max-height: 30vh;
+  width: auto;
 }
 
 .abtDescription {
   margin-left: 5%;
+  margin-right: 10%;
+}
+
+.abtDescription h2 {
+  font-family: "Funnel Sans", sans-serif;
+  font-weight: 100;
+}
+
+.abtDescription a {
+  text-decoration: none;
+  color: black;
+  font-family: "Funnel Sans", sans-serif;
+  font-weight: 400;
+   background-color: white;
+      padding: 10px 20px;
+    font-size: 14px;
+    width: 80%;
+    max-width: 300px;
+    cursor: pointer;
+    border-radius: 0.5em;
+    margin-bottom: 10vh;
+}
+
+.main2 {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5vw;
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+  height: 100vh;
+}
+
+.main2 a {
+    text-decoration: none;
+  color: black;
+  font-family: "Funnel Sans", sans-serif;
+  font-weight: 800;
+   background-color: white;
+      padding: 10px 20px;
+    font-size: 30px;
+    width: 80%;
+    max-width: 300px;
+    cursor: pointer;
+    border-radius: 0.5em;
+    margin-top: 1vh;
+}
+
+.main2 h1 {
+  line-height: 150px;
 }
 
 h1 {
@@ -262,6 +443,13 @@ margin-top: 2%;
   to { opacity: 1; transform: translateY(0); }
 }
 
+.gallery a{
+  display: block;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
 .image-card {
   opacity: 0;
   animation: fadeUp 0.6s ease-out forwards;
@@ -300,7 +488,7 @@ margin-top: 2%;
   margin: 2vh;
 }
 
-.ft button {
+.ft a {
     background-color: #ffffff;
   border: none;
   color: rgb(0, 0, 0);
@@ -413,16 +601,3 @@ margin-top: 2%;
 .footer-animate.visible {
   animation: fadeUpFooter 0.6s ease forwards;
 }
-
-
-.image-card:nth-child(1) { animation-delay: 0.1s; }
-.image-card:nth-child(2) { animation-delay: 0.2s; }
-.image-card:nth-child(3) { animation-delay: 0.3s; }
-.image-card:nth-child(4) { animation-delay: 0.4s; }
-.image-card:nth-child(5) { animation-delay: 0.5s; }
-.image-card:nth-child(6) { animation-delay: 0.6s; }
-.image-card:nth-child(7) { animation-delay: 0.7s; }
-.image-card:nth-child(8) { animation-delay: 0.8s; }
-.image-card:nth-child(9) { animation-delay: 0.9s; }
-.image-card:nth-child(10) { animation-delay: 1.0s; }
-.image-card:nth-child(11) { animation-delay: 1.1s; }
