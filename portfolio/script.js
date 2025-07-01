@@ -6,10 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let visibleIndex = 0;
 
     cards.forEach((card) => {
-      const img = card.querySelector("img");
       const wrapper = card.parentElement;
+      const categories = card.getAttribute("data-categories")?.split(" ") || [];
+      const img = card.querySelector("img");
+      const matches = category === "all" || categories.includes(category) || img.id === category;
 
-      if (category === "all" || img.id === category) {
+      if (matches) {
         wrapper.style.display = "block";
         card.style.display = "flex";
         card.style.animation = "none";
@@ -25,6 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  cards.forEach(card => {
+    const categories = card.getAttribute("data-categories")?.split(" ") || [];
+    if (categories.includes("magic")) {
+      card.classList.add("magic");
+    }
+  });
+
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       buttons.forEach(btn => btn.classList.remove("active"));
@@ -37,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (activeButton) {
     filterCategory(activeButton.id);
   }
+
 
 
   function animateFooterElements() {
