@@ -1,0 +1,17 @@
+body {
+    background-color: aqua;
+}
+
+.headerpic {
+    position: relative;
+width: 10%;
+height: 10%;
+    display: flex;
+    
+}
+
+.img1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
