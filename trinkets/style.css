@@ -1,17 +1,35 @@
 body {
-    background-color: aqua;
+    background-color: rgb(159, 196, 218);
 }
 
 .headerpic {
-    position: relative;
-width: 10%;
-height: 10%;
-    display: flex;
-    
+overflow: hidden;
 }
 
 .img1 {
+    border: 2px solid blue;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -30vh;
+    left: -10vw;
+}
+
+.img2 {
+    border: 2px solid green;
+    position: absolute;
+    top: -25vh;
+    left: 15vw;
+}
+
+.img3 {
+    border: 2px solid red;
+    position: absolute;
+    top: -31vh;
+    left: 2vw;
+}
+
+.img4 {
+    border: 2px solid yellow;
+    position: absolute;
+    top: -31vh;
+    left: -20vw;
 }
