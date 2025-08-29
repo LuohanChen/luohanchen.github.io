@@ -1,35 +1,33 @@
+@font-face {
+    font-family: 'argesta_displayregular';
+    src: url('argestadisplay-regular-webfont.eot');
+    src: url('argestadisplay-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('argestadisplay-regular-webfont.woff2') format('woff2'),
+         url('argestadisplay-regular-webfont.woff') format('woff'),
+         url('argestadisplay-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
     background-color: rgb(159, 196, 218);
+    margin: 0;
+    padding: 0;
 }
 
 .headerpic {
 overflow: hidden;
 }
 
-.img1 {
-    border: 2px solid blue;
+.info {
     position: absolute;
-    top: -30vh;
-    left: -10vw;
+    top: 70vh;;
+    right: 10vw;;
 }
 
-.img2 {
-    border: 2px solid green;
-    position: absolute;
-    top: -25vh;
-    left: 15vw;
-}
-
-.img3 {
-    border: 2px solid red;
-    position: absolute;
-    top: -31vh;
-    left: 2vw;
-}
-
-.img4 {
-    border: 2px solid yellow;
-    position: absolute;
-    top: -31vh;
-    left: -20vw;
+.info h1 {
+    font-family: 'argesta_displayregular';
+    font-size: 100px;
+    margin: 0;
 }
