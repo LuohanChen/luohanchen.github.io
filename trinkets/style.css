@@ -1,23 +1,18 @@
-@font-face {
-    font-family: 'argesta_displayregular';
-    src: url('argestadisplay-regular-webfont.eot');
-    src: url('argestadisplay-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('argestadisplay-regular-webfont.woff2') format('woff2'),
-         url('argestadisplay-regular-webfont.woff') format('woff'),
-         url('argestadisplay-regular-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
 body {
     background-color: rgb(159, 196, 218);
     margin: 0;
     padding: 0;
 }
 
-.headerpic {
-overflow: hidden;
+.hero {
+    display: flex;
+  overflow-x: hidden;
+    max-height: 100vh;
+}
+.hero img {
+    width: 100vw;
+    height: auto;
+    object-fit: cover;
 }
 
 .info {
@@ -27,7 +22,21 @@ overflow: hidden;
 }
 
 .info h1 {
-    font-family: 'argesta_displayregular';
+    background-color: white;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  font-family: "Bitter", serif;
+  font-weight: 300;
     font-size: 100px;
+    margin-bottom: 0.5vh;;
+}
+
+.info h3 {
+    background-color: white;
+    padding-left: 1vw;
+    padding-right: 1vw;
+  font-family: "Bitter", serif;
+  font-weight: 100;
+    font-size: 30px;
     margin: 0;
 }
