@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
+  <!-- Konva -->
+  <script src="https://unpkg.com/konva@9/konva.min.js"></script>
   <script src="script.js" defer></script>
   <title>Trinkets</title>
 </head>
@@ -25,15 +27,47 @@
       <img src="image/feature9square.jpg" alt="Trinket 9">
     </section>
 
-
     <section class="info">
       <h1>Trinkets</h1>
       <div class="cta-row">
         <h3>The stories we carry everyday.</h3>
         <button class="story">The Trinkets Story</button>
-        <button class="skip">My Trinket</button>
+        <button class="skip" id="gotoStudio">My Trinket</button>
       </div>
     </section>
+
+    <!-- NEW: Studio section -->
+    <section id="studio" class="studio" aria-label="Create your trinket">
+      <div class="studio-inner">
+        <h2>My Trinket</h2>
+
+        <div class="canvas-wrap">
+          <div id="konvaStage" class="konva-stage"></div>
+          <div class="tools">
+            <label>
+              Brush
+              <input type="color" id="brushColor" value="#111111">
+            </label>
+            <label>
+              Size
+              <input type="range" id="brushSize" min="1" max="48" value="6">
+            </label>
+            <button id="clearCanvas" type="button">Clear</button>
+            <button id="savePNG" type="button">Download PNG</button>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Describe your trinket</span>
+          <textarea id="trinketText" rows="5" placeholder="Write your story..."></textarea>
+          <label class="field">
+</label>
+
+<button id="submitTrinket" type="button" class="submit-btn">Submit</button>
+        </label>
+      </div>
+    </section>
+
   </main>
 </body>
 </html>

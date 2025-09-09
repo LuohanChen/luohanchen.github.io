@@ -1,7 +1,9 @@
 html, body {
   height: 100%;
   margin: 0;
-  overflow: hidden;
+  /* allow vertical scroll, keep horizontal hidden */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 
@@ -98,6 +100,115 @@ body {
 .info .skip{ background:#fff; color:#111; }
 .info button:hover{ transform: translateY(-2px); }
 
+.studio{
+  position: relative;
+  padding: clamp(20px, 6vw, 64px);
+  background: #fff;
+  color: #111;
+  min-height: 100vh;
+}
+
+.studio-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+}
+
+.studio h2{
+  font-weight: 300;
+  font-size: clamp(32px, 6vw, 56px);
+  margin: 0 0 10px 0;
+}
+
+.canvas-wrap{
+  background: #f4f6f8;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.konva-stage{
+  width: 100%;
+  height: min(60vh, 640px);  /* responsive drawing area */
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.08);
+}
+
+.tools{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tools label{
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.tools button{
+  appearance: none;
+  border: 0;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #111; color: #fff;
+  cursor: pointer;
+}
+.tools button:hover{ transform: translateY(-1px); }
+
+.submit-btn {
+  appearance: none;
+  border: 0;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: #0077ff;
+  color: #fff;
+  font-size: 16px;
+  font-family: "Bitter", serif;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: transform 160ms cubic-bezier(.2,.7,.2,1), background 160ms;
+}
+.submit-btn:hover {
+  transform: translateY(-2px);
+  background: #005bcc;
+}
+
+.field{
+  display: grid;
+  gap: 8px;
+}
+.field span{
+  font-size: 14px;
+  opacity: .7;
+}
+#trinketText{
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  padding: 12px 14px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 10px;
+  font-family: "Bitter", serif;
+  font-size: 16px;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.04) inset;
+}
+#trinketText:focus{
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.08);
+}
+
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px){
   :root{ --tile-size: 170px; --gap: 18px; --radius: 18px; }
@@ -106,3 +217,4 @@ body {
   :root{ --tile-size: 140px; --gap: 14px; --radius: 16px; }
   .hero.scatter{ height: 140vh; }
 }
+

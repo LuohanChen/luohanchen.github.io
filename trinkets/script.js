@@ -194,3 +194,153 @@
   if (!applyReduced()) requestAnimationFrame(tick);
 })();
 
+(() => {
+  // Smooth scroll to studio
+  const btn = document.getElementById('gotoStudio');
+  const studio = document.getElementById('studio');
+  if (btn && studio) {
+    btn.addEventListener('click', () => {
+      studio.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  // --- Konva setup ---
+  const stageHost = document.getElementById('konvaStage');
+  if (!stageHost || !window.Konva) return;
+
+  // Internal logical drawing resolution
+  const BASE_W = 1200;
+  const BASE_H = 800;
+
+  // Stage matches the host's current pixel size (no CSS transforms!)
+  const stage = new Konva.Stage({
+    container: stageHost,
+    width: stageHost.clientWidth,
+    height: stageHost.clientHeight,
+  });
+
+  // One layer, one "content" group that we scale/position to fit
+  const layer = new Konva.Layer();
+  stage.add(layer);
+
+  const content = new Konva.Group();
+  layer.add(content);
+
+  // Helper: fit content group into the host
+  function fitStage() {
+    const cw = stageHost.clientWidth;
+    const ch = stageHost.clientHeight;
+
+    stage.size({ width: cw, height: ch });
+
+    const scale = Math.min(cw / BASE_W, ch / BASE_H);
+    content.scale({ x: scale, y: scale });
+
+    // Center the content group within the stage
+    const ox = (cw - BASE_W * scale) / 2;
+    const oy = (ch - BASE_H * scale) / 2;
+    content.position({ x: ox, y: oy });
+
+    layer.batchDraw();
+  }
+
+  fitStage();
+  window.addEventListener('resize', fitStage);
+
+  // Tools
+  const colorEl = document.getElementById('brushColor');
+  const sizeEl  = document.getElementById('brushSize');
+  const clearEl = document.getElementById('clearCanvas');
+  const saveEl  = document.getElementById('savePNG');
+
+  let isPainting = false;
+  let currentLine = null;
+
+  // Convert screen pointer -> content (logical) coordinates
+  function getPointerPosInContent() {
+    const pos = stage.getPointerPosition();
+    if (!pos) return { x: 0, y: 0 };
+
+    // Invert the group's absolute transform to map to its local space
+    const transform = content.getAbsoluteTransform().copy().invert();
+    const pt = transform.point(pos);
+    // Clamp to canvas bounds (optional)
+    return {
+      x: Math.max(0, Math.min(pt.x, BASE_W)),
+      y: Math.max(0, Math.min(pt.y, BASE_H)),
+    };
+  }
+
+  function startLine() {
+    isPainting = true;
+    const { x, y } = getPointerPosInContent();
+    currentLine = new Konva.Line({
+      points: [x, y],
+      stroke: colorEl?.value || '#111',
+      strokeWidth: Number(sizeEl?.value || 6),
+      lineCap: 'round',
+      lineJoin: 'round',
+      tension: 0,
+    });
+    content.add(currentLine);
+    layer.batchDraw();
+  }
+
+  function extendLine() {
+    if (!isPainting || !currentLine) return;
+    const { x, y } = getPointerPosInContent();
+    const pts = currentLine.points();
+    pts.push(x, y);
+    currentLine.points(pts);
+    layer.batchDraw();
+  }
+
+  function endLine() {
+    isPainting = false;
+    currentLine = null;
+  }
+
+  stage.on('mousedown touchstart', startLine);
+  stage.on('mousemove touchmove', extendLine);
+  stage.on('mouseup touchend touchcancel', endLine);
+
+  // Clear & Save
+  clearEl?.addEventListener('click', () => {
+    content.destroyChildren();
+    layer.batchDraw();
+  });
+
+  saveEl?.addEventListener('click', () => {
+    // Render only the content group area at base resolution
+    const dataURL = stage.toDataURL({
+      x: content.x(),
+      y: content.y(),
+      width: BASE_W * content.scaleX(),
+      height: BASE_H * content.scaleY(),
+      pixelRatio: 1 / content.scaleX(), // export at logical BASE_*
+    });
+    const a = document.createElement('a');
+    a.href = dataURL;
+    a.download = 'my-trinket.png';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  });
+
+  // --- Submit button (if you added it) ---
+  const submitBtn = document.getElementById('submitTrinket');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      const drawing = stage.toDataURL({
+        x: content.x(),
+        y: content.y(),
+        width: BASE_W * content.scaleX(),
+        height: BASE_H * content.scaleY(),
+        pixelRatio: 1 / content.scaleX(),
+      });
+      const text = document.getElementById('trinketText')?.value || '';
+      console.log('Submitted Trinket:', { drawing, text });
+      alert('Your trinket has been submitted! (Check console for data)');
+    });
+  }
+})();
