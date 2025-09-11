@@ -3,47 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trinkets</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@200;300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css"/>
-  <!-- Konva -->
   <script src="https://unpkg.com/konva@9/konva.min.js"></script>
   <script src="script.js" defer></script>
-  <title>Trinkets</title>
 </head>
 <body>
-  <main>
 
-    <section class="hero scatter" id="hero" aria-label="Featured Trinkets">
+  <!-- Loading screen -->
+  <section id="loading" class="loading-screen">
+    <div class="image-row" id="imageRow">
       <img src="image/feature1square.jpg" alt="Trinket 1">
       <img src="image/feature2square.jpg" alt="Trinket 2">
       <img src="image/feature3square.jpg" alt="Trinket 3">
-      <img src="image/feature4square.jpg" alt="Trinket 4">
-      <img src="image/feature5square.jpg" alt="Trinket 5">
-      <img src="image/feature6square.jpg" alt="Trinket 6">
-      <img src="image/feature7square.jpg" alt="Trinket 7">
-      <img src="image/feature8square.jpg" alt="Trinket 8">
-      <img src="image/feature9square.jpg" alt="Trinket 9">
-    </section>
+      <img src="image/feature4square.jpg" alt="Trinket 3">
+      <img src="image/feature5square.jpg" alt="Trinket 3">
+      <img src="image/feature6square.jpg" alt="Trinket 3">
+      <img src="image/feature7square.jpg" alt="Trinket 3">
+      <img src="image/feature8square.jpg" alt="Trinket 3">
+    </div>
 
-    <section class="info">
-      <h1>Trinkets</h1>
-      <div class="cta-row">
-        <h3>The stories we carry everyday.</h3>
-        <button class="story">The Trinkets Story</button>
-        <button class="skip" id="gotoStudio">My Trinket</button>
-      </div>
-    </section>
 
-    <!-- NEW: Studio section -->
-    <section id="studio" class="studio" aria-label="Create your trinket">
-      <div class="studio-inner">
-        <h2>My Trinket</h2>
+    <!-- Title -->
+      <div class="overlay">
+    <h1 id="title"></h1>
+    <h3 id="subtitle"></h3>
+  </div>
+  </section>
 
+
+ <!-- Trinkets Studio -->
+<main id="studio" class="studio hidden">
+  <div class="studio-inner">
+<div class="studio-header">
+  <h2>Trinket</h2>
+  <h3>Studio</h3>
+</div>
+
+
+<!-- Drawing -->
+    <div class="studio-grid">
+      <div class="canvas-col">
+          <label class="canvas-label">Draw your Trinket</label>
         <div class="canvas-wrap">
           <div id="konvaStage" class="konva-stage"></div>
           <div class="tools">
+            </label>
             <label>
               Brush
               <input type="color" id="brushColor" value="#111111">
@@ -56,18 +64,28 @@
             <button id="savePNG" type="button">Download PNG</button>
           </div>
         </div>
-
-        <label class="field">
-          <span>Describe your trinket</span>
-          <textarea id="trinketText" rows="5" placeholder="Write your story..."></textarea>
-          <label class="field">
-</label>
-
-<button id="submitTrinket" type="button" class="submit-btn">Submit</button>
-        </label>
       </div>
-    </section>
 
-  </main>
+
+      <!-- text -->
+<div class="text-col">
+  <label class="field">
+    <span>What is your Trinket's Name?</span>
+    <input id="trinketName" type="text" placeholder="Enter a name..." />
+  </label>
+
+
+
+  <label class="field">
+    <span>What is your Trinket's Story?</span>
+    <textarea id="trinketText" rows="8" placeholder="Write your story..."></textarea>
+  </label>
+
+
+  <button id="submitTrinket" type="button" class="submit-btn">Submit</button>
+</div>
+    </div>
+  </div>
+</main>
 </body>
 </html>
