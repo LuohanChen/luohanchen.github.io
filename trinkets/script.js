@@ -2,27 +2,21 @@
   const loading  = document.getElementById('loading');
   const studio   = document.getElementById('studio');
   const row      = document.getElementById('imageRow');
-  const images   = document.querySelectorAll('#imageRow img');
+  const images   = Array.from(document.querySelectorAll('#imageRow img'));
   const overlay  = document.querySelector('.overlay');
   const titleEl  = document.getElementById('title');
   const subEl    = document.getElementById('subtitle');
-
   titleEl.textContent = 'Trinkets';
   subEl.textContent   = 'The stories we carry';
-
   const timeouts = [];
-  const wait = (ms) => new Promise(res => {
-    const id = setTimeout(res, ms);
-    timeouts.push(id);
-  });
-  function clearAllTimeouts() {
-    for (const id of timeouts) clearTimeout(id);
-    timeouts.length = 0;
-  }
+  const wait = (ms) => new Promise(res => { const id = setTimeout(res, ms); timeouts.push(id); });
+  function clearAllTimeouts() { timeouts.forEach(clearTimeout); timeouts.length = 0; }
 
+  // Skip
   function showStudio({ instant = false } = {}) {
     clearAllTimeouts();
-    removeSkipListeners();
+    removeSkip();
+    removeTilt();
 
     if (instant) {
       loading.style.transition = 'none';
@@ -36,28 +30,89 @@
     studio.classList.remove('hidden');
     document.body.style.overflow = 'auto';
   }
-
-// Skip
-  function skipNow(e) {
-    e?.preventDefault?.();
-    showStudio({ instant: true });
+  function skipNow(e){ e?.preventDefault?.(); showStudio({ instant:true }); }
+  function addSkip(){
+    window.addEventListener('click', skipNow, { passive:false, once:true });
+    window.addEventListener('keydown', skipNow, { passive:false, once:true });
+    window.addEventListener('touchstart', skipNow, { passive:false, once:true });
+  }
+  function removeSkip(){
+    window.removeEventListener('click', skipNow, { passive:false });
+    window.removeEventListener('keydown', skipNow, { passive:false });
+    window.removeEventListener('touchstart', skipNow, { passive:false });
   }
 
-  function addSkipListeners() {
-    window.addEventListener('click', skipNow, { passive: false, once: true });
-    window.addEventListener('keydown', skipNow, { passive: false, once: true });
-    window.addEventListener('touchstart', skipNow, { passive: false, once: true });
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let rafQueued = false;
+  let lastPointer = { x: window.innerWidth/2, y: window.innerHeight/2 };
+
+  function onPointerMove(e){
+    if (prefersReduced) return;
+    const t = e.touches?.[0] || e;
+    lastPointer.x = t.clientX;
+    lastPointer.y = t.clientY;
+    if (!rafQueued){
+      rafQueued = true;
+      requestAnimationFrame(applyTilts);
+    }
   }
-  function removeSkipListeners() {
-    window.removeEventListener('click', skipNow, { passive: false });
-    window.removeEventListener('keydown', skipNow, { passive: false });
-    window.removeEventListener('touchstart', skipNow, { passive: false });
+  function applyTilts(){
+    rafQueued = false;
+    const maxDeg = 14;
+    for (const img of images){
+      const r = img.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top  + r.height/2;
+      const dx = (lastPointer.x - cx) / Math.max(r.width, 1);
+      const dy = (lastPointer.y - cy) / Math.max(r.height, 1);
+      const ry = Math.max(-1, Math.min(1, dx)) * maxDeg;
+      const rx = Math.max(-1, Math.min(1, -dy)) * maxDeg;
+      img.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      img.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+    }
+  }
+  function addTilt(){
+    if (prefersReduced) return;
+    window.addEventListener('mousemove', onPointerMove, { passive:true });
+    window.addEventListener('touchmove', onPointerMove, { passive:true });
+    applyTilts();
+  }
+  function removeTilt(){
+    window.removeEventListener('mousemove', onPointerMove);
+    window.removeEventListener('touchmove', onPointerMove);
+    images.forEach(img => {
+      img.style.removeProperty('--rx');
+      img.style.removeProperty('--ry');
+    });
+  }
+
+  // title font
+  function flashTitleFonts(el, { step = 500, duration = 2000 } = {}){
+    if (!el) return;
+    const FINAL = '"Bitter", serif';
+    if (prefersReduced) { el.style.fontFamily = FINAL; return; }
+
+    const FONTS = [
+      '"Cossette Titre", sans-serif',
+      '"Bitcount Grid Double", system-ui',
+      '"League Script", cursive',
+      '"UnifrakturMaguntia", cursive'
+    ];
+    let i = 0;
+    const tick = () => {
+      el.style.fontFamily = FONTS[i % FONTS.length];
+      i++;
+    };
+    tick();
+    const swap = setInterval(tick, step);
+    setTimeout(() => { clearInterval(swap); el.style.fontFamily = FINAL; }, duration);
   }
 
   window.addEventListener('DOMContentLoaded', async () => {
-    addSkipListeners();
+    addSkip();
+    addTilt();
 
-    const STEP = 350; //img stagger delay
+    const STEP = 350;
     images.forEach((img, i) => {
       const id = setTimeout(() => img.classList.add('show'), i * STEP);
       timeouts.push(id);
@@ -65,19 +120,16 @@
 
     await wait(images.length * STEP + 300);
     row.classList.add('fade-out');
-
+    removeTilt();
     await wait(500);
     overlay.classList.add('show');
-
-// Text Hold
-    await wait(1600);
-
+    flashTitleFonts(titleEl, { step: 500, duration: 2000 });
+    await wait(3500);
     loading.style.opacity = '0';
-    await wait(900);
-    showStudio({ instant: false });
+    await wait(1000);
+    showStudio({ instant:false });
   });
 })();
-
 
 // Konva
 (() => {
@@ -162,18 +214,12 @@
     a.click();
   });
 
-  submit?.addEventListener('click', () => {
-  const drawing = stage.toDataURL({ pixelRatio: 2 });
-  const name    = document.getElementById('trinketName')?.value || '';
-  const text    = document.getElementById('trinketText')?.value || '';
-  console.log('Submitted:', { name, text, drawing });
-  alert('Your trinket has been submitted! (check console)');
-});
-
+  // buttons
   submit?.addEventListener('click', () => {
     const drawing = stage.toDataURL({ pixelRatio: 2 });
+    const name    = document.getElementById('trinketName')?.value || '';
     const text    = document.getElementById('trinketText')?.value || '';
-    console.log('Submitted:', { drawing, text });
+    console.log('Submitted:', { name, text, drawing });
     alert('Your trinket has been submitted! (check console)');
   });
 })();
