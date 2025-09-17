@@ -112,7 +112,7 @@
     addSkip();
     addTilt();
 
-    const STEP = 350;
+    const STEP = 600;
     images.forEach((img, i) => {
       const id = setTimeout(() => img.classList.add('show'), i * STEP);
       timeouts.push(id);
