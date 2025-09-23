@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Trinket Street</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@200;300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="street.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Trinket Street</h1>
+    <a class="btn" href="/">Make another</a>
+  </header>
+
+  <main class="gallery" id="gallery" aria-live="polite"></main>
+
+  <template id="card-tpl">
+    <article class="card">
+      <img class="shot" alt="Trinket drawing"/>
+      <div class="meta">
+        <h3 class="name"></h3>
+        <p class="story"></p>
+        <time class="time"></time>
+      </div>
+    </article>
+  </template>
+
+  <script src="street.js" defer></script>
+</body>
+</html>
