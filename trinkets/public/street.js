@@ -29,4 +29,58 @@
     err.textContent = 'Failed to load submissions.';
     list.appendChild(err);
   }
+
+  async function loadFloatingTrinkets() {
+  try {
+    const res = await fetch("/api/trinkets");
+    const trinkets = await res.json();
+
+    trinkets.forEach((t) => {
+      const img = document.createElement("img");
+      img.src = t.drawing; // stored base64 image from DB
+      img.className = "trinket-float";
+
+      // Random vertical position
+      const y = Math.random() * (window.innerHeight - 150);
+      img.style.top = `${y}px`;
+
+      // Random speed (duration of float across screen)
+      const duration = 15 + Math.random() * 10; // 15–25s
+      const direction = Math.random() < 0.5 ? "left" : "right";
+
+      // Define animation
+      if (direction === "left") {
+        img.style.left = `${window.innerWidth + 200}px`;
+        img.animate(
+          [
+            { transform: `translateX(0)` },
+            { transform: `translateX(-${window.innerWidth + 400}px)` }
+          ],
+          {
+            duration: duration * 1000,
+            iterations: Infinity
+          }
+        );
+      } else {
+        img.style.left = `-200px`;
+        img.animate(
+          [
+            { transform: `translateX(0)` },
+            { transform: `translateX(${window.innerWidth + 400}px)` }
+          ],
+          {
+            duration: duration * 1000,
+            iterations: Infinity
+          }
+        );
+      }
+
+      document.body.appendChild(img);
+    });
+  } catch (err) {
+    console.error("Failed to load trinkets:", err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", loadFloatingTrinkets);
 })();
