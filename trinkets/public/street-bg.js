@@ -1,11 +1,19 @@
-// street-bg.js
+// street-bg.js (DEBUG)
 import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
-import { GLTFLoader }   from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
-import { RGBELoader }   from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/RGBELoader.js';
-// If your GLB was Draco-compressed in Blender, uncomment:
-// import { DRACOLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
 
-const canvas   = document.getElementById('bg3d');
+function dbg(...args){ console.log('[bg3d]', ...args); }
+
+// ===== Canvas / Renderer =====
+let canvas = document.getElementById('bg3d');
+if (!canvas) {
+  dbg('No #bg3d found in DOM. Creating one and appending to <body> now.');
+  canvas = document.createElement('canvas');
+  canvas.id = 'bg3d';
+  document.body.appendChild(canvas);
+}
+dbg('Canvas element:', canvas);
+
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -13,12 +21,47 @@ renderer.toneMappingExposure = 1.0;
 
 const scene  = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-camera.position.set(0, 1.6, 4); // tweak for your scene scale
 
-// Resize handling
+// Target the camera looks at
+const target = new THREE.Vector3(0, 1.2, 0);
+
+// Spherical params
+let radius = 5.0;
+let baseYaw = 0.2;
+let basePitch = 0.15;
+
+// Live values
+let yaw = baseYaw;
+let pitch = basePitch;
+
+// Limits & sensitivity
+const MIN_PITCH = -Math.PI / 3;
+const MAX_PITCH =  Math.PI / 3;
+const YAW_RANGE   = 0.7;
+const PITCH_RANGE = 0.35;
+
+let locked = false;
+
+function applyCamera() {
+  const cx = target.x + radius * Math.sin(yaw) * Math.cos(pitch);
+  const cz = target.z + radius * Math.cos(yaw) * Math.cos(pitch);
+  const cy = target.y + radius * Math.sin(pitch);
+  camera.position.set(cx, cy, cz);
+  camera.lookAt(target);
+}
+
+camera.position.set(2.5, 1.8, 5.0);
+camera.lookAt(target);
+
+// ===== Resize =====
 function resize(){
-  const w = canvas.clientWidth;
-  const h = canvas.clientHeight;
+  const w = canvas.clientWidth || window.innerWidth;
+  const h = canvas.clientHeight || window.innerHeight;
+  dbg('resize()', { w, h, cw: canvas.clientWidth, ch: canvas.clientHeight, locked });
+
+  // If CSS didn't size the canvas, force full screen
+  if (!canvas.style.width)  canvas.style.width  = '100%';
+  if (!canvas.style.height) canvas.style.height = '100%';
   if (canvas.width !== w || canvas.height !== h) {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
@@ -28,89 +71,124 @@ function resize(){
 resize();
 window.addEventListener('resize', resize);
 
-// Soft lights in case your GLB has no lights (PBR prefers environment)
-const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.6);
-hemi.position.set(0, 1, 0);
-scene.add(hemi);
-
-const dir = new THREE.DirectionalLight(0xffffff, 0.6);
+// ===== Lights =====
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 0.7));
+const dir = new THREE.DirectionalLight(0xffffff, 1.2);
 dir.position.set(4, 10, 8);
 scene.add(dir);
 
-// Optional: environment HDR (uncomment and set path if you have one)
-// new RGBELoader().load('/assets/studio.hdr', (hdr) => {
-//   hdr.mapping = THREE.EquirectangularReflectionMapping;
-//   scene.environment = hdr;
-//   // scene.background = hdr; // if you prefer HDR as background (opaque), leave canvas alpha:false
-// });
-
-// Load your GLB
-const gltfLoader = new GLTFLoader();
-// If Draco compressed:
-// const draco = new DRACOLoader();
-// draco.setDecoderPath('https://unpkg.com/three@0.160.0/examples/jsm/libs/draco/');
-// gltfLoader.setDRACOLoader(draco);
-
-gltfLoader.load(
-  '/assets/street.glb',           // <-- put your path here
+// ===== Load GLB =====
+const loader = new GLTFLoader();
+dbg('Loading GLB: /assets/street.glb');
+loader.load(
+  '/assets/street.glb',
   (gltf) => {
+    dbg('GLB onLoad() fired. Scene:', gltf.scene);
     const root = gltf.scene;
     root.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = false;
         o.receiveShadow = false;
-        // Ensure correct colorspace on any baked textures (usually sRGB)
-        if (o.material && o.material.map) {
+        if (o.material?.map) {
           o.material.map.colorSpace = THREE.SRGBColorSpace;
           o.material.needsUpdate = true;
         }
       }
     });
-
-    // Auto-fit scene to camera nicely
-    fitToView(root, camera);
     scene.add(root);
+
+    // Initialize spherical params from current camera so motion starts from your view
+    const v = new THREE.Vector3().copy(camera.position).sub(target);
+    radius = Math.max(0.01, v.length());
+    baseYaw = Math.atan2(v.x, v.z);
+    basePitch = Math.asin(THREE.MathUtils.clamp(v.y / radius, -1, 1));
+    yaw = baseYaw; pitch = basePitch;
+
+    dbg('Initialized camera params from current view:', {
+      radius, baseYaw, basePitch, pos: camera.position.clone(), target: target.clone()
+    });
+
+    applyCamera();
   },
-  undefined,
-  (err) => console.error('GLB load error:', err)
+  (ev) => {
+    // progress callback
+    if (ev.lengthComputable) {
+      const pct = Math.round((ev.loaded / ev.total) * 100);
+      if (pct % 25 === 0) dbg(`GLB loading: ${pct}%`);
+    } else {
+      dbg(`GLB loading: ${ev.loaded} bytes`);
+    }
+  },
+  (err) => {
+    console.error('[bg3d] GLB load error:', err);
+  }
 );
 
-// Fit model into view
-function fitToView(object3D, cam){
-  const box = new THREE.Box3().setFromObject(object3D);
-  const size = box.getSize(new THREE.Vector3());
-  const center = box.getCenter(new THREE.Vector3());
+// ===== Mouse → Camera =====
+function onMouseMove(e) {
+  if (locked) return;
+  const nx = (e.clientX / window.innerWidth)  * 2 - 1; // -1..1
+  const ny = (e.clientY / window.innerHeight) * 2 - 1; // -1..1
 
-  // frame the largest dimension
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const fov = cam.fov * (Math.PI / 180);
-  let dist = (maxDim / 2) / Math.tan(fov / 2);
+  const prevYaw = yaw, prevPitch = pitch;
 
-  // pad out a bit
-  dist *= 1.2;
+  yaw   = baseYaw   + nx * YAW_RANGE;
+  pitch = basePitch - ny * PITCH_RANGE;
+  pitch = Math.max(MIN_PITCH, Math.min(MAX_PITCH, pitch));
 
-  const dir = new THREE.Vector3(0, 0, 1);
-  cam.position.copy(center.clone().add(dir.multiplyScalar(dist)));
-  cam.near = Math.max(0.1, dist - maxDim * 2);
-  cam.far  = dist + maxDim * 2.5;
-  cam.updateProjectionMatrix();
-  cam.lookAt(center);
+  applyCamera();
+
+  // Log occasionally to avoid spam: every ~12th event
+  if ((e.timeStamp | 0) % 12 === 0) {
+    dbg('mousemove', {
+      nx: +nx.toFixed(3), ny: +ny.toFixed(3),
+      yaw: +yaw.toFixed(3), pitch: +pitch.toFixed(3),
+      changedYaw: +(yaw - prevYaw).toFixed(4),
+      changedPitch: +(pitch - prevPitch).toFixed(4),
+      camPos: { x:+camera.position.x.toFixed(3), y:+camera.position.y.toFixed(3), z:+camera.position.z.toFixed(3) }
+    });
+  }
 }
 
-// Subtle idle motion so it feels alive but not distracting
-let t = 0;
+function onMouseDown(e) {
+  dbg('mousedown', { button: e.button, locked });
+  if (locked) return;
+  if (e.button !== 0) return; // only left click
+  locked = true;
+  baseYaw = yaw; basePitch = pitch;
+
+  const p = camera.position;
+  const t = target;
+  console.log(`
+/* Freeze this view in street-bg.js */
+camera.position.set(${p.x.toFixed(4)}, ${p.y.toFixed(4)}, ${p.z.toFixed(4)});
+camera.lookAt(${t.x.toFixed(4)}, ${t.y.toFixed(4)}, ${t.z.toFixed(4)});
+`);
+  window.removeEventListener('mousemove', onMouseMove);
+  window.removeEventListener('mousedown', onMouseDown);
+}
+
+window.addEventListener('mousemove', onMouseMove, { passive: true });
+window.addEventListener('mousedown', onMouseDown, { passive: true });
+dbg('Mouse listeners attached to window.');
+
+// ===== Render loop =====
+let frames = 0;
 function animate(){
   requestAnimationFrame(animate);
-  t += 0.003;
-  camera.position.x += Math.sin(t) * 0.0008;  // tiny drift
-  camera.position.y += Math.cos(t*0.7) * 0.0006;
-  camera.lookAt(0, 0, 0);
   renderer.render(scene, camera);
+  if ((frames++ % 180) === 0) {
+    dbg('render tick', {
+      size: { w: renderer.domElement.width, h: renderer.domElement.height },
+      devicePixelRatio: window.devicePixelRatio,
+      locked
+    });
+  }
 }
+applyCamera();
 animate();
 
-// Pause when tab not visible (saves battery)
+// ===== Visibility =====
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) renderer.setAnimationLoop(null);
-  else animate();
+  dbg('visibilitychange', document.hidden ? 'hidden' : 'visible');
 });

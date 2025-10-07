@@ -18,15 +18,15 @@
   scene.background = new THREE.Color(0x9fc4da);
 
   const camera = new THREE.PerspectiveCamera(
-    60,
+    30,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
 
   // 👇 Set the exact position of the camera
-  camera.position.set(0, 1, 25);  // x, y, z
-  camera.lookAt(0, 5, 0);        // point the camera at your model
+  camera.position.set(0, -1, 30);  // x, y, z
+  camera.lookAt(0, -1, 1);        // point the camera at your model
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -44,7 +44,7 @@
   );
 
   // Lights
-  const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 5);
   scene.add(hemi);
 
   // Animate loop
