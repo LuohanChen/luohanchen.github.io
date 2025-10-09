@@ -1,4 +1,4 @@
-// ------------ Start screen + sequence + floating images ------------
+// ========== Start screen + sequence + floating images ==========
 (() => {
   const loading     = document.getElementById('loading');
   const studio      = document.getElementById('studio');
@@ -9,434 +9,332 @@
   const finalPrompt = document.getElementById('finalPrompt');
   const floatLayer  = document.getElementById('floatLayer');
 
-  // Typewriter timings (working version)
   const WORDS = ["our passions", "our love", "our friendships", "our fight"];
-  const TYPE_SPEED       = 90;
-  const ERASE_SPEED      = 65;
-  const HOLD_AFTER_TYPE  = 900;
-  const HOLD_AFTER_ERASE = 350;
-  const FINAL_HOLD       = 1300;
-
-  // Fades (working version)
-  const FADE_OUT_FIRST_MS = 900;
-  const FADE_IN_SECOND_MS = 1000;
-
+  const TYPE_SPEED = 90, ERASE_SPEED = 65;
+  const HOLD_AFTER_TYPE = 900, HOLD_AFTER_ERASE = 350, FINAL_HOLD = 1300;
+  const FADE_OUT_FIRST_MS = 900, FADE_IN_SECOND_MS = 1000;
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const IMAGE_SRCS = [
-    "image/feature1square.jpg",
-    "image/feature2square.jpg",
-    "image/feature3square.jpg",
-    "image/feature4square.jpg",
-    "image/feature5square.jpg",
-    "image/feature6square.jpg",
-    "image/feature7square.jpg",
-    "image/feature8square.jpg",
+    "image/feature1square.jpg","image/feature2square.jpg","image/feature3square.jpg","image/feature4square.jpg",
+    "image/feature5square.jpg","image/feature6square.jpg","image/feature7square.jpg","image/feature8square.jpg"
   ];
 
-function makeShuffler(items) {
-  let pool = [];
-  function refill() {
-    pool = items.slice();
-    for (let i = pool.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pool[i], pool[j]] = [pool[j], pool[i]];
+  function makeShuffler(items){
+    let pool=[]; function refill(){
+      pool = items.slice();
+      for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+    }
+    refill(); return ()=>{if(!pool.length) refill(); return pool.pop();};
+  }
+
+  let hasEnteredStudio=false, skipRequested=false;
+  function revealStudio(){
+    if(hasEnteredStudio) return;
+    hasEnteredStudio=true;
+    loading.style.opacity='0';
+    setTimeout(()=>{
+      loading.classList.add('hidden');
+      studio.classList.remove('hidden');
+      studio.setAttribute('aria-hidden','false');
+      document.body.style.overflow='auto';
+      if(window.__konvaEnsure){window.__konvaEnsure();requestAnimationFrame(window.__konvaEnsure);}
+    },720);
+  }
+
+  function fadeOut(el,ms){if(ms) el.style.setProperty('--fade-ms',`${ms}ms`);el.classList.add('fade-out');el.classList.remove('fade-in');}
+  function fadeIn(el,ms){if(ms) el.style.setProperty('--fade-ms',`${ms}ms`);el.classList.add('fade-in');el.classList.remove('fade-out','hidden');}
+  const randBetween=(a,b)=>Math.random()*(b-a)+a;
+  const wait=ms=>new Promise(res=>setTimeout(res,ms));
+
+  function startFloatingImages(){
+    if(!floatLayer) return;
+    const W=window.innerWidth; const isSmall=W<640,isMedium=W>=640&&W<1024;
+    const count=isSmall?5:isMedium?8:11;
+    const sizeMin=isSmall?90:isMedium?130:180, sizeMax=isSmall?150:isMedium?220:360;
+    const durMin=isSmall?36:isMedium?48:60, durMax=isSmall?65:isMedium?80:110;
+    const nextSrc=makeShuffler(IMAGE_SRCS);
+
+    for(let i=0;i<count;i++){
+      const img=document.createElement('img');
+      img.className='float-img'; img.src=nextSrc();
+      const size=Math.round(randBetween(sizeMin,sizeMax));
+      img.style.width=`${size}px`; img.style.height=`${size}px`;
+      img.style.top=`${randBetween(4,92)}%`;
+      const dur=randBetween(durMin,durMax), delay=-randBetween(0,dur);
+      img.style.animation=`floatLeft ${dur}s linear infinite`;
+      img.style.animationDelay=`${delay}s`;
+      floatLayer.appendChild(img);
+      void img.offsetWidth; img.classList.add('visible');
+      img.addEventListener('animationiteration',()=>{
+        img.style.top=`${randBetween(4,92)}%`;
+        const nsize=Math.round(randBetween(sizeMin,sizeMax));
+        img.style.width=`${nsize}px`; img.style.height=`${nsize}px`;
+        const ndur=randBetween(durMin,durMax); img.style.animationDuration=`${ndur}s`;
+      });
     }
   }
-  refill();
-  return function next() {
-    if (pool.length === 0) refill();
-    return pool.pop();
-  };
-}
 
-
-  // --- Skip / guard flags ---
-  let hasEnteredStudio = false;
-  let skipRequested = false;
-
-function revealStudio() {
-  loading.style.opacity = '0';
-  setTimeout(() => {
-    loading.classList.add('hidden');
-    studio.classList.remove('hidden');
-    studio.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'auto';
-
-    // NEW: ensure Konva measures AFTER the studio is visible
-    if (window.__konvaEnsure) {
-      window.__konvaEnsure();
-      // safety: call again next frame in case of CSS transitions/layout settling
-      requestAnimationFrame(window.__konvaEnsure);
-    }
-  }, 720);
-}
-
-  function fadeOut(el, ms) {
-    if (ms) el.style.setProperty('--fade-ms', `${ms}ms`);
-    el.classList.add('fade-out');
-    el.classList.remove('fade-in');
-  }
-  function fadeIn(el, ms) {
-    if (ms) el.style.setProperty('--fade-ms', `${ms}ms`);
-    el.classList.add('fade-in');
-    el.classList.remove('fade-out','hidden');
-  }
-
-  // Floating images (fade-in on first paint)
-function startFloatingImages() {
-  if (!floatLayer) return;
-
-  // --- Responsiveness buckets ---
-  const W = window.innerWidth;
-  const isSmall  = W < 640;
-  const isMedium = W >= 640 && W < 1024;
-  const isLarge  = W >= 1024;
-
-  // Count: fewer sprites overall -> feels less "repeating"
-  const count = isSmall ? 5 : isMedium ? 8 : 11;
-
-  // Size ranges (smaller on small screens)
-  const sizeMin = isSmall ? 90  : isMedium ? 130 : 180;
-  const sizeMax = isSmall ? 150 : isMedium ? 220 : 360;
-
-  // Slower float (longer durations = each image repeats less often)
-  const durMin  = isSmall ? 36 : isMedium ? 48 : 60;   // seconds
-  const durMax  = isSmall ? 65 : isMedium ? 80 : 110;
-
-  // Use shuffler so initial sprites don't repeat the same src too quickly
-  const nextSrc = makeShuffler(IMAGE_SRCS);
-
-  for (let i = 0; i < count; i++) {
-    const img = document.createElement('img');
-    img.className = 'float-img';
-    img.src = nextSrc();
-
-    // Responsive size
-    const size = Math.round(randBetween(sizeMin, sizeMax));
-    img.style.width = `${size}px`;
-    img.style.height = `${size}px`;
-
-    // Random vertical lane (keep away from edges a bit)
-    img.style.top = `${randBetween(4, 92)}%`;
-
-    // Slow, varied duration; negative delay so some are already mid-flight
-    const dur = randBetween(durMin, durMax);
-    const delay = -randBetween(0, dur); // spread across full duration window
-    img.style.animation = `floatLeft ${dur}s linear infinite`;
-    img.style.animationDelay = `${delay}s`;
-
-    // Append at opacity:0 (CSS), then force reflow and show (Approach A)
-    floatLayer.appendChild(img);
-    void img.offsetWidth;            // <-- force reflow
-    img.classList.add('visible');    // <-- triggers the CSS fade to 1
-
-    // On each loop: randomize lane and duration a bit; keep opacity 1
-    img.addEventListener('animationiteration', () => {
-      img.style.top = `${randBetween(4, 92)}%`;
-
-      // Slightly vary size each pass (still responsive)
-      const nsize = Math.round(randBetween(sizeMin, sizeMax));
-      img.style.width = `${nsize}px`;
-      img.style.height = `${nsize}px`;
-
-      // Re-randomize duration so repeats stay unpredictable (and slower)
-      const ndur = randBetween(durMin, durMax);
-      img.style.animationDuration = `${ndur}s`;
-    });
-  }
-}
-
-
-
-
-  function randBetween(min, max) { return Math.random() * (max - min) + min; }
-  function wait(ms){ return new Promise(res => setTimeout(res, ms)); }
-
-  // Typewriter
-  async function typeWord(el, text) {
-    for (let i = 1; i <= text.length; i++) {
-      if (skipRequested) return;
-      el.textContent = text.slice(0, i);
-      await wait(TYPE_SPEED);
-    }
+  async function typeWord(el,text){
+    for(let i=1;i<=text.length;i++){if(skipRequested) return;el.textContent=text.slice(0,i);await wait(TYPE_SPEED);}
     await wait(HOLD_AFTER_TYPE);
-    for (let i = text.length; i >= 0; i--) {
-      if (skipRequested) return;
-      el.textContent = text.slice(0, i);
-      await wait(ERASE_SPEED);
-    }
+    for(let i=text.length;i>=0;i--){if(skipRequested) return;el.textContent=text.slice(0,i);await wait(ERASE_SPEED);}
     await wait(HOLD_AFTER_ERASE);
   }
 
-  // Main sequence
-  async function runSequence() {
-    if (skipRequested) return revealStudio();
-
-    // Hide the button & hint
-    startBtn.style.pointerEvents = 'none';
-    startBtn.classList.add('fade-out');
+  async function runSequence(){
+    if(skipRequested) return revealStudio();
+    startBtn.style.pointerEvents='none'; startBtn.classList.add('fade-out');
     document.querySelector('.start-hint')?.classList.add('fade-out');
-    setTimeout(() => {
-      startBtn.classList.add('hidden');
-      document.querySelector('.start-hint')?.classList.add('hidden');
-    }, 300);
-
-    if (!prefersReduced) startFloatingImages();
-
-    // Fade out first sentence
-    fadeOut(startTitle, FADE_OUT_FIRST_MS);
-    await wait(FADE_OUT_FIRST_MS + 50);
-    if (skipRequested) return revealStudio();
-    startTitle.classList.add('hidden');
-
-    // Fade in "Stories of:"
-    seqWrap.classList.remove('hidden');
-    seqWrap.setAttribute('aria-hidden', 'false');
-    fadeIn(seqWrap, FADE_IN_SECOND_MS);
-    await wait(FADE_IN_SECOND_MS + 50);
-    if (skipRequested) return revealStudio();
-
-    if (prefersReduced) {
-      for (const w of WORDS) {
-        if (skipRequested) return revealStudio();
-        storiesWord.textContent = w;
-        await wait(900);
-      }
-    } else {
-      for (const w of WORDS) {
-        if (skipRequested) return revealStudio();
-        await typeWord(storiesWord, w);
-      }
-    }
-
-    // Final prompt
-    storiesWord.textContent = '';
-    fadeOut(seqWrap);
-    await wait(450);
-    if (skipRequested) return revealStudio();
-    seqWrap.classList.add('hidden');
-
-    finalPrompt.classList.remove('hidden');
-    fadeIn(finalPrompt, 700);
-    await wait(FINAL_HOLD);
-    if (skipRequested) return revealStudio();
-
-    fadeOut(finalPrompt, 500);
-    await wait(550);
-    revealStudio();
+    setTimeout(()=>{startBtn.classList.add('hidden');document.querySelector('.start-hint')?.classList.add('hidden');},300);
+    if(!prefersReduced) startFloatingImages();
+    fadeOut(startTitle,FADE_OUT_FIRST_MS); await wait(FADE_OUT_FIRST_MS+50);
+    if(skipRequested) return revealStudio(); startTitle.classList.add('hidden');
+    seqWrap.classList.remove('hidden'); seqWrap.setAttribute('aria-hidden','false'); fadeIn(seqWrap,FADE_IN_SECOND_MS);
+    await wait(FADE_IN_SECOND_MS+50); if(skipRequested) return revealStudio();
+    if(prefersReduced){for(const w of WORDS){if(skipRequested) return revealStudio(); storiesWord.textContent=w;await wait(900);}}
+    else{for(const w of WORDS){if(skipRequested) return revealStudio(); await typeWord(storiesWord,w);}}
+    storiesWord.textContent=''; fadeOut(seqWrap); await wait(450);
+    if(skipRequested) return revealStudio(); seqWrap.classList.add('hidden');
+    finalPrompt.classList.remove('hidden'); fadeIn(finalPrompt,700); await wait(FINAL_HOLD);
+    if(skipRequested) return revealStudio(); fadeOut(finalPrompt,500); await wait(550); revealStudio();
   }
 
-  // ----------- Interceptors: skip on ANY interaction EXCEPT Start -----------
-  function requestSkipToStudio(e) {
-    if (hasEnteredStudio) return;
-
-    // Allow the Start button to play the sequence:
-    const isStartClick =
-      e &&
-      (
-        e.target === startBtn ||
-        (startBtn && startBtn.contains(e.target)) ||
-        (
-          e.type === 'keydown' &&
-          (e.key === 'Enter' || e.key === ' ') &&
-          document.activeElement === startBtn
-        )
-      );
-
-    if (isStartClick) {
-      // Don't skip; let the Start button's own handler run the sequence
-      return;
-    }
-
-    // Any other interaction skips
-    skipRequested = true;
-    revealStudio();
+  function requestSkipToStudio(e){
+    if(hasEnteredStudio) return;
+    const isStartClick=e&&(e.target===startBtn||(startBtn&&startBtn.contains(e.target))||(e.type==='keydown'&&(e.key==='Enter'||e.key===' ')&&document.activeElement===startBtn));
+    if(isStartClick) return;
+    skipRequested=true; revealStudio();
   }
 
-  function addStartInterceptors() {
-    // capture phase so we beat other handlers
-    window.addEventListener('click', requestSkipToStudio, { capture: true });
-    window.addEventListener('touchstart', requestSkipToStudio, { capture: true });
-    window.addEventListener('keydown', requestSkipToStudio, { capture: true });
-  }
-  function removeStartInterceptors() {
-    window.removeEventListener('click', requestSkipToStudio, { capture: true });
-    window.removeEventListener('touchstart', requestSkipToStudio, { capture: true });
-    window.removeEventListener('keydown', requestSkipToStudio, { capture: true });
-  }
+  function addStartInterceptors(){window.addEventListener('click',requestSkipToStudio,{capture:true});window.addEventListener('touchstart',requestSkipToStudio,{capture:true});window.addEventListener('keydown',requestSkipToStudio,{capture:true});}
+  function onKeyStart(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();runSequence();}}
 
-  function onKeyStart(e) {
-    // Secondary handler: Enter/Space anywhere still starts the sequence,
-    // but the capture interceptor above will skip unless focus is on the Start button.
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      runSequence();
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    document.body.style.overflow = 'hidden';
-    studio.classList.add('hidden');
-    studio.setAttribute('aria-hidden', 'true');
-
-    addStartInterceptors();
-
-    startBtn?.addEventListener('click', runSequence);
-    window.addEventListener('keydown', onKeyStart, { passive: false });
-
-    // Ensure the opening title is visible
+  window.addEventListener('DOMContentLoaded',()=>{
+    document.body.style.overflow='hidden'; studio.classList.add('hidden'); studio.setAttribute('aria-hidden','true');
+    addStartInterceptors(); startBtn?.addEventListener('click',runSequence); window.addEventListener('keydown',onKeyStart,{passive:false});
     startTitle.classList.add('fade-in');
   });
 })();
 
-// ----------------- Konva drawing tools (unchanged) -----------------
-// ----------------- Konva drawing tools (deferred + robust sizing) -----------------
+
+// ========== Konva drawing tools + POST ==========
 (() => {
   const stageHost = document.getElementById('konvaStage');
   if (!stageHost || !window.Konva) return;
 
+  const API_URL = 'http://localhost:5050/api/trinkets'; // adjust if needed
+
+  // Your drawing's logical resolution (export size)
   const BASE_W = 1200, BASE_H = 800;
 
-  let stage = null, layer = null, content = null;
-  let ro = null;
+  // ---- choose how the drawing fits the container: 'cover' fills, 'contain' keeps all visible
+  const SCALE_MODE = 'cover'; // <- changed from implicit contain to cover
 
-  function createStageIfNeeded() {
-    if (stage) return;
-    const rect = stageHost.getBoundingClientRect();
-    const cw = Math.max(1, rect.width);
-    const ch = Math.max(1, rect.height);
+  const stage = new Konva.Stage({
+    container: stageHost,
+    width: stageHost.clientWidth || 1,
+    height: stageHost.clientHeight || 1,
+  });
+  const layer = new Konva.Layer();
+  stage.add(layer);
 
-    // Only create once the container is actually measurable
-    if (cw === 1 && ch === 1) return;
+  // Backing bitmap we draw into
+  const baseCanvas = document.createElement('canvas');
+  baseCanvas.width = BASE_W;
+  baseCanvas.height = BASE_H;
+  const baseCtx = baseCanvas.getContext('2d', { willReadFrequently: true });
+  baseCtx.fillStyle = '#00000000';
+  baseCtx.fillRect(0, 0, BASE_W, BASE_H);
 
-    stage = new Konva.Stage({
-      container: stageHost,
-      width: cw,
-      height: ch,
-    });
+  // Visible node for the bitmap
+  const imageNode = new Konva.Image({
+    image: baseCanvas,
+    x: 0, y: 0,
+    width: BASE_W,
+    height: BASE_H
+  });
+  layer.add(imageNode);
+  layer.draw();
 
-    layer = new Konva.Layer({ listening: true });
-    content = new Konva.Group();
-    stage.add(layer);
-    layer.add(content);
-
-    // Make sure touch doesn’t convert to scrolling instead of drawing
-    stage.getContent().style.touchAction = 'none';
-
-    wireDrawingTools();
-  }
-
+  // Fit + center the bitmap in the available area
   function fitStage() {
-    if (!stage || !content) return;
-    const rect = stageHost.getBoundingClientRect();
-    const cw = Math.max(1, rect.width);
-    const ch = Math.max(1, rect.height);
+    const cw = stageHost.clientWidth  || 1;
+    const ch = stageHost.clientHeight || 1;
+
     stage.size({ width: cw, height: ch });
 
-    const s = Math.min(cw / BASE_W, ch / BASE_H);
-    content.scale({ x: s, y: s });
-    content.position({
-      x: (cw - BASE_W * s) / 2,
-      y: (ch - BASE_H * s) / 2
-    });
+    const scaleContain = Math.min(cw / BASE_W, ch / BASE_H);
+    const scaleCover   = Math.max(cw / BASE_W, ch / BASE_H);
+    const s = SCALE_MODE === 'cover' ? scaleCover : scaleContain;
+
+    // Center; with 'cover' one axis will be negative (intentionally spilling out)
+    const x = (cw - BASE_W * s) / 2;
+    const y = (ch - BASE_H * s) / 2;
+
+    imageNode.scale({ x: s, y: s });
+    imageNode.position({ x, y });
     layer.batchDraw();
   }
 
-  // Public hook you can call after the studio becomes visible
-  function ensureAndFit() {
-    createStageIfNeeded();
-    // fit twice: once now, again next frame after layout settles
-    fitStage();
-    requestAnimationFrame(fitStage);
+  // Initial + deferred ensure
+  fitStage();
+  requestAnimationFrame(fitStage);
+  window.addEventListener('resize', fitStage);
+  window.__konvaEnsure = fitStage;
+
+  // ---------- Tools ----------
+  const colorEl = document.getElementById('brushColor');
+  const sizeEl  = document.getElementById('brushSize');
+  const clearEl = document.getElementById('clearCanvas');
+  const saveEl  = document.getElementById('savePNG');
+  const submit  = document.getElementById('submitTrinket');
+
+  // Convert stage pointer -> bitmap coordinates (accounts for scale & centering)
+  function toBitmapPoint() {
+    const pos = stage.getPointerPosition();
+    if (!pos) return { x: 0, y: 0 };
+    const inv = imageNode.getAbsoluteTransform().copy().invert();
+    const pt  = inv.point(pos);
+    return {
+      x: Math.max(0, Math.min(BASE_W - 1, Math.round(pt.x))),
+      y: Math.max(0, Math.min(BASE_H - 1, Math.round(pt.y)))
+    };
+    // With SCALE_MODE='cover', strokes outside the visible region are still valid
   }
-  window.__konvaEnsure = ensureAndFit;
 
-  // Observe size changes of the host; when it becomes non-zero, init + fit
-  try {
-    ro = new ResizeObserver(() => ensureAndFit());
-    ro.observe(stageHost);
-  } catch {
-    window.addEventListener('resize', ensureAndFit);
+  // Brush
+  let painting = false;
+  function brushStart() {
+    const { x, y } = toBitmapPoint();
+    baseCtx.strokeStyle = colorEl?.value || '#111';
+    baseCtx.lineWidth   = Number(sizeEl?.value || 6);
+    baseCtx.lineJoin = 'round';
+    baseCtx.lineCap  = 'round';
+    baseCtx.beginPath();
+    baseCtx.moveTo(x, y);
+    painting = true;
+  }
+  function brushMove() {
+    if (!painting) return;
+    const { x, y } = toBitmapPoint();
+    baseCtx.lineTo(x, y);
+    baseCtx.stroke();
+    layer.batchDraw();
+  }
+  function brushEnd() {
+    if (!painting) return;
+    painting = false;
+    baseCtx.closePath();
+    layer.draw();
   }
 
-  // If it’s already visible at load (e.g., you navigated back), init now
-  ensureAndFit();
+  // Paint bucket
+  function hexToRGBA(hex) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '#000');
+    if (!m) return [0,0,0,255];
+    return [parseInt(m[1],16), parseInt(m[2],16), parseInt(m[3],16), 255];
+  }
+  function colorsMatch(pix, i, target, tol) {
+    return Math.abs(pix[i]   - target[0]) <= tol &&
+           Math.abs(pix[i+1] - target[1]) <= tol &&
+           Math.abs(pix[i+2] - target[2]) <= tol &&
+           Math.abs(pix[i+3] - target[3]) <= tol;
+  }
+  function setColor(pix, i, fill) {
+    pix[i]   = fill[0]; pix[i+1] = fill[1]; pix[i+2] = fill[2]; pix[i+3] = fill[3];
+  }
+  function floodFillSeed(startX, startY, fillColorHex, tolerance = 24) {
+    const w = BASE_W, h = BASE_H;
+    const img = baseCtx.getImageData(0, 0, w, h);
+    const data = img.data;
+    const idx = (x, y) => (y * w + x) * 4;
+    const startI = idx(startX, startY);
+    const target = [data[startI], data[startI+1], data[startI+2], data[startI+3]];
+    const fill   = hexToRGBA(fillColorHex);
+    if (Math.abs(fill[0]-target[0]) <= 1 &&
+        Math.abs(fill[1]-target[1]) <= 1 &&
+        Math.abs(fill[2]-target[2]) <= 1 &&
+        Math.abs(fill[3]-target[3]) <= 1) return;
 
-  // ---- Drawing tools (unchanged from your version) ----
-  function wireDrawingTools() {
-    const colorEl = document.getElementById('brushColor');
-    const sizeEl  = document.getElementById('brushSize');
-    const clearEl = document.getElementById('clearCanvas');
-    const saveEl  = document.getElementById('savePNG');
-    const submit  = document.getElementById('submitTrinket');
+    const stack = [[startX, startY]];
+    const seen  = new Uint8Array(w * h);
 
-    let painting = false, line = null;
-
-    function localPointer() {
-      const pos = stage.getPointerPosition();
-      if (!pos) return { x: 0, y: 0 };
-      const inv = content.getAbsoluteTransform().copy().invert();
-      return inv.point(pos);
-    }
-
-    function start() {
-      painting = true;
-      const { x, y } = localPointer();
-      line = new Konva.Line({
-        points: [x, y],
-        stroke: colorEl?.value || '#111',
-        strokeWidth: Number(sizeEl?.value || 6),
-        lineCap: 'round',
-        lineJoin: 'round',
-      });
-      content.add(line);
-      layer.batchDraw();
-    }
-    function move() {
-      if (!painting || !line) return;
-      const { x, y } = localPointer();
-      line.points(line.points().concat([x, y]));
-      layer.batchDraw();
-    }
-    function end() { painting = false; line = null; }
-
-    stage.on('mousedown touchstart', start);
-    stage.on('mousemove touchmove', move);
-    stage.on('mouseup touchend touchcancel', end);
-
-    clearEl?.addEventListener('click', () => {
-      content.destroyChildren();
-      layer.draw();
-    });
-
-    saveEl?.addEventListener('click', () => {
-      const dataURL = stage.toDataURL({ pixelRatio: 2 });
-      const a = document.createElement('a');
-      a.href = dataURL;
-      a.download = 'my-trinket.png';
-      a.click();
-    });
-
-    submit?.addEventListener('click', async () => {
-      const drawing = stage.toDataURL({ pixelRatio: 2 });
-      const name    = document.getElementById('trinketName')?.value || '';
-      const text    = document.getElementById('trinketText')?.value || '';
-
-      try {
-        const res = await fetch('/api/trinkets', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, story: text, drawing })
-        });
-        if (!res.ok) throw new Error('Failed to submit');
-        // const saved = await res.json();
-        window.location.href = '/street.html';
-      } catch (e) {
-        alert('Sorry, failed to submit your trinket.');
-        console.error(e);
+    while (stack.length) {
+      const [x, y] = stack.pop();
+      let xi = x; while (xi >= 0 && !seen[y*w+xi] && colorsMatch(data, idx(xi,y), target, tolerance)) xi--; xi++;
+      let spanAbove = false, spanBelow = false;
+      for (; xi < w && !seen[y*w+xi] && colorsMatch(data, idx(xi,y), target, tolerance); xi++) {
+        setColor(data, idx(xi,y), fill);
+        seen[y*w+xi] = 1;
+        if (y > 0) {
+          const a = y - 1;
+          if (!seen[a*w+xi] && colorsMatch(data, idx(xi,a), target, tolerance)) {
+            if (!spanAbove) { stack.push([xi,a]); spanAbove = true; }
+          } else if (spanAbove) spanAbove = false;
+        }
+        if (y < h - 1) {
+          const b = y + 1;
+          if (!seen[b*w+xi] && colorsMatch(data, idx(xi,b), target, tolerance)) {
+            if (!spanBelow) { stack.push([xi,b]); spanBelow = true; }
+          } else if (spanBelow) spanBelow = false;
+        }
       }
-    });
-  }
-})();
+    }
 
+    baseCtx.putImageData(img, 0, 0);
+    layer.draw();
+  }
+
+  // Pointer routing
+  const toolBrush  = document.getElementById('toolBrush');
+  const toolBucket = document.getElementById('toolBucket');
+  let currentTool = 'brush';
+  toolBrush?.addEventListener('change',()=>{ if (toolBrush.checked) currentTool='brush'; });
+  toolBucket?.addEventListener('change',()=>{ if (toolBucket.checked) currentTool='bucket'; });
+
+  function onDown(){
+    if (currentTool === 'bucket') {
+      const { x, y } = toBitmapPoint();
+      floodFillSeed(x, y, (document.getElementById('brushColor')?.value || '#111'), 24);
+      return;
+    }
+    brushStart();
+  }
+  function onMove(){ if (currentTool === 'brush') brushMove(); }
+  function onUp(){ if (currentTool === 'brush') brushEnd(); }
+
+  stage.on('mousedown touchstart', onDown);
+  stage.on('mousemove touchmove', onMove);
+  stage.on('mouseup touchend touchcancel', onUp);
+
+  // Buttons
+  document.getElementById('clearCanvas')?.addEventListener('click',()=>{
+    baseCtx.clearRect(0,0,BASE_W,BASE_H);
+    layer.draw();
+  });
+  document.getElementById('savePNG')?.addEventListener('click',()=>{
+    const dataURL = stage.toDataURL({ pixelRatio: 2 });
+    const a = document.createElement('a'); a.href = dataURL; a.download = 'my-trinket.png'; a.click();
+  });
+
+  // Submit to backend
+  document.getElementById('submitTrinket')?.addEventListener('click', async ()=>{
+    try{
+      const drawing = stage.toDataURL({ pixelRatio: 2 });
+      const name = document.getElementById('trinketName')?.value.trim() || '';
+      const text = document.getElementById('trinketText')?.value.trim() || '';
+      const res = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ name, text, drawing })
+      });
+      if(!res.ok) throw new Error(`Submit failed: ${res.status}`);
+      alert('Your trinket has been submitted!');
+      console.log('Submitted:', { name, text, drawingLen: drawing.length });
+    }catch(e){
+      console.error(e);
+      alert('Failed to submit. Check console.');
+    }
+  });
+})();

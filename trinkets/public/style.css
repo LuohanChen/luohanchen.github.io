@@ -22,9 +22,7 @@ body { background: rgb(159,196,218); overflow: hidden; }
   opacity: 0;                        /* start hidden */
   transition: opacity 900ms ease;    /* smoother fade-in */
 }
-.float-img.visible {
-  opacity: 1;                        /* fade to full, then stay */
-}
+.float-img.visible { opacity: 1; }
 
 @keyframes floatLeft {
   from { transform: translateX(110vw) translateZ(0); }
@@ -69,51 +67,84 @@ body { background: rgb(159,196,218); overflow: hidden; }
 
 .sequence .stories-of { opacity: .75; font-weight: 300; }
 
-/* Typewriter word: steady caret, no blinking/fade */
+/* Typewriter word */
 .stories-word {
   font-weight: 600;
   margin-left: .35em;
   display: inline-block;
-  opacity: 1;
   white-space: nowrap;
   border-right: 2px solid rgba(0,0,0,.85);
   padding-right: .2em;
 }
 
-/* Studio */
+/* ===================== Studio ===================== */
 .studio {
-  position: relative; padding: clamp(20px, 5vw, 48px);
-  background: rgb(159,196,218); color: #111; min-height: 100vh;
+  height: 100vh;                      /* fill viewport */
+  padding: clamp(20px, 5vw, 48px);
+  background: rgb(159,196,218);
+  color: #111;
+  overflow: hidden;                   /* avoid page scrollbars */
 }
+
 .studio-inner {
-  max-width: 1200px; margin: 0 auto; display: grid;
-  grid-template-rows: auto 1fr;
-  height: calc(100vh - clamp(20px, 5vw, 48px) * 2);
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;                      /* header + grid */
+  flex-direction: column;
+  min-height: 0;                      /* allow children to grow */
 }
-.studio-header { display: flex; align-items: baseline; margin-bottom: 1vh; }
+
+.studio-header {
+  display: flex; align-items: baseline; gap: 8px;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
 .studio-header h2, .studio-header h3 { margin: 0; padding: 0; background-color: white; }
 .studio-header h2 { font-weight: 300; font-size: clamp(28px, 4.8vw, 44px); padding-left: 1%; }
 .studio-header h3 { font-weight: 600; font-size: clamp(28px, 4.8vw, 44px); padding-right: 1%; }
 
+/* Grid fills remaining height */
 .studio-grid {
-  display: grid; grid-template-columns: 1.2fr 1fr;
-  gap: clamp(12px, 3vw, 28px); height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;                      /* IMPORTANT */
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 1fr);
+  gap: clamp(12px, 3vw, 28px);
 }
+
 .canvas-col, .text-col { min-height: 0; }
-.canvas-col { display: flex; flex-direction: column; gap: 8px; }
+.canvas-col { display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .canvas-label { font-size: 14px; font-weight: 500; color: #111; margin-left: 4px; }
 
+/* Canvas wrapper fills column */
 .canvas-wrap {
-  display: grid; grid-template-rows: 1fr auto; gap: 12px; height: 100%;
-  background: #f4f6f8; border-radius: 12px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  flex: 1 1 auto;
+  min-height: 0;                      /* IMPORTANT */
+  display: flex;                      /* canvas on top, tools below */
+  flex-direction: column;
+  gap: 12px;
+  background: #f4f6f8;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
   padding: 12px;
 }
-.konva-stage {
-  width: 100%; height: 100%; border-radius: 10px; overflow: hidden; background: #fff;
+
+/* Konva mount stretches fully */
+#konvaStage {
+  flex: 1 1 auto;
+  min-height: 0;                      /* IMPORTANT */
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
   box-shadow: 0 6px 16px rgba(0,0,0,.08);
 }
 
-.tools { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+/* Tools sit under the canvas */
+.tools {
+  flex: 0 0 auto;
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+}
 .tools label{
   display: inline-flex; gap: 8px; align-items: center; padding: 6px 10px;
   background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.06);
@@ -125,7 +156,11 @@ body { background: rgb(159,196,218); overflow: hidden; }
 }
 .tools button:hover{ transform: translateY(-1px); }
 
-.text-col { display: flex; flex-direction: column; gap: 16px; }
+.text-col {
+  display: flex; flex-direction: column; gap: 16px;
+  overflow: auto;                     /* scroll text column if very small screens */
+}
+
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field span { font-size: 14px; opacity: .7; }
 
@@ -153,9 +188,15 @@ body { background: rgb(159,196,218); overflow: hidden; }
 }
 .submit-btn:hover { transform: translateY(-2px); background: #005bcc; }
 
+/* Responsive */
 @media (max-width: 980px){
+  .studio { height: auto; min-height: 100vh; }
   .studio-inner { height: auto; }
-  .studio-grid { grid-template-columns: 1fr; grid-template-rows: auto auto; height: auto; }
-  .konva-stage { height: min(60vh, 520px); }
-  #trinketText { height: 200px; resize: vertical; }
+  .studio-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+  /* Give the canvas a reasonable height on small screens */
+  #konvaStage { height: min(60vh, 520px); }
+  #trinketText { height: 200px; }
 }
