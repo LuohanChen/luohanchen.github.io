@@ -147,3 +147,35 @@ app.delete('/api/trinkets', async (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// ---- Ephemeral leggies (in-memory) ----
+let leggies = [];  // [{id:number, created_at:string}]
+let nextLeggyId = 1;
+
+app.get('/api/leggies', (_req, res) => {
+  res.json(leggies.slice(-300)); // limit
+});
+
+app.post('/api/leggies', (req, res) => {
+  const { count = 1 } = req.body || {};
+  const made = [];
+  for (let i = 0; i < Math.max(1, Math.min(50, Number(count) || 1)); i++) {
+    const row = { id: nextLeggyId++, created_at: new Date().toISOString() };
+    leggies.push(row);
+    made.push(row);
+  }
+  res.json({ added: made.length, rows: made });
+});
+
+app.delete('/api/leggies/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const before = leggies.length;
+  leggies = leggies.filter(l => l.id !== id);
+  res.json({ success: true, deleted: before - leggies.length });
+});
+
+app.delete('/api/leggies', (_req, res) => {
+  const n = leggies.length;
+  leggies = [];
+  res.json({ success: true, deleted: n });
+});

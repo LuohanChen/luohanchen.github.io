@@ -1,0 +1,60 @@
+:root {
+  --leggy-scale: 8; /* make legs 40% bigger */
+}
+
+body {
+  margin: 0;
+  background-image: url("assets/street.png");
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  font-family: "Bitter", serif;
+  overflow: hidden;
+}
+
+#walkerLayer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Walker container */
+.walker {
+  position: absolute;
+  will-change: transform;
+  contain: layout paint;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.3));
+  opacity: 0;
+  transform: translate3d(0,0,0) scale(0.96);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+.walker.show {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+}
+
+/* Leggy */
+.walker .gif {
+  display: block;
+  width: calc(var(--leggy-scale, 1) * 180px);
+  height: auto;
+  transform-origin: center bottom;
+  transform: scale(var(--pulse, 1));
+  animation: legPulse 2.5s ease-in-out infinite;
+}
+
+/* Trinket */
+.walker .trinket {
+  position: absolute;
+  left: 35%;
+  top: 30%;
+  width: var(--trinket-w, 400px);
+  height: auto;
+  transform: translate(-50%, -50%) translate(var(--offset-x, 0px), var(--offset-y, 0px));
+  border-radius: 10px;
+  object-fit: cover;
+  background: transparent !important;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
+}
+
