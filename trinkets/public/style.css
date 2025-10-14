@@ -1,7 +1,7 @@
 /* Base */
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; font-family: "Bitter", serif; }
-body { background: rgb(159,196,218); overflow: hidden; }
+body { background: #9fc4da; overflow: hidden; }
 .hidden { display: none !important; }
 
 /* Start / Loading screen */

@@ -1,107 +1,58 @@
-:root {
-  --leggy-scale: 8; /* make legs 40% bigger */
+:root{
+  --leggy-size: 500px; /* base walker box size */
 }
 
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; height:100%; }
+
 body {
-  margin: 0;
   background-image: url("assets/street.png");
-  background-position: 50% 50%;
   background-repeat: no-repeat;
-  font-family: "Bitter", serif;
+  background-position: 50% 50%;
+  background-size: contain;
+  background-color: #000;
   overflow: hidden;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+#bgFrame {
+  position: fixed;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 #walkerLayer {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 
-/* Walker container */
 .walker {
   position: absolute;
+  width: var(--leggy-size);
+  height: var(--leggy-size);
   will-change: transform;
-  contain: layout paint;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,.3));
-  opacity: 0;
-  transform: translate3d(0,0,0) scale(0.96);
-  transition: opacity 600ms ease, transform 600ms ease;
-}
-.walker.show {
-  opacity: 1;
-  transform: translate3d(0,0,0) scale(1);
 }
 
-/* Leggy */
 .walker .gif {
-  display: block;
-  width: calc(var(--leggy-scale, 1) * 180px);
+  position: absolute;
+  bottom: 13%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(var(--leggy-size) - 10px);
   height: auto;
-  transform-origin: center bottom;
-  transform: scale(var(--pulse, 1));
-  animation: legPulse 2.5s ease-in-out infinite;
+  z-index: 1;
 }
 
-/* Trinket */
 .walker .trinket {
   position: absolute;
-  left: 35%;
-  top: 30%;
-  width: var(--trinket-w, 400px);
-  height: auto;
-  transform: translate(-50%, -50%) translate(var(--offset-x, 0px), var(--offset-y, 0px));
-  border-radius: 10px;
-  object-fit: cover;
-  background: transparent !important;
+  left: calc(50% + var(--tx, 0px));
+  top: var(--ty, 50%);
+  transform: translate(-50%, -50%) scale(var(--scale,1));
+  max-width: calc(var(--leggy-size) * 1.1);
+  max-height: calc(var(--leggy-size) * 1.1);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
   mix-blend-mode: multiply;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
-}
-
-/* WALKERS */
-.leggy-wrap{
-  position: fixed;
-  top: 0; left: 0;
-  translate: -50% -50%;
   pointer-events: none;
-  will-change: transform, opacity;
-  z-index: 2; /* above bg */
-  animation-fill-mode: both;
-  /* movement animation is applied inline from JS:
-     animation: walkLR 18s linear infinite; */
+  z-index: 2;
 }
-
-.leggy-img{
-  display:block;
-  image-rendering: auto;
-  filter: drop-shadow(0 14px 22px rgba(0,0,0,.22));
-  /* pulse is set from JS with a per-walker delay */
-}
-
-.trinket-pin{
-  position:absolute;
-  left:50%; top:50%;
-  translate:-50% -50%;
-  width: var(--trinket-size, 80px);
-  height: var(--trinket-size, 80px);
-  object-fit: contain; /* keep transparent bg */
-  pointer-events: none;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,.2));
-}
-
-/* Horizontal travel; we use negative delays (JS) to randomize starting phase */
-@keyframes walkLR{
-  from{ transform: translateX(-20vw); }
-  to  { transform: translateX(120vw); }
-}
-@keyframes walkRL{
-  from{ transform: translateX(120vw); }
-  to  { transform: translateX(-20vw); }
-}
-
-/* Gentle breathing pulse, each walker gets a different delay/duration */
-@keyframes pulse {
-  0%,100% { transform: scale(1) }
-  50%     { transform: scale(1.06) }
-}
-

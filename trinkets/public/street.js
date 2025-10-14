@@ -1,238 +1,297 @@
-// street.js
-// Desynced walkers + support for "plain leggies" from /api/leggies.
+// street.js — final version with fade-in/out, random spawn, updated attach points & scales.
 
 const API_BASE = "";
 const LIST_URL = `${API_BASE}/api/trinkets`;
-const LEGGIES_URL = `${API_BASE}/api/leggies`;
 
+const DEBUG = true;
+const SHOW_BG_OUTLINE = false; // set true to visualize the bg clipping frame
+
+/* ---------- Leg variants & attachment points ---------- */
+const LEG_VARIANTS = [
+  "assets/leg1_default.gif",
+  "assets/leg1_bag.gif",
+  "assets/leg1_sling.gif",
+];
+
+/* Attachment points (fractions of walker box, origin = top-left)
+   x: +right / -left (auto-mirrored when moving left)
+   y: down from top of the walker box */
+const ATTACH_POINTS = {
+  default: { x:  0,    y: 0.30 }, // middle of legs
+  bag:     { x: -0.15, y: 0.18 }, // middle-left (bag)
+  sling:   { x: -0.05, y: 0.20 }, // middle-top (sling)
+};
+
+/* Trinket size adjusters */
+const GLOBAL_TRINKET_SCALE = 0.5; // overall size multiplier
+const TRINKET_SCALES = {
+  default: 0.3,
+  bag:     0.4,
+  sling:   0.3,
+};
+
+/* ---------- DOM setup ---------- */
+let bgFrame = document.getElementById("bgFrame");
+if (!bgFrame) {
+  bgFrame = document.createElement("div");
+  bgFrame.id = "bgFrame";
+  document.body.appendChild(bgFrame);
+}
 let layer = document.getElementById("walkerLayer");
 if (!layer) {
   layer = document.createElement("div");
   layer.id = "walkerLayer";
-  document.body.appendChild(layer);
+  bgFrame.appendChild(layer);
 }
 
-/* ---------- TUNABLES ---------- */
-// Visibility band (keeps body offscreen; increases to move legs down)
-const MIN_VISIBLE = 1220;
-const MAX_VISIBLE = 1260;
-const GLOBAL_DROP = 24;
+/* Optional outline (debug) */
+let outline = document.getElementById("bgOutline");
+if (!outline && SHOW_BG_OUTLINE) {
+  outline = document.createElement("div");
+  Object.assign(outline.style, {
+    position: "fixed",
+    pointerEvents: "none",
+    border: "2px dashed rgba(255,0,0,.7)",
+    boxShadow: "inset 0 0 0 2px rgba(255,255,255,.35)",
+    zIndex: 9999,
+  });
+  document.body.appendChild(outline);
+}
 
-// Speed range (px/s)
-const SPEED_MIN = 30;
-const SPEED_MAX = 120;
+/* ---------- Background rect ---------- */
+let bgRect = { left: 0, top: 0, width: 0, height: 0 };
 
-// Vertical wiggle range (px/s baseline; randomized per walker)
-const VY_MIN = -18;
-const VY_MAX = 18;
+function applyBgRect() {
+  Object.assign(bgFrame.style, {
+    position: "fixed",
+    overflow: "hidden",
+    pointerEvents: "none",
+    left: `${bgRect.left}px`,
+    top: `${bgRect.top}px`,
+    width: `${bgRect.width}px`,
+    height: `${bgRect.height}px`,
+  });
+  if (outline)
+    Object.assign(outline.style, {
+      left: `${bgRect.left}px`,
+      top: `${bgRect.top}px`,
+      width: `${bgRect.width}px`,
+      height: `${bgRect.height}px`,
+    });
+}
 
-// Stagger new spawns (ms)
-const STAGGER_MIN = 3000;
-const STAGGER_MAX = 5000;
+function getViewportBox(el) {
+  const w = el.clientWidth || document.documentElement.clientWidth;
+  const h = el.clientHeight || document.documentElement.clientHeight;
+  return { w, h };
+}
 
-// Leggy scale (CSS fallback; can also override in CSS via --leggy-scale)
-const DEFAULT_SCALE = 8;
-/* -------------------------------- */
+function parseBgUrl() {
+  const str = getComputedStyle(document.body).backgroundImage;
+  if (!str || str === "none") return null;
+  const m = str.match(/url\(["']?(.*?)["']?\)/i);
+  return m ? m[1] : null;
+}
 
-const seenTrinketIds = new Set();
-const seenLeggyIds = new Set();
-const walkers = []; // { el,x,y,w,h,vx,vy,dir,phase,phaseSpeed,bounds:{minY,maxY}, id, kind }
+function computeContainRect(imgW, imgH, boxW, boxH) {
+  const scale = Math.min(boxW / imgW, boxH / imgH);
+  const dispW = imgW * scale,
+    dispH = imgH * scale;
+  return {
+    left: (boxW - dispW) / 2,
+    top: (boxH - dispH) / 2,
+    width: dispW,
+    height: dispH,
+  };
+}
 
-function env() { return { W: innerWidth, H: innerHeight }; }
-function rand(a, b) { return Math.random() * (b - a) + a; }
-function normalizeSrc(s) {
-  if (!s) return null;
-  const t = String(s).trim();
-  if (t.startsWith("http") || t.startsWith("/")) return t;
+async function measureBackground() {
+  const url = parseBgUrl();
+  const { w, h } = getViewportBox(document.body);
+  if (!url) {
+    bgRect = { left: 0, top: 0, width: w, height: h };
+    applyBgRect();
+    return;
+  }
+
+  await new Promise((res) => {
+    const img = new Image();
+    img.onload = () => {
+      bgRect = computeContainRect(
+        img.naturalWidth || 1,
+        img.naturalHeight || 1,
+        w,
+        h
+      );
+      applyBgRect();
+      res();
+    };
+    img.onerror = () => {
+      bgRect = { left: 0, top: 0, width: w, height: h };
+      applyBgRect();
+      res();
+    };
+    img.src = url;
+  });
+}
+
+/* ---------- Helpers ---------- */
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const pick = (arr) => arr[(Math.random() * arr.length) | 0];
+function normalizeSrc(t) {
+  if (!t) return "";
+  if (/^(data:|https?:|\/)/i.test(t)) return t;
   return t.startsWith("uploads/") ? `/${t}` : t;
 }
+const getRowId = (r) =>
+  r?.id ?? r?._id ?? r?.uuid ?? r?.guid ?? r?.pk ?? JSON.stringify(r);
+const getRowSrc = (r) =>
+  r?.image_path ?? r?.image ?? r?.src ?? r?.drawing ?? "";
+function variantKeyFromSrc(src) {
+  if (/sling/i.test(src)) return "sling";
+  if (/bag/i.test(src)) return "bag";
+  return "default";
+}
 
-function buildWalkerElement(trinketSrc) {
+/* ---------- Walker ---------- */
+function spawnWalker(trinketSrc) {
   const el = document.createElement("div");
   el.className = "walker";
-  el.style.setProperty("--leggy-scale", `${DEFAULT_SCALE}`);
+  el.style.opacity = "0";
+  layer.appendChild(el);
 
-  // main gif
-  const gif = document.createElement("img");
-  gif.className = "gif";
-  gif.src = `assets/leggy1.gif?cb=${Date.now()}_${Math.random()
+  const legSrc = pick(LEG_VARIANTS);
+  const vKey = variantKeyFromSrc(legSrc);
+
+  const leg = document.createElement("img");
+  leg.className = "gif";
+  leg.alt = "legs";
+  leg.src = `${legSrc}?cb=${Date.now()}_${Math.random()
     .toString(36)
-    .slice(2)}`; // cache-bust for desynced gif loops
-  gif.alt = "walker";
+    .slice(2)}`;
+  el.appendChild(leg);
 
-  el.appendChild(gif);
-
+  let tr = null;
   if (trinketSrc) {
-    const tr = document.createElement("img");
+    tr = document.createElement("img");
     tr.className = "trinket";
-    tr.src = trinketSrc;
-    tr.alt = "Trinket";
-    tr.style.setProperty("--offset-x", `${Math.round((Math.random() - 0.5) * 30)}px`);
-    tr.style.setProperty("--offset-y", `${Math.round((Math.random() - 0.5) * 20) - 10}px`);
+    tr.alt = "trinket";
+    tr.src = normalizeSrc(trinketSrc);
+    const scale = (TRINKET_SCALES[vKey] ?? 1) * GLOBAL_TRINKET_SCALE;
+    tr.style.setProperty("--scale", scale);
     el.appendChild(tr);
   }
 
-  // subtle pulse (desynced)
-  el.style.animationDelay = `${-Math.floor(rand(0, 2000))}ms`;
+  const size = el.offsetWidth || parseFloat(getComputedStyle(el).width) || 180;
+  const ap = ATTACH_POINTS[vKey] || ATTACH_POINTS.default;
+  const baseTX = size * ap.x;
+  const baseTY = size * ap.y;
 
-  layer.appendChild(el);
-  return { el, gif };
-}
+  let x = Math.random() * Math.max(0, bgRect.width - size);
+  const yBase = bgRect.height * 0.70;
+  let y = clamp(
+    yBase + (Math.random() * 0.2 - 0.1) * bgRect.height,
+    0,
+    bgRect.height - size - 10
+  );
 
-function computeBand(w) {
-  const minY = -w.h + MIN_VISIBLE + GLOBAL_DROP;
-  const maxY = -w.h + MAX_VISIBLE + GLOBAL_DROP;
-  w.bounds = { minY, maxY };
-  if (w.y < minY) w.y = minY;
-  if (w.y > maxY) w.y = maxY;
-}
+  let vx = (Math.random() < 0.5 ? 1 : -1) * (20 + Math.random() * 15);
+  let vy = (Math.random() * 2 - 1) * 4;
+  let last = performance.now();
 
-function createWalker({ trinketSrc = null, id, kind = "trinket" }) {
-  const { el, gif } = buildWalkerElement(trinketSrc);
+  // fade in
+  requestAnimationFrame(() => (el.style.opacity = "1"));
 
-  let w = 180, h = 180;
-  const measure = () => {
-    const r = gif.getBoundingClientRect();
-    if (r.width && r.height) { w = r.width; h = r.height; }
-  };
-  measure();
-
-  const fromLeft = Math.random() < 0.5;
-  const speed = rand(SPEED_MIN, SPEED_MAX) * (fromLeft ? 1 : -1);
-  const baseVy = rand(VY_MIN, VY_MAX);
-  const phase = rand(0, Math.PI * 2);
-  const phaseSpeed = rand(0.4, 1.2);
-
-  const { W } = env();
-  const startX = fromLeft ? -w - 20 : W + 20;
-  let startY = -h + (MIN_VISIBLE + MAX_VISIBLE) / 2 + GLOBAL_DROP;
-
-  const walker = {
-    el, x: startX, y: startY, w, h,
-    vx: speed, vy: baseVy,
-    dir: fromLeft ? 1 : -1,
-    phase, phaseSpeed,
-    bounds: { minY: -h + MIN_VISIBLE + GLOBAL_DROP, maxY: -h + MAX_VISIBLE + GLOBAL_DROP },
-    id, kind
-  };
-
-  // finalize after gif load
-  gif.addEventListener("load", () => {
-    measure();
-    walker.w = w; walker.h = h;
-    computeBand(walker);
-    walker.y = rand(walker.bounds.minY, walker.bounds.maxY);
-    place(walker, true);
-    requestAnimationFrame(() => el.classList.add("show"));
-  });
-
-  computeBand(walker);
-  walker.y = rand(walker.bounds.minY, walker.bounds.maxY);
-
-  // Stagger appearance so walkers don't all move at once
-  const appearDelay = Math.floor(rand(100, 1800));
+  // fade out & remove after 2 minutes
   setTimeout(() => {
-    place(walker, true);
-    el.classList.add("show");
-  }, appearDelay);
+    el.style.transition = "opacity 2s ease-in";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 2200);
+  }, 120000);
 
-  walkers.push(walker);
-  return walker;
-}
+  function step(t) {
+    const now = t || performance.now();
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    x += vx * dt;
+    y += vy * dt;
+    vy += (Math.random() * 2 - 1) * 2 * dt;
+    vy *= 0.98;
 
-function place(w, instant = false) {
-  const t = `translate3d(${w.x}px, ${w.y}px, 0) scale(${w.dir < 0 ? -1 : 1}, 1)`;
-  if (instant) {
-    w.el.style.transition = "none";
-    w.el.style.transform = t;
-    requestAnimationFrame(() => (w.el.style.transition = ""));
-  } else {
-    w.el.style.transform = t;
+    leg.style.transform = `translateX(-50%) scaleX(${vx < 0 ? -1 : 1})`;
+    if (tr) {
+      const tx = vx < 0 ? -baseTX : baseTX;
+      tr.style.setProperty("--tx", `${tx}px`);
+      tr.style.setProperty("--ty", `${baseTY}px`);
+    }
+
+    if (x <= 0) {
+      x = 0;
+      vx = Math.abs(vx);
+    }
+    if (x >= bgRect.width - size) {
+      x = bgRect.width - size;
+      vx = -Math.abs(vx);
+    }
+    if (y <= 0) {
+      y = 0;
+      vy = Math.abs(vy);
+    }
+    if (y >= bgRect.height - size) {
+      y = bgRect.height - size;
+      vy = -Math.abs(vy);
+    }
+
+    el.style.transform = `translate(${x}px, ${y}px)`;
+    requestAnimationFrame(step);
   }
+  requestAnimationFrame(step);
 }
 
-let last = performance.now();
-function tick(now = performance.now()) {
-  const dt = Math.min(0.05, (now - last) / 1000);
-  last = now;
-  const { W } = env();
-
-  for (const w of walkers) {
-    // wiggle by sine with per-walker offset
-    w.phase += w.phaseSpeed * dt;
-    const wiggle = Math.sin(w.phase) * rand(6, 10);
-    w.x += w.vx * dt;
-    w.y += (w.vy * 0.2 + wiggle) * dt;
-
-    if (w.y < w.bounds.minY) { w.y = w.bounds.minY; w.vy *= -1; }
-    if (w.y > w.bounds.maxY) { w.y = w.bounds.maxY; w.vy *= -1; }
-
-    // horizontal bounce offscreen edges
-    if (w.x < -w.w - 60) { w.x = -w.w - 60; w.vx *= -1; w.dir *= -1; }
-    if (w.x > W + 60) { w.x = W + 60; w.vx *= -1; w.dir *= -1; }
-
-    place(w);
-  }
-  requestAnimationFrame(tick);
-}
-requestAnimationFrame(tick);
-
-// --- Helper for staggered spawn ---
-function staggerSpawn(fn) {
-  const delay = Math.floor(rand(STAGGER_MIN, STAGGER_MAX));
-  setTimeout(fn, delay);
-}
-
-// ---------- POLLING ----------
-async function fetchJSON(url) {
+/* ---------- Sync ---------- */
+async function fetchJSON(u) {
   try {
-    const r = await fetch(url, { cache: "no-store" });
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch(u, { headers: { Accept: "application/json" } });
+    if (!r.ok) throw new Error(`${u} -> ${r.status}`);
     return await r.json();
-  } catch {
+  } catch (e) {
+    DEBUG && console.warn("[street] fetch fail", u, e);
     return [];
   }
 }
 
+const seenTrinketIds = new Set();
 async function syncTrinkets() {
   const rows = await fetchJSON(LIST_URL);
+  if (!Array.isArray(rows)) return;
+  if (DEBUG) {
+    console.groupCollapsed("[street] /api/trinkets");
+    console.table(rows);
+    console.groupEnd();
+  }
+  let delay = 0,
+    stagger = 300 + Math.random() * 200;
   for (const row of rows) {
-    if (seenTrinketIds.has(row.id)) continue;
-    seenTrinketIds.add(row.id);
-    const src = normalizeSrc(row.image_path);
-    staggerSpawn(() =>
-      createWalker({ trinketSrc: src, id: row.id, kind: "trinket" })
-    );
+    const id = getRowId(row);
+    if (seenTrinketIds.has(id)) continue;
+    const src = normalizeSrc(getRowSrc(row));
+    if (!src) continue;
+    seenTrinketIds.add(id);
+    delay += stagger;
+    setTimeout(() => spawnWalker(src), delay);
   }
 }
 
-async function syncLeggies() {
-  const rows = await fetchJSON(LEGGIES_URL);
-  for (const r of rows) {
-    if (seenLeggyIds.has(r.id)) continue;
-    seenLeggyIds.add(r.id);
-    staggerSpawn(() =>
-      createWalker({ trinketSrc: null, id: r.id, kind: "leggy" })
-    );
-  }
-}
-
-function resync() {
-  syncTrinkets();
-  syncLeggies();
-}
-resync();
-setInterval(resync, 3000);
-
-// Recompute band on resize
-let rz;
+/* ---------- Resize ---------- */
 addEventListener("resize", () => {
-  clearTimeout(rz);
-  rz = setTimeout(() => {
-    for (const w of walkers) {
-      computeBand(w);
-      place(w, true);
-    }
-  }, 120);
+  clearTimeout(window._bgR);
+  window._bgR = setTimeout(measureBackground, 120);
 });
-  
+
+/* ---------- Boot ---------- */
+(async function start() {
+  await measureBackground();
+  await syncTrinkets();
+  setInterval(syncTrinkets, 2000);
+  DEBUG && console.log("[street] ready");
+})();
