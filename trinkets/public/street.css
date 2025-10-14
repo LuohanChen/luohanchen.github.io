@@ -58,3 +58,50 @@ body {
   filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
 }
 
+/* WALKERS */
+.leggy-wrap{
+  position: fixed;
+  top: 0; left: 0;
+  translate: -50% -50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+  z-index: 2; /* above bg */
+  animation-fill-mode: both;
+  /* movement animation is applied inline from JS:
+     animation: walkLR 18s linear infinite; */
+}
+
+.leggy-img{
+  display:block;
+  image-rendering: auto;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.22));
+  /* pulse is set from JS with a per-walker delay */
+}
+
+.trinket-pin{
+  position:absolute;
+  left:50%; top:50%;
+  translate:-50% -50%;
+  width: var(--trinket-size, 80px);
+  height: var(--trinket-size, 80px);
+  object-fit: contain; /* keep transparent bg */
+  pointer-events: none;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.2));
+}
+
+/* Horizontal travel; we use negative delays (JS) to randomize starting phase */
+@keyframes walkLR{
+  from{ transform: translateX(-20vw); }
+  to  { transform: translateX(120vw); }
+}
+@keyframes walkRL{
+  from{ transform: translateX(120vw); }
+  to  { transform: translateX(-20vw); }
+}
+
+/* Gentle breathing pulse, each walker gets a different delay/duration */
+@keyframes pulse {
+  0%,100% { transform: scale(1) }
+  50%     { transform: scale(1.06) }
+}
+

@@ -27,20 +27,18 @@ const VY_MIN = -18;
 const VY_MAX = 18;
 
 // Stagger new spawns (ms)
-const STAGGER_MIN = 300;
-const STAGGER_MAX = 2500;
+const STAGGER_MIN = 3000;
+const STAGGER_MAX = 5000;
 
 // Leggy scale (CSS fallback; can also override in CSS via --leggy-scale)
 const DEFAULT_SCALE = 8;
 /* -------------------------------- */
 
 const seenTrinketIds = new Set();
-const seenLeggyIds = new Set(); // in-memory ids for ephemeral leggies
+const seenLeggyIds = new Set();
 const walkers = []; // { el,x,y,w,h,vx,vy,dir,phase,phaseSpeed,bounds:{minY,maxY}, id, kind }
 
-function env() {
-  return { W: innerWidth, H: innerHeight };
-}
+function env() { return { W: innerWidth, H: innerHeight }; }
 function rand(a, b) { return Math.random() * (b - a) + a; }
 function normalizeSrc(s) {
   if (!s) return null;
@@ -52,13 +50,14 @@ function normalizeSrc(s) {
 function buildWalkerElement(trinketSrc) {
   const el = document.createElement("div");
   el.className = "walker";
-
-  // allow CSS scaling
   el.style.setProperty("--leggy-scale", `${DEFAULT_SCALE}`);
 
+  // main gif
   const gif = document.createElement("img");
   gif.className = "gif";
-  gif.src = "assets/leggy1.gif";
+  gif.src = `assets/leggy1.gif?cb=${Date.now()}_${Math.random()
+    .toString(36)
+    .slice(2)}`; // cache-bust for desynced gif loops
   gif.alt = "walker";
 
   el.appendChild(gif);
@@ -76,9 +75,7 @@ function buildWalkerElement(trinketSrc) {
   // subtle pulse (desynced)
   el.style.animationDelay = `${-Math.floor(rand(0, 2000))}ms`;
 
-  // layer
   layer.appendChild(el);
-
   return { el, gif };
 }
 
@@ -93,7 +90,6 @@ function computeBand(w) {
 function createWalker({ trinketSrc = null, id, kind = "trinket" }) {
   const { el, gif } = buildWalkerElement(trinketSrc);
 
-  // measure (after load too)
   let w = 180, h = 180;
   const measure = () => {
     const r = gif.getBoundingClientRect();
@@ -101,14 +97,12 @@ function createWalker({ trinketSrc = null, id, kind = "trinket" }) {
   };
   measure();
 
-  // random side/speed/phase
   const fromLeft = Math.random() < 0.5;
   const speed = rand(SPEED_MIN, SPEED_MAX) * (fromLeft ? 1 : -1);
   const baseVy = rand(VY_MIN, VY_MAX);
   const phase = rand(0, Math.PI * 2);
-  const phaseSpeed = rand(0.4, 1.2); // rad/s
+  const phaseSpeed = rand(0.4, 1.2);
 
-  // start just outside horizontally
   const { W } = env();
   const startX = fromLeft ? -w - 20 : W + 20;
   let startY = -h + (MIN_VISIBLE + MAX_VISIBLE) / 2 + GLOBAL_DROP;
@@ -134,8 +128,13 @@ function createWalker({ trinketSrc = null, id, kind = "trinket" }) {
 
   computeBand(walker);
   walker.y = rand(walker.bounds.minY, walker.bounds.maxY);
-  place(walker, true);
-  requestAnimationFrame(() => el.classList.add("show"));
+
+  // Stagger appearance so walkers don't all move at once
+  const appearDelay = Math.floor(rand(100, 1800));
+  setTimeout(() => {
+    place(walker, true);
+    el.classList.add("show");
+  }, appearDelay);
 
   walkers.push(walker);
   return walker;
@@ -159,19 +158,18 @@ function tick(now = performance.now()) {
   const { W } = env();
 
   for (const w of walkers) {
-    // wiggle by sine; each has a different phase/phaseSpeed
+    // wiggle by sine with per-walker offset
     w.phase += w.phaseSpeed * dt;
-    const wiggle = Math.sin(w.phase) * 8; // px
+    const wiggle = Math.sin(w.phase) * rand(6, 10);
     w.x += w.vx * dt;
     w.y += (w.vy * 0.2 + wiggle) * dt;
 
-    // keep in above-top band
     if (w.y < w.bounds.minY) { w.y = w.bounds.minY; w.vy *= -1; }
     if (w.y > w.bounds.maxY) { w.y = w.bounds.maxY; w.vy *= -1; }
 
-    // horizontal bounce
-    if (w.x < -w.w - 60)  { w.x = -w.w - 60;  w.vx *= -1; w.dir *= -1; }
-    if (w.x > W + 60)     { w.x =  W + 60;   w.vx *= -1; w.dir *= -1; }
+    // horizontal bounce offscreen edges
+    if (w.x < -w.w - 60) { w.x = -w.w - 60; w.vx *= -1; w.dir *= -1; }
+    if (w.x > W + 60) { w.x = W + 60; w.vx *= -1; w.dir *= -1; }
 
     place(w);
   }
@@ -179,7 +177,7 @@ function tick(now = performance.now()) {
 }
 requestAnimationFrame(tick);
 
-// --- Staggered spawn helper
+// --- Helper for staggered spawn ---
 function staggerSpawn(fn) {
   const delay = Math.floor(rand(STAGGER_MIN, STAGGER_MAX));
   setTimeout(fn, delay);
@@ -202,16 +200,20 @@ async function syncTrinkets() {
     if (seenTrinketIds.has(row.id)) continue;
     seenTrinketIds.add(row.id);
     const src = normalizeSrc(row.image_path);
-    // stagger the add so motion desyncs
-    staggerSpawn(() => createWalker({ trinketSrc: src, id: row.id, kind: "trinket" }));
+    staggerSpawn(() =>
+      createWalker({ trinketSrc: src, id: row.id, kind: "trinket" })
+    );
   }
 }
+
 async function syncLeggies() {
-  const rows = await fetchJSON(LEGGIES_URL); // [{id,created_at}]
+  const rows = await fetchJSON(LEGGIES_URL);
   for (const r of rows) {
     if (seenLeggyIds.has(r.id)) continue;
     seenLeggyIds.add(r.id);
-    staggerSpawn(() => createWalker({ trinketSrc: null, id: r.id, kind: "leggy" }));
+    staggerSpawn(() =>
+      createWalker({ trinketSrc: null, id: r.id, kind: "leggy" })
+    );
   }
 }
 
@@ -227,6 +229,10 @@ let rz;
 addEventListener("resize", () => {
   clearTimeout(rz);
   rz = setTimeout(() => {
-    for (const w of walkers) { computeBand(w); place(w, true); }
+    for (const w of walkers) {
+      computeBand(w);
+      place(w, true);
+    }
   }, 120);
 });
+  
