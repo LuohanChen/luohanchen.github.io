@@ -1,0 +1,139 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    height: 5vh;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    top: 0;
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1;
+}
+
+nav img {
+    margin-left: 2vw;
+}
+
+.links {
+    margin-right: 2vw;
+}
+
+nav a {
+    margin-right: 2vw;
+}
+
+.banner { /* REPLACE WITH IMAGE */
+    background-color: #26489c;     
+    min-height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.posters {
+    padding-top: 3vh;
+    background-color: #fefcf3;
+    min-height: 60vh;
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+    align-items: center;
+    padding-bottom: 3vh;
+}
+
+.column {
+    text-align: center;
+}
+
+.posters h4 {
+    display: flex;
+    justify-content: center;
+}
+
+.posters img {
+    display: flex;
+    border: 1px solid black;
+    min-width: 550px;
+    min-height: 800px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.posters a {
+    display: inline-block;
+    margin: 2vh auto 0;
+    padding: 10px 25px;
+    background-color: #fdcf1a;
+    border-radius: 0.7em;
+    text-align: center;
+    text-decoration: none;
+}
+
+.hopscotch { /* REPLACE WITH BG IMAGE */
+    background-color: #26489c;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.box {
+    width: 500px;
+    height: 350px;
+    position: relative;
+    overflow: hidden;
+    background-color: #ddd;
+    border: 10px solid white;
+}
+
+.box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.box a {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #26489c;
+    color: white;
+    padding: 10px 20px;
+    border: 1px solid white;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.semi {
+  width: 500px;
+  height: 250px;
+  overflow: hidden;
+  border-bottom-left-radius: 350px;
+  border-bottom-right-radius: 350px;
+  background-color: #ddd;
+  margin: 0 auto;
+  position: relative;
+  border: 10px solid white; 
+}
+
+footer {
+    height: 5vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
