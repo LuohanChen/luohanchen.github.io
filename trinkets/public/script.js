@@ -21,14 +21,27 @@
   ];
 
   function makeShuffler(items){
-    let pool=[]; function refill(){
+    let pool=[];
+    function refill(){
       pool = items.slice();
-      for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+      for(let i=pool.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [pool[i],pool[j]]=[pool[j],pool[i]];
+      }
     }
-    refill(); return ()=>{if(!pool.length) refill(); return pool.pop();};
+    refill();
+    return ()=>{ if(!pool.length) refill(); return pool.pop(); };
   }
 
   let hasEnteredStudio=false, skipRequested=false;
+
+  function removeStartInterceptors(){
+    window.removeEventListener('click',      requestSkipToStudio, { capture: true });
+    window.removeEventListener('touchstart', requestSkipToStudio, { capture: true });
+    window.removeEventListener('keydown',    requestSkipToStudio, { capture: true });
+    window.removeEventListener('keydown',    onKeyStart);
+  }
+
   function revealStudio(){
     if(hasEnteredStudio) return;
     hasEnteredStudio=true;
@@ -38,18 +51,23 @@
       studio.classList.remove('hidden');
       studio.setAttribute('aria-hidden','false');
       document.body.style.overflow='auto';
-      if(window.__konvaEnsure){window.__konvaEnsure();requestAnimationFrame(window.__konvaEnsure);}
+      removeStartInterceptors();
+      if(window.__konvaEnsure){
+        window.__konvaEnsure();
+        requestAnimationFrame(window.__konvaEnsure);
+      }
     },720);
   }
 
-  function fadeOut(el,ms){if(ms) el.style.setProperty('--fade-ms',`${ms}ms`);el.classList.add('fade-out');el.classList.remove('fade-in');}
-  function fadeIn(el,ms){if(ms) el.style.setProperty('--fade-ms',`${ms}ms`);el.classList.add('fade-in');el.classList.remove('fade-out','hidden');}
+  function fadeOut(el,ms){ if(ms) el.style.setProperty('--fade-ms',`${ms}ms`); el.classList.add('fade-out'); el.classList.remove('fade-in'); }
+  function fadeIn(el,ms){ if(ms) el.style.setProperty('--fade-ms',`${ms}ms`); el.classList.add('fade-in'); el.classList.remove('fade-out','hidden'); }
   const randBetween=(a,b)=>Math.random()*(b-a)+a;
   const wait=ms=>new Promise(res=>setTimeout(res,ms));
 
   function startFloatingImages(){
     if(!floatLayer) return;
-    const W=window.innerWidth; const isSmall=W<640,isMedium=W>=640&&W<1024;
+    const W=window.innerWidth;
+    const isSmall=W<640, isMedium=W>=640&&W<1024;
     const count=isSmall?5:isMedium?8:11;
     const sizeMin=isSmall?90:isMedium?130:180, sizeMax=isSmall?150:isMedium?220:360;
     const durMin=isSmall?36:isMedium?48:60, durMax=isSmall?65:isMedium?80:110;
@@ -57,7 +75,8 @@
 
     for(let i=0;i<count;i++){
       const img=document.createElement('img');
-      img.className='float-img'; img.src=nextSrc();
+      img.className='float-img';
+      img.src=nextSrc();
       const size=Math.round(randBetween(sizeMin,sizeMax));
       img.style.width=`${size}px`; img.style.height=`${size}px`;
       img.style.top=`${randBetween(4,92)}%`;
@@ -65,20 +84,30 @@
       img.style.animation=`floatLeft ${dur}s linear infinite`;
       img.style.animationDelay=`${delay}s`;
       floatLayer.appendChild(img);
-      void img.offsetWidth; img.classList.add('visible');
+      void img.offsetWidth;
+      img.classList.add('visible');
       img.addEventListener('animationiteration',()=>{
         img.style.top=`${randBetween(4,92)}%`;
         const nsize=Math.round(randBetween(sizeMin,sizeMax));
         img.style.width=`${nsize}px`; img.style.height=`${nsize}px`;
-        const ndur=randBetween(durMin,durMax); img.style.animationDuration=`${ndur}s`;
+        const ndur=randBetween(durMin,durMax);
+        img.style.animationDuration=`${ndur}s`;
       });
     }
   }
 
   async function typeWord(el,text){
-    for(let i=1;i<=text.length;i++){if(skipRequested) return;el.textContent=text.slice(0,i);await wait(TYPE_SPEED);}
+    for(let i=1;i<=text.length;i++){
+      if(skipRequested) return;
+      el.textContent=text.slice(0,i);
+      await wait(TYPE_SPEED);
+    }
     await wait(HOLD_AFTER_TYPE);
-    for(let i=text.length;i>=0;i--){if(skipRequested) return;el.textContent=text.slice(0,i);await wait(ERASE_SPEED);}
+    for(let i=text.length;i>=0;i--){
+      if(skipRequested) return;
+      el.textContent=text.slice(0,i);
+      await wait(ERASE_SPEED);
+    }
     await wait(HOLD_AFTER_ERASE);
   }
 
@@ -86,33 +115,83 @@
     if(skipRequested) return revealStudio();
     startBtn.style.pointerEvents='none'; startBtn.classList.add('fade-out');
     document.querySelector('.start-hint')?.classList.add('fade-out');
-    setTimeout(()=>{startBtn.classList.add('hidden');document.querySelector('.start-hint')?.classList.add('hidden');},300);
+    setTimeout(()=>{
+      startBtn.classList.add('hidden');
+      document.querySelector('.start-hint')?.classList.add('hidden');
+    },300);
+
     if(!prefersReduced) startFloatingImages();
-    fadeOut(startTitle,FADE_OUT_FIRST_MS); await wait(FADE_OUT_FIRST_MS+50);
-    if(skipRequested) return revealStudio(); startTitle.classList.add('hidden');
-    seqWrap.classList.remove('hidden'); seqWrap.setAttribute('aria-hidden','false'); fadeIn(seqWrap,FADE_IN_SECOND_MS);
-    await wait(FADE_IN_SECOND_MS+50); if(skipRequested) return revealStudio();
-    if(prefersReduced){for(const w of WORDS){if(skipRequested) return revealStudio(); storiesWord.textContent=w;await wait(900);}}
-    else{for(const w of WORDS){if(skipRequested) return revealStudio(); await typeWord(storiesWord,w);}}
-    storiesWord.textContent=''; fadeOut(seqWrap); await wait(450);
-    if(skipRequested) return revealStudio(); seqWrap.classList.add('hidden');
-    finalPrompt.classList.remove('hidden'); fadeIn(finalPrompt,700); await wait(FINAL_HOLD);
-    if(skipRequested) return revealStudio(); fadeOut(finalPrompt,500); await wait(550); revealStudio();
+
+    fadeOut(startTitle,FADE_OUT_FIRST_MS);
+    await wait(FADE_OUT_FIRST_MS+50);
+    if(skipRequested) return revealStudio();
+    startTitle.classList.add('hidden');
+
+    seqWrap.classList.remove('hidden');
+    seqWrap.setAttribute('aria-hidden','false');
+    fadeIn(seqWrap,FADE_IN_SECOND_MS);
+    await wait(FADE_IN_SECOND_MS+50);
+    if(skipRequested) return revealStudio();
+
+    if(prefersReduced){
+      for(const w of WORDS){ if(skipRequested) return revealStudio(); storiesWord.textContent=w; await wait(900); }
+    } else {
+      for(const w of WORDS){ if(skipRequested) return revealStudio(); await typeWord(storiesWord,w); }
+    }
+
+    storiesWord.textContent='';
+    fadeOut(seqWrap);
+    await wait(450);
+    if(skipRequested) return revealStudio();
+    seqWrap.classList.add('hidden');
+
+    finalPrompt.classList.remove('hidden');
+    fadeIn(finalPrompt,700);
+    await wait(FINAL_HOLD);
+    if(skipRequested) return revealStudio();
+    fadeOut(finalPrompt,500);
+    await wait(550);
+    revealStudio();
   }
 
   function requestSkipToStudio(e){
     if(hasEnteredStudio) return;
-    const isStartClick=e&&(e.target===startBtn||(startBtn&&startBtn.contains(e.target))||(e.type==='keydown'&&(e.key==='Enter'||e.key===' ')&&document.activeElement===startBtn));
+    const isStartClick = e && (
+      e.target===startBtn ||
+      (startBtn && startBtn.contains(e.target)) ||
+      (e.type==='keydown' && (e.key==='Enter'||e.key===' ') && document.activeElement===startBtn)
+    );
     if(isStartClick) return;
-    skipRequested=true; revealStudio();
+    skipRequested=true;
+    revealStudio();
   }
 
-  function addStartInterceptors(){window.addEventListener('click',requestSkipToStudio,{capture:true});window.addEventListener('touchstart',requestSkipToStudio,{capture:true});window.addEventListener('keydown',requestSkipToStudio,{capture:true});}
-  function onKeyStart(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();runSequence();}}
+  function addStartInterceptors(){
+    window.addEventListener('click',      requestSkipToStudio, { capture: true });
+    window.addEventListener('touchstart', requestSkipToStudio, { capture: true });
+    window.addEventListener('keydown',    requestSkipToStudio, { capture: true });
+  }
+
+  function onKeyStart(e){
+    // Don't hijack keys when typing
+    const t = e.target;
+    const tag = (t && t.tagName) ? t.tagName.toUpperCase() : "";
+    const typing = tag === "INPUT" || tag === "TEXTAREA" || t?.isContentEditable;
+    if (typing) return;
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      runSequence();
+    }
+  }
 
   window.addEventListener('DOMContentLoaded',()=>{
-    document.body.style.overflow='hidden'; studio.classList.add('hidden'); studio.setAttribute('aria-hidden','true');
-    addStartInterceptors(); startBtn?.addEventListener('click',runSequence); window.addEventListener('keydown',onKeyStart,{passive:false});
+    document.body.style.overflow='hidden';
+    studio.classList.add('hidden');
+    studio.setAttribute('aria-hidden','true');
+    addStartInterceptors();
+    startBtn?.addEventListener('click',runSequence);
+    window.addEventListener('keydown',onKeyStart,{passive:false});
     startTitle.classList.add('fade-in');
   });
 })();
@@ -124,12 +203,13 @@
   if (!stageHost || !window.Konva) return;
 
   const API_URL = 'http://localhost:5050/api/trinkets'; // adjust if needed
+  const NAVIGATE_AFTER_SUBMIT = true;                    // redirect to street.html
 
   // Your drawing's logical resolution (export size)
   const BASE_W = 1200, BASE_H = 800;
 
-  // ---- choose how the drawing fits the container: 'cover' fills, 'contain' keeps all visible
-  const SCALE_MODE = 'cover'; // <- changed from implicit contain to cover
+  // choose how the drawing fits the container: 'cover' fills, 'contain' keeps all visible
+  const SCALE_MODE = 'cover';
 
   const stage = new Konva.Stage({
     container: stageHost,
@@ -185,10 +265,6 @@
 
   // ---------- Tools ----------
   const colorEl = document.getElementById('brushColor');
-  const sizeEl  = document.getElementById('brushSize');
-  const clearEl = document.getElementById('clearCanvas');
-  const saveEl  = document.getElementById('savePNG');
-  const submit  = document.getElementById('submitTrinket');
 
   // Convert stage pointer -> bitmap coordinates (accounts for scale & centering)
   function toBitmapPoint() {
@@ -200,7 +276,6 @@
       x: Math.max(0, Math.min(BASE_W - 1, Math.round(pt.x))),
       y: Math.max(0, Math.min(BASE_H - 1, Math.round(pt.y)))
     };
-    // With SCALE_MODE='cover', strokes outside the visible region are still valid
   }
 
   // Brush
@@ -208,7 +283,7 @@
   function brushStart() {
     const { x, y } = toBitmapPoint();
     baseCtx.strokeStyle = colorEl?.value || '#111';
-    baseCtx.lineWidth   = Number(sizeEl?.value || 6);
+    baseCtx.lineWidth   = Number((document.getElementById('brushSize')?.value) || 6);
     baseCtx.lineJoin = 'round';
     baseCtx.lineCap  = 'round';
     baseCtx.beginPath();
@@ -322,16 +397,45 @@
   document.getElementById('submitTrinket')?.addEventListener('click', async ()=>{
     try{
       const drawing = stage.toDataURL({ pixelRatio: 2 });
-      const name = document.getElementById('trinketName')?.value.trim() || '';
-      const text = document.getElementById('trinketText')?.value.trim() || '';
+      const trinketName = document.getElementById('trinketName')?.value.trim() || '';
+      const trinketText = document.getElementById('trinketText')?.value.trim() || ''; // unused by street now
+
+      // Save name locally as a courtesy (may be read by street if same-origin)
+      try {
+        localStorage.setItem('lastTrinketName', trinketName);
+        localStorage.setItem('lastTrinketSavedAt', String(Date.now()));
+      } catch {}
+
       const res = await fetch(API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ name, text, drawing })
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({
+          trinketName,
+          trinketText, // saved but not displayed on street
+          drawing,
+          // legacy aliases:
+          name: trinketName,
+          text: trinketText
+        })
       });
+
       if(!res.ok) throw new Error(`Submit failed: ${res.status}`);
+
+      // Optional: live broadcast of the name (same-origin)
+      try {
+        const bc = new BroadcastChannel('trinkets');
+        bc.postMessage({ trinketName, when: Date.now() });
+      } catch {}
+
+      // Redirect with name param so street always has the name (works cross-origin)
+      if (NAVIGATE_AFTER_SUBMIT) {
+        const q = new URLSearchParams({ name: trinketName, t: String(Date.now()) });
+        window.location.href = `street.html?${q.toString()}`;
+        return;
+      }
+
       alert('Your trinket has been submitted!');
-      console.log('Submitted:', { name, text, drawingLen: drawing.length });
+      console.log('Submitted:', { trinketName, drawingLen: drawing.length });
     }catch(e){
       console.error(e);
       alert('Failed to submit. Check console.');

@@ -9,6 +9,26 @@ function setStatus(msg, isError=false){
   statusEl.style.color = isError ? '#c0392b' : '#111';
 }
 
+/* ---- Live command channel to street ---- */
+let adminBC = null;
+try { adminBC = new BroadcastChannel('admin-legs'); } catch {}
+function sendAdminCommand(cmd){
+  // BroadcastChannel (if available)
+  if (adminBC) {
+    try { adminBC.postMessage(cmd); } catch {}
+  }
+  // localStorage fallback
+  try {
+    const key = 'adminCmdQueue';
+    const now = Date.now();
+    const entry = { ...cmd, _id: `cmd_${now}_${Math.random().toString(36).slice(2)}`, ts: now };
+    const raw = localStorage.getItem(key);
+    const arr = raw ? JSON.parse(raw) : [];
+    arr.push(entry);
+    localStorage.setItem(key, JSON.stringify(arr));
+  } catch {}
+}
+
 async function load() {
   try {
     setStatus('Loading…');
@@ -35,6 +55,25 @@ async function load() {
       img.alt = `Trinket: ${t.name || 'Untitled'}`;
       name.textContent = t.name || 'Untitled';
       story.textContent = t.story || '';
+
+      // Add a "Replay" button next to Delete
+      const actions = node.querySelector('.actions');
+      const replayBtn = document.createElement('button');
+      replayBtn.textContent = 'Replay';
+      replayBtn.addEventListener('click', () => {
+        // Send a replay command with the essentials the street needs
+        sendAdminCommand({
+          type: 'replay_trinket',
+          trinket: {
+            id: t.id,
+            name: t.name || '',
+            src: t.image_path || t.drawing || ''
+          }
+        });
+        setStatus('Replay sent to street.');
+        setTimeout(()=>setStatus(''), 1200);
+      });
+      actions.appendChild(replayBtn);
 
       del.addEventListener('click', async () => {
         if (!confirm('Delete this submission?')) return;
