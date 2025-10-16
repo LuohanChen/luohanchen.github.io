@@ -19,6 +19,12 @@
   <div id="floatLayer" aria-hidden="true"></div>
 
   <!-- App -->
+
+  <script>
+  // Because server serves /trinkets(.json) on the same origin:
+  window.TRINKETS_API = "/trinkets.json";
+</script>
+<script src="street.js" defer></script>
   <script type="module" src="street.js"></script>
 </body>
 </html>

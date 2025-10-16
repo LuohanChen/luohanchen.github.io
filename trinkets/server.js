@@ -1,181 +1,159 @@
-// server.js (ESM, Express + sqlite3 only)
-import fs from 'fs';
-import path from 'path';
-import express from 'express';
-import cors from 'cors';
-import sqlite3 from 'sqlite3';
+// server.js
+// Express server for Trinkets: serves static site + JSON API + persistent uploads on Render.
+
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const fsp = require('fs/promises');
+const cors = require('cors');
 
 const app = express();
+
+// ---------- Config ----------
 const PORT = process.env.PORT || 5050;
 
-const __dirname = path.resolve();
-const PUBLIC_DIR = path.join(__dirname, 'public');
-const UPLOAD_DIR = path.join(PUBLIC_DIR, 'uploads');
+// On Render, containers are ephemeral. We'll mount a persistent disk at /data via render.yaml.
+const DATA_DIR    = process.env.DATA_DIR    || '/data';
+const UPLOAD_DIR  = process.env.UPLOAD_DIR  || path.join(DATA_DIR, 'uploads');
+const DB_FILE     = process.env.DB_FILE     || path.join(DATA_DIR, 'db.json');
+
+// Ensure folders exist
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
-app.use(cors());
+// Allow big JSON posts (drawings)
 app.use(express.json({ limit: '20mb' }));
-app.use(express.static(PUBLIC_DIR));
+app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Tiny request logger
-app.use((req, _res, next) => {
-  console.log(new Date().toISOString(), req.method, req.url);
-  next();
-});
+// If you will host front-end elsewhere, restrict CORS; same-origin is fine as-is.
+app.use(cors());
 
-// Health
-app.get('/health', (_req, res) => res.json({ ok: true }));
-
-// --- sqlite3 (no 'sqlite' wrapper) ---
-const db = new sqlite3.Database(path.join(__dirname, 'trinkets.db'));
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS trinkets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      story TEXT,
-      image_path TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-});
-
-// Helpers
-function saveDataUrlToFile(dataUrl) {
-  const m = /^data:(image\/\w+);base64,/.exec(dataUrl || '');
-  if (!m) throw new Error('Invalid image data URL');
-  const ext = m[1].split('/')[1] || 'png';
-  const base64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
-  const buf = Buffer.from(base64, 'base64');
-  const filename = `trinket_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-  const filePath = path.join(UPLOAD_DIR, filename);
-  fs.writeFileSync(filePath, buf);
-  return `/uploads/${filename}`; // web path
-}
-function deleteFileSafe(relPath) {
+// ---------- Tiny JSON "DB" ----------
+async function loadDB() {
   try {
-    if (!relPath) return;
-    const p = path.join(PUBLIC_DIR, relPath.replace(/^[\\/]/, ''));
-    if (fs.existsSync(p)) fs.unlinkSync(p);
-  } catch (e) {
-    console.warn('Could not delete file:', relPath, e?.message);
+    const txt = await fsp.readFile(DB_FILE, 'utf8');
+    return JSON.parse(txt);
+  } catch {
+    const init = { seq: 1, items: [] };
+    await saveDB(init);
+    return init;
   }
 }
-
-// Promise wrappers for sqlite3
-function runAsync(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) reject(err);
-      else resolve(this); // has lastID, changes
-    });
-  });
-}
-function getAsync(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => (err ? reject(err) : resolve(row)));
-  });
-}
-function allAsync(sql, params = []) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => (err ? reject(err) : resolve(rows)));
-  });
+async function saveDB(db) {
+  await fsp.writeFile(DB_FILE, JSON.stringify(db, null, 2), 'utf8');
 }
 
-// --- Routes ---
-// Create
+// ---------- Helpers ----------
+function dataUrlToBuffer(dataUrl) {
+  const m = /^data:(.+?);base64,(.+)$/.exec(dataUrl || '');
+  if (!m) return null;
+  return Buffer.from(m[2], 'base64');
+}
+async function writePng(buffer) {
+  const ts = Date.now();
+  const name = `trinket_${ts}_${Math.random().toString(36).slice(2)}.png`;
+  const abs = path.join(UPLOAD_DIR, name);
+  await fsp.writeFile(abs, buffer);
+  return `/uploads/${name}`; // URL path we serve below
+}
+
+// ---------- API ----------
+// We expose both /api/trinkets and /trinkets(.json) (your street.js can use either)
+
+app.get(['/api/trinkets', '/trinkets', '/trinkets.json'], async (_req, res) => {
+  const db = await loadDB();
+  res.json(db.items); // plain array
+});
+
 app.post('/api/trinkets', async (req, res) => {
   try {
-    const { name = '', story = '', drawing } = req.body || {};
-    if (!drawing) return res.status(400).json({ error: 'Missing drawing' });
+    const body = req.body || {};
+    const name = (body.trinketName || body.name || '').toString();
+    const story = (body.trinketText || body.text || '').toString();
+    const drawing = body.drawing || body.image || '';
 
-    const imagePath = saveDataUrlToFile(drawing);
-    const r = await runAsync(
-      'INSERT INTO trinkets (name, story, image_path) VALUES (?, ?, ?)',
-      [name.trim(), story.trim(), imagePath]
-    );
-    const row = await getAsync('SELECT * FROM trinkets WHERE id = ?', [r.lastID]);
-    res.json(row);
-  } catch (err) {
-    console.error('POST /api/trinkets failed', err);
-    res.status(500).json({ error: 'Failed to save trinket' });
+    if (!drawing.startsWith('data:image/')) {
+      return res.status(400).json({ error: 'drawing must be a data:image/*;base64 URL' });
+    }
+    const buf = dataUrlToBuffer(drawing);
+    if (!buf) return res.status(400).json({ error: 'Invalid data URL' });
+
+    const image_path = await writePng(buf);
+
+    const db = await loadDB();
+    const id = db.seq++;
+    const item = { id, name, story, image_path, created_at: new Date().toISOString() };
+    db.items.push(item);
+    await saveDB(db);
+
+    res.status(201).json(item);
+  } catch (e) {
+    console.error('[POST /api/trinkets] failed:', e);
+    res.status(500).json({ error: 'server_error' });
   }
 });
 
-// List
-app.get('/api/trinkets', async (_req, res) => {
-  try {
-    const rows = await allAsync(
-      'SELECT * FROM trinkets ORDER BY id DESC LIMIT 200'
-    );
-    res.json(rows);
-  } catch (err) {
-    console.error('GET /api/trinkets failed', err);
-    res.status(500).json({ error: 'Failed to fetch trinkets' });
-  }
-});
-
-// Delete one
 app.delete('/api/trinkets/:id', async (req, res) => {
+  const id = Number(req.params.id);
   try {
-    const id = Number(req.params.id);
-    const row = await getAsync('SELECT * FROM trinkets WHERE id = ?', [id]);
-    if (!row) return res.status(404).json({ error: 'Not found' });
+    const db = await loadDB();
+    const idx = db.items.findIndex(x => Number(x.id) === id);
+    if (idx === -1) return res.status(404).json({ error: 'not_found' });
 
-    deleteFileSafe(row.image_path);
-    await runAsync('DELETE FROM trinkets WHERE id = ?', [id]);
-    res.json({ success: true, deleted: id });
-  } catch (err) {
-    console.error('DELETE /api/trinkets/:id failed', err);
-    res.status(500).json({ error: 'Failed to delete trinket' });
+    const img = db.items[idx]?.image_path;
+    if (img && img.startsWith('/uploads/')) {
+      const abs = path.join(UPLOAD_DIR, path.basename(img));
+      try { await fsp.unlink(abs); } catch {}
+    }
+
+    db.items.splice(idx, 1);
+    await saveDB(db);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('[DELETE /api/trinkets/:id] failed:', e);
+    res.status(500).json({ error: 'server_error' });
   }
 });
 
-// Delete all
 app.delete('/api/trinkets', async (_req, res) => {
   try {
-    const rows = await allAsync('SELECT image_path FROM trinkets');
-    for (const r of rows) deleteFileSafe(r.image_path);
-    await runAsync('DELETE FROM trinkets');
-    res.json({ success: true, deletedAll: true });
-  } catch (err) {
-    console.error('DELETE /api/trinkets failed', err);
-    res.status(500).json({ error: 'Failed to delete all trinkets' });
+    const db = await loadDB();
+    for (const it of db.items) {
+      const img = it?.image_path;
+      if (img && img.startsWith('/uploads/')) {
+        const abs = path.join(UPLOAD_DIR, path.basename(img));
+        try { await fsp.unlink(abs); } catch {}
+      }
+    }
+    db.items = [];
+    await saveDB(db);
+    res.json({ ok: true });
+  } catch (e) {
+    console.error('[DELETE /api/trinkets] failed:', e);
+    res.status(500).json({ error: 'server_error' });
   }
 });
+
+// ---------- Static files ----------
+// Serve the uploaded images at /uploads/*
+app.use('/uploads', express.static(UPLOAD_DIR, {
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+}));
+
+// Serve your front-end from /public
+const PUBLIC_DIR = path.join(__dirname, 'public');
+app.use(express.static(PUBLIC_DIR, {
+  extensions: ['html'],
+  setHeaders: (res, filePath) => {
+    if (/\.(html?)$/i.test(filePath)) res.setHeader('Cache-Control', 'no-cache');
+  }
+}));
+
+// If you want SPA fallback, uncomment:
+// app.get('*', (_req, res) => res.sendFile(path.join(PUBLIC_DIR, 'index.html')));
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
-
-// ---- Ephemeral leggies (in-memory) ----
-let leggies = [];  // [{id:number, created_at:string}]
-let nextLeggyId = 1;
-
-app.get('/api/leggies', (_req, res) => {
-  res.json(leggies.slice(-300)); // limit
-});
-
-app.post('/api/leggies', (req, res) => {
-  const { count = 1 } = req.body || {};
-  const made = [];
-  for (let i = 0; i < Math.max(1, Math.min(50, Number(count) || 1)); i++) {
-    const row = { id: nextLeggyId++, created_at: new Date().toISOString() };
-    leggies.push(row);
-    made.push(row);
-  }
-  res.json({ added: made.length, rows: made });
-});
-
-app.delete('/api/leggies/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const before = leggies.length;
-  leggies = leggies.filter(l => l.id !== id);
-  res.json({ success: true, deleted: before - leggies.length });
-});
-
-app.delete('/api/leggies', (_req, res) => {
-  const n = leggies.length;
-  leggies = [];
-  res.json({ success: true, deleted: n });
+  console.log(`Trinkets server listening on :${PORT}`);
+  console.log(`Data directory: ${DATA_DIR}`);
 });
