@@ -427,14 +427,7 @@
         bc.postMessage({ trinketName, when: Date.now() });
       } catch {}
 
-      // Redirect with name param so street always has the name (works cross-origin)
-      if (NAVIGATE_AFTER_SUBMIT) {
-        const q = new URLSearchParams({ name: trinketName, t: String(Date.now()) });
-        window.location.href = `street.html?${q.toString()}`;
-        return;
-      }
-
-      alert('Your trinket has been submitted!');
+      alert('Thank you for submitting! Please take a look at the screen!');
       console.log('Submitted:', { trinketName, drawingLen: drawing.length });
     }catch(e){
       console.error(e);

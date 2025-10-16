@@ -1,5 +1,6 @@
-:root{
-  --leggy-size: 25em; /* base walker box size */
+:root {
+  /* JS will overwrite this to keep size consistent across resolutions */
+  --leggy-size: 520px; /* fallback */
 }
 
 * { box-sizing: border-box; }
@@ -26,49 +27,36 @@ body {
 
 /* Walkers live inside the bgFrame */
 #walkerLayer {
-  position: absolute;
+  position: absolute; /* already set in your file; keep it */
   inset: 0;
   pointer-events: none;
 }
 
-/* A walker container */
 .walker {
   position: absolute;
   width: var(--leggy-size);
   height: var(--leggy-size);
   will-change: transform, opacity;
-  opacity: 0;                         /* start hidden; JS fades to 1 on spawn */
-  transition: opacity 480ms ease-out;
+  opacity: 0; /* will fade in */
 }
 
-/* Leg GIF (one of the variants) */
-.walker .gif {
-  position: absolute;
-  bottom: 35px;
-  left: 50%;
-  transform: translateX(-50%); /* JS appends scaleX(...) per direction */
-  width: calc(var(--leggy-size) - 10px);
-  height: auto;
-  image-rendering: auto;
-  z-index: 1; /* stays below trinket/bubble */
-}
-
-/* User trinket overlay
-   Positioned via CSS vars:
-   --tx (px): horizontal offset from center (mirrored in JS on flip)
-   --ty (px): vertical offset from top (absolute from walker box top)
-   --scale:   size multiplier (global + per-variant) */
+.walker .gif,
 .walker .trinket {
   position: absolute;
-  left: calc(50% + var(--tx, 0px));
-  top: var(--ty, 50%);
-  transform: translate(-50%, -50%) scale(var(--scale, 1));
-  max-width: calc(var(--leggy-size) * 1.1);
-  max-height: calc(var(--leggy-size) * 1.1);
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
-  mix-blend-mode: multiply;
+  left: 50%;
+  top: -5%;
+  transform: translateX(-50%); /* we flip with scaleX in JS */
+  width: var(--leggy-size);
+  height: var(--leggy-size);
+  object-fit: contain;
+  image-rendering: auto;
   pointer-events: none;
-  z-index: 2; /* over legs */
+}
+
+.walker .trinket {
+  width: calc(var(--leggy-size) * var(--scale, 1));
+  height: auto;
+  transform: translateX(calc(-50% + var(--tx, 0px))) translateY(var(--ty, 0px));
 }
 
 /* Floating bubble that follows the walker/trinket */
@@ -103,4 +91,3 @@ body {
   white-space: pre-wrap;
   word-break: break-word;
 }
-
