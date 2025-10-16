@@ -1,5 +1,5 @@
 :root{
-  --leggy-size: 500px; /* base walker box size */
+  --leggy-size: 25em; /* base walker box size */
 }
 
 * { box-sizing: border-box; }
@@ -44,7 +44,7 @@ body {
 /* Leg GIF (one of the variants) */
 .walker .gif {
   position: absolute;
-  bottom: 4.5em;
+  bottom: 35px;
   left: 50%;
   transform: translateX(-50%); /* JS appends scaleX(...) per direction */
   width: calc(var(--leggy-size) - 10px);

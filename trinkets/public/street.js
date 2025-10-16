@@ -24,9 +24,9 @@ const LEG_VARIANTS = [
 ];
 
 const ATTACH_POINTS = {
-  default: { x:  0,    y: 0.30 }, // middle of legs
+  default: { x:  0,    y: 0.32 }, // middle of legs
   bag:     { x: -0.15, y: 0.18 }, // middle-left (bag)
-  sling:   { x: -0.05, y: 0.20 }, // middle-top (sling)
+  sling:   { x: -0.05, y: 0.25 }, // middle-top (sling)
 };
 
 const GLOBAL_TRINKET_SCALE = 0.5;
@@ -563,7 +563,7 @@ function processLocalQueue() {
 window.addEventListener('storage', (e) => {
   if (e.key === 'adminCmdQueue') processLocalQueue();
 });
-setInterval(processLocalQueue, 1000);
+setInterval(processLocalQueue, 5000);
 
 /* ---- Boot ---- */
 (async function start(){
